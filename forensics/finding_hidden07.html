@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Knowledge Terminal — Media Extraction Protocol</title>
+<link rel="stylesheet" href="https://use.typekit.net/fiv8wyx.css">
+
+<style>
+
+*,
+*::after,
+*::before{
+  box-sizing:border-box;
+}
+
+:root{
+  font-size:12px;
+  --color-text: rgba(255,255,255,0.95);
+  --color-bg: #0c0b10;
+  --color-link: rgb(124 20 244 / 90%);
+  --color-bg-date: rgb(96 56 178 / 48%);
+  --color-link-hover: rgb(94 54 176 / 75%);
+  --color-border: rgba(177,177,177,0.3);
+}
+
+body{
+  margin:0;
+  color:var(--color-text);
+  background-color:var(--color-bg);
+  font-family:"ocr-a-std", monospace;
+  text-transform:uppercase;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+
+a{
+  text-decoration:none;
+  color:var(--color-link);
+  outline:none;
+  cursor:pointer;
+}
+
+a:hover{
+  color:var(--color-link-hover);
+}
+
+.frame{
+  position:relative;
+  z-index:10;
+  width:100%;
+  display:grid;
+  grid-template-columns:1fr auto;
+  align-items:center;
+  padding:2rem;
+  gap:1rem;
+}
+
+.frame__title{
+  font-size:1.25rem;
+  margin:0;
+  font-weight:400;
+  letter-spacing:0.05em;
+}
+
+.frame__index{
+  font-size:0.9rem;
+  color:var(--color-text);
+  opacity:0.5;
+  justify-self:end;
+  text-align:right;
+}
+
+.title{
+  font-weight:400;
+  font-size:clamp(2rem,8.5vw,6.5rem);
+  line-height:1.05;
+  text-align:center;
+  margin:10vh auto 4vh;
+  padding-bottom:2vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  width:min-content;
+  min-width:80%;
+  border-bottom:1px solid var(--color-border);
+}
+
+.title span::first-letter{
+  opacity:0.5;
+}
+
+.subtitle{
+  text-align:center;
+  font-size:1rem;
+  letter-spacing:0.15em;
+  opacity:0.6;
+  margin-bottom:8vh;
+}
+
+.section-grid{
+  display:grid;
+  grid-template-columns:1fr;
+  border-top:1px solid var(--color-border);
+  margin-bottom:6vh;
+}
+
+@media screen and (min-width:60em){
+  .section-grid{
+    grid-template-columns:1fr 1fr;
+  }
+  .block:nth-child(odd){
+    border-right:1px solid var(--color-border);
+  }
+}
+
+.block{
+  padding:4vw;
+  border-bottom:1px solid var(--color-border);
+}
+
+.block__head{
+  display:flex;
+  align-items:center;
+  margin-bottom:2.5rem;
+}
+
+.block__head::before{
+  content:'';
+  width:15px;
+  height:15px;
+  flex:none;
+  border:1px solid var(--color-link);
+  background:var(--color-bg-date);
+  margin-right:12px;
+}
+
+.block__title{
+  font-weight:400;
+  font-size:clamp(1.5rem,4vw,2.25rem);
+  margin:0;
+  letter-spacing:0.05em;
+}
+
+.step{
+  margin-bottom:2.6rem;
+}
+
+.step:last-child{
+  margin-bottom:0;
+}
+
+.step__label{
+  display:flex;
+  align-items:center;
+  font-size:0.95rem;
+  opacity:0.55;
+  letter-spacing:0.15em;
+  margin-bottom:0.9rem;
+}
+
+.step__label::before{
+  content:'';
+  width:6px;
+  height:6px;
+  margin-right:10px;
+  background:var(--color-link);
+}
+
+.cmd{
+  position:relative;
+  display:block;
+  padding:1.1rem 1.2rem 1.1rem 2rem;
+  border:1px solid var(--color-border);
+  font-size:1.05rem;
+  letter-spacing:0.02em;
+  color:var(--color-text);
+  transition:background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+.cmd::before{
+  content:'+';
+  position:absolute;
+  left:0.8rem;
+  color:var(--color-link);
+}
+
+.cmd:hover{
+  background-color:var(--color-bg-date);
+  border-color:var(--color-link);
+  color:var(--color-text);
+}
+
+.cmd:hover::before{
+  color:#fff;
+}
+
+.or{
+  text-align:center;
+  font-size:0.85rem;
+  opacity:0.4;
+  letter-spacing:0.2em;
+  margin:0.9rem 0;
+}
+
+.note{
+  font-size:0.85rem;
+  opacity:0.45;
+  letter-spacing:0.05em;
+  margin-top:0.8rem;
+}
+
+.note b{
+  opacity:1;
+  color:var(--color-text);
+}
+
+.foot{
+  display:flex;
+  justify-content:space-between;
+  padding:2rem;
+  border-top:1px solid var(--color-border);
+  font-size:0.85rem;
+  opacity:0.5;
+  letter-spacing:0.15em;
+}
+
+.foot span b{
+  opacity:1;
+  color:var(--color-link);
+  font-weight:400;
+}
+
+@media screen and (max-width:33em){
+  .foot{
+    flex-direction:column;
+    gap:0.6rem;
+  }
+}
+
+</style>
+</head>
+<body>
+
+<div class="frame">
+  <h1 class="frame__title">WHITEX FORENSIC</h1>
+  <span class="frame__index">Case File // 007</span>
+</div>
+
+<main>
+
+  <h1 class="title">
+    <span>FINDING HIDDEN</span>
+    <span>DATA</span>
+  </h1>
+  <p class="subtitle">Finding Hidden Data on Digital Devices</p>
+
+  <div class="section-grid">
+    <section class="block">
+      <div class="block__head">
+        <h2 class="block__title">FILE CARVING</h2>
+      </div>
+      <div class="step">
+        <div class="step__label"></div>
+        <div class="note">EXTRACTING FILES AND FILE FRAGMENTS FROM UNALLOCATED SPACE WITHOUT RELYING ON FILE SYSTEM METADATA.</div>
+      </div>
+      <div class="step">
+        <div class="step__label">TOOL</div>
+        <div class="note">SCALPEL, FOREMOST, PHOTOREC</div>
+      </div>
+    </section>
+    <section class="block">
+      <div class="block__head">
+        <h2 class="block__title">DATA RECOVERY</h2>
+      </div>
+      <div class="step">
+        <div class="step__label"></div>
+        <div class="note">RECOVERING DELETED FILES OR CORRUPTED DATA</div>
+      </div>
+      <div class="step">
+        <div class="step__label">TOOLS</div>
+        <a class="cmd">sudo dd if=/dev/urandom of=/dev/sdc bs=100M count=1</a>
+        <div class="or">— or —</div>
+        <a class="cmd">sudo testdisk</a>
+        <div class="or">— or —</div>
+        <a class="cmd">sudo fsck.ext4 -y -b 32768 -B 4096 /dev/sdc</a>
+        <div class="or">— or —</div>
+        <a class="cmd">sudo fsck.ext4 -p -b 32768 -B 4096 /dev/sdc</a>
+        <div class="note">TESTDISK FIRST CORRUPT YOUR DRIVE OR USB FOR TESTING THEN MOUNT THAT DEVICE FOR CHECKING USB IS CORRUPTED OR NOT NOW WE START THE RECOVERY PROCESS CHOOSE YOUR USB NONE COPY THE TOP - SUPER BLOCK = 32768, BLOCK SIZE = 4096 NOW QUIT THE TESTDISK THIS PROCESS RECOVERS THE CORRUPTED USB BUT NOT DATA FOR RECOVERING OR CARVING DATA USE PHOTOREC</div>
+      </div>
+    </section>
+    <section class="block">
+      <div class="block__head">
+        <h2 class="block__title">STEGANOGRAPHY DETECTION</h2>
+      </div>
+      <div class="step">
+        <div class="step__label"></div>
+        <div class="note">FINDING HIDDEN MESSAGES WITHIN DIGITAL MEDIA (IMAGES, AUDIO, VIDEO).</div>
+      </div>
+      <div class="step">
+        <div class="step__label">TOOL</div>
+        <a class="cmd">yay -S stegdetect</a>
+        <div class="or">— or —</div>
+        <a class="cmd">stegdetect my.jpg</a>
+        <div class="or">— or —</div>
+        <a class="cmd">stegdetect *.jpg</a>
+        <div class="or">— or —</div>
+        <a class="cmd">stegdetect -s 10 my.jpg</a>
+        <div class="note">STEGDETECT SINGLE MULTIPLE ADJUST SENSITIVITY</div>
+      </div>
+    </section>
+    <section class="block">
+      <div class="block__head">
+        <h2 class="block__title">ENCRYPTION ANALYSIS</h2>
+      </div>
+      <div class="step">
+        <div class="step__label"></div>
+        <div class="note">IDENTIFYING AND ATTEMPTING TO DECRYPT ENCRYPTED FILES.</div>
+      </div>
+      <div class="step">
+        <div class="step__label">TOOLS</div>
+        <div class="note">HASHCAT, JOHN THE RIPPER</div>
+      </div>
+    </section>
+    <section class="block">
+      <div class="block__head">
+        <h2 class="block__title">METADATA ANALYSIS</h2>
+      </div>
+      <div class="step">
+        <div class="step__label"></div>
+        <div class="note">ANALYZING METADATA TO UNCOVER HIDDEN OR MODIFIED INFORMATION.</div>
+      </div>
+      <div class="step">
+        <div class="step__label">TOOLS</div>
+        <a class="cmd">exiftool my.jpg</a>
+        <div class="note">EXIFTOOL</div>
+      </div>
+    </section>
+    <section class="block">
+      <div class="block__head">
+        <h2 class="block__title">REGISTRY ANALYSIS</h2>
+      </div>
+      <div class="step">
+        <div class="step__label"></div>
+        <div class="note">EXAMINING THE WINDOWS REGISTRY FOR HIDDEN OR OBFUSCATED ENTRIES.</div>
+      </div>
+      <div class="step">
+        <div class="step__label">TOOLS</div>
+      </div>
+      <div class="step">
+        <div class="step__label">1) REGISTRY EXPLORER</div>
+        <a class="cmd">wine registryexplorer.exe</a>
+        <div class="or">— or —</div>
+        <a class="cmd">File -> Open Hive -> Now start exploring</a>
+        <div class="or">— or —</div>
+        <a class="cmd">path = /windows/system32/config</a>
+        <div class="note">FIRST INSTALL REGISTRY EXPLORER HOW TO FIND HIVES FILE hives = SAM, SECURITY, SOFTWARE, SYSTEM</div>
+      </div>
+      <div class="step">
+        <div class="step__label">2) REGLOOKUP</div>
+        <a class="cmd">reglookup -h -t key -p "/sam/domains" sam</a>
+        <div class="note">THIS SHOWS HEADERS LIKE: PATH, TYPE, VALUES, MTIME]</div>
+      </div>
+      <div class="step">
+        <div class="step__label">-p "/sam/domains" IS USED TO GO INSIDE THE HIVE FILE TO A SPECIFIC LOCATION</div>
+      </div>
+      <div class="step">
+        <div class="step__label">-t KEY IS USED TO SHOW RESULTS ONLY FOR A SPECIFIC DATA TYPE</div>
+      </div>
+      <div class="step">
+        <div class="step__label">-t DATA TYPE OPTIONS]: NONE, SZ, EXPAND_SZ, BINARY, DWORD, DWORD_BE, LINK, MULTI-SZ, KEY, RSRC_LIST, RSRC_DESC, QWORD</div>
+        <a class="cmd">reglookup sam</a>
+        <div class="or">— or —</div>
+        <a class="cmd">reglookup -h -s -t key -p "/sam/domains" sam</a>
+        <div class="note">IF YOU DON'T KNOW THE PATH IF YOU WANT MORE INFO</div>
+      </div>
+    </section>
+    <section class="block">
+      <div class="block__head">
+        <h2 class="block__title">MEMORY FORENSICS</h2>
+      </div>
+      <div class="step">
+        <div class="step__label"></div>
+        <div class="note">ANALYZING RAM DUMPS TO FIND HIDDEN PROCESSES, DATA, OR MALWARE.</div>
+      </div>
+      <div class="step">
+        <div class="step__label">TOOLS</div>
+        <div class="note">VOLATILITY, REKALL</div>
+      </div>
+    </section>
+    <section class="block">
+      <div class="block__head">
+        <h2 class="block__title">NETWORK TRAFFIC ANALYSIS</h2>
+      </div>
+      <div class="step">
+        <div class="step__label"></div>
+        <div class="note">MONITORING AND ANALYZING NETWORK TRAFFIC FOR HIDDEN COMMUNICATION OR DATA EXFILTRATION.</div>
+      </div>
+      <div class="step">
+        <div class="step__label">TOOLS</div>
+      </div>
+      <div class="step">
+        <div class="step__label">1) WIRESHARK</div>
+        <a class="cmd">wireshark -i wlan0</a>
+        <div class="or">— or —</div>
+        <a class="cmd">sudo wireshark data.pcap</a>
+        <div class="note">OPEN TEST LOGIN PAGE IN YOUR BROWSER AND TYPE ANY USERNAME AND PASSWORD SAVE FILE AS DATA.PCAP</div>
+      </div>
+      <div class="step">
+        <div class="step__label">SEARCH] -> http.request.method == "post"</div>
+      </div>
+      <div class="step">
+        <div class="step__label">2) TSHARK</div>
+        <a class="cmd">tshark -r data.pcap -Y "http.request.method == POST" -T fields -e ip.src -e ip.dst -e http.request.uri</a>
+        <div class="or">— or —</div>
+        <a class="cmd">tshark -r data.pcap -Y 'http.request.uri contains "userinfo.php"' -T fields -e tcp.stream</a>
+        <div class="or">— or —</div>
+        <a class="cmd">tshark -r data.pcap -Y 'tcp.stream eq 89' -w new.pcap</a>
+        <div class="or">— or —</div>
+        <a class="cmd">tshark -r new.pcap -Y "http.request.method == POST" -V</a>
+        <div class="note">THIS CMD SHOWS POST REQUESTS THIS CMD SHOWS THE STREAM NUMBER OF USERINFO.PHP THIS CMD EXTRACTS THE USERINFO.PHP STREAM INTO NEW.PCAP</div>
+      </div>
+    </section>
+    <section class="block">
+      <div class="block__head">
+        <h2 class="block__title">SLACK SPACE ANALYSIS</h2>
+      </div>
+      <div class="step">
+        <div class="step__label"></div>
+        <div class="note">INVESTIGATING SLACK SPACE, THE UNUSED SPACE WITHIN A DISK CLUSTER, FOR HIDDEN DATA.</div>
+      </div>
+      <div class="step">
+        <div class="step__label">TOOLS</div>
+      </div>
+      <div class="step">
+        <div class="step__label">FOREMOST</div>
+        <a class="cmd">sudo dd if=/dev/sdb of=data.img bs=4M</a>
+        <div class="or">— or —</div>
+        <a class="cmd">mmls data.img</a>
+        <div class="or">— or —</div>
+        <a class="cmd">fsstat -o 103216 data.img</a>
+        <div class="or">— or —</div>
+        <a class="cmd">fls -f fat32 -o 103216 -r data.img</a>
+        <div class="or">— or —</div>
+        <a class="cmd">istat -f fat32 -o 103216 data.img 256</a>
+        <div class="or">— or —</div>
+        <a class="cmd">blkls -f fat32 -o 103216 data.img > new.img</a>
+        <div class="or">— or —</div>
+        <a class="cmd">foremost -i new.img</a>
+        <div class="note">CREATE SDB TO IMG USE FOR IDENTIFY PARTITIONS CHECK FILE SYSTEM TYPE - 103216 IS THE START NUM LIST ALL THE DATA INCLUDING DELETED FILES/DIRECTORY - FILE SYSTEM TYPE FAT32, START 103216 IT GIVES FULL INFO ABOUT A SPECIFIC FILE - 256 IS THE INODE NUMBER THIS CMD EXTRACTS SLACK SPACE IN DATA.IMG</div>
+      </div>
+    </section>
+    <section class="block">
+      <div class="block__head">
+        <h2 class="block__title">LOG ANALYSIS</h2>
+      </div>
+      <div class="step">
+        <div class="step__label"></div>
+        <div class="note">REVIEWING SYSTEM LOGS FOR SIGNS OF TAMPERING OR HIDDEN ACTIVITY.</div>
+      </div>
+      <div class="step">
+        <div class="step__label">TOOLS</div>
+      </div>
+      <div class="step">
+        <div class="step__label">10.1)LOGWATCH</div>
+        <a class="cmd">sudo logwatch --detail high</a>
+      </div>
+      <div class="step">
+        <div class="step__label">10.2) GOACCESS</div>
+        <a class="cmd">goaccess /var/log/httpd/access_log</a>
+        <div class="note">CHOOSE COMMON LOG FORMAT WHEN PROMPTED</div>
+      </div>
+      <div class="step">
+        <div class="step__label">10.3) SQLITE3 - SPECIALLY FOR BROWSERS</div>
+        <a class="cmd">cd .mozilla/firefox</a>
+        <div class="or">— or —</div>
+        <a class="cmd">cd xxxx.default-release</a>
+        <div class="or">— or —</div>
+        <a class="cmd">sqlite3 places.sqlite</a>
+        <div class="or">— or —</div>
+        <a class="cmd">select url, title, visit_count, datetime(last_visit_date/1000000, 'unixepoch') as last from moz_places order by last desc;</a>
+      </div>
+      <div class="step">
+        <div class="step__label">COOKIES</div>
+        <a class="cmd">sqlite3 cookies.sqlite "select host, name, value from moz_cookies;"</a>
+      </div>
+      <div class="step">
+        <div class="step__label">HISTORY</div>
+        <a class="cmd">sqlite3 formhistory.sqlite "select fieldname, value, timesused from moz_formhistory;"</a>
+      </div>
+      <div class="step">
+        <div class="step__label">CHROME HISTORY</div>
+        <a class="cmd">cd .config/google-chrome/default</a>
+        <div class="or">— or —</div>
+        <a class="cmd">sqlite3 history "select url, title, visit_count, datetime((last_visit_time/1000000)-11644473600, 'unixepoch') as last from urls order by last desc;"</a>
+      </div>
+      <div class="step">
+        <div class="step__label">SHOW TABLES AND DESCRIBE TABLE</div>
+        <a class="cmd">sqlite3 places.sqlite</a>
+        <div class="or">— or —</div>
+        <a class="cmd">.tables</a>
+        <div class="or">— or —</div>
+        <a class="cmd">.schema table_name</a>
+      </div>
+      <div class="step">
+        <div class="step__label">10.4) JOURNALCTL</div>
+        <a class="cmd">sudo journalctl</a>
+        <div class="or">— or —</div>
+        <a class="cmd">sudo journalctl -b</a>
+        <div class="or">— or —</div>
+        <a class="cmd">sudo journalctl -u sshd.service</a>
+        <div class="or">— or —</div>
+        <a class="cmd">sudo journalctl -p err</a>
+        <div class="or">— or —</div>
+        <a class="cmd">sudo journalctl --since "1 hour ago"</a>
+        <div class="or">— or —</div>
+        <a class="cmd">sudo journalctl -k</a>
+        <div class="or">— or —</div>
+        <a class="cmd">sudo journalctl -f</a>
+        <div class="note">VIEW ALL LOGS VIEW LOGS FROM THE LAST BOOT VIEW LOG ON SPECIFIC SERVICE VIEW LOGS OF A SPECIFIC PRIORITY VIEW LOGS FROM THE LAST HOUR VIEW KERNEL LOGS FOLLOW LOGS IN REAL TIME</div>
+      </div>
+    </section>
+  </div>
+
+  <div class="foot">
+    <span>Link Status: <b>Encrypted</b></span>
+  </div>
+
+</main>
+
+</body>
+</html>

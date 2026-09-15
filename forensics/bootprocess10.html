@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Knowledge Terminal — Media Extraction Protocol</title>
+<link rel="stylesheet" href="https://use.typekit.net/fiv8wyx.css">
+
+<style>
+
+*,
+*::after,
+*::before{
+  box-sizing:border-box;
+}
+
+:root{
+  font-size:12px;
+  --color-text: rgba(255,255,255,0.95);
+  --color-bg: #0c0b10;
+  --color-link: rgb(124 20 244 / 90%);
+  --color-bg-date: rgb(96 56 178 / 48%);
+  --color-link-hover: rgb(94 54 176 / 75%);
+  --color-border: rgba(177,177,177,0.3);
+}
+
+body{
+  margin:0;
+  color:var(--color-text);
+  background-color:var(--color-bg);
+  font-family:"ocr-a-std", monospace;
+  text-transform:uppercase;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+
+a{
+  text-decoration:none;
+  color:var(--color-link);
+  outline:none;
+  cursor:pointer;
+}
+
+a:hover{
+  color:var(--color-link-hover);
+}
+
+.frame{
+  position:relative;
+  z-index:10;
+  width:100%;
+  display:grid;
+  grid-template-columns:1fr auto;
+  align-items:center;
+  padding:2rem;
+  gap:1rem;
+}
+
+.frame__title{
+  font-size:1.25rem;
+  margin:0;
+  font-weight:400;
+  letter-spacing:0.05em;
+}
+
+.frame__index{
+  font-size:0.9rem;
+  color:var(--color-text);
+  opacity:0.5;
+  justify-self:end;
+  text-align:right;
+}
+
+.title{
+  font-weight:400;
+  font-size:clamp(2rem,8.5vw,6.5rem);
+  line-height:1.05;
+  text-align:center;
+  margin:10vh auto 4vh;
+  padding-bottom:2vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  width:min-content;
+  min-width:80%;
+  border-bottom:1px solid var(--color-border);
+}
+
+.title span::first-letter{
+  opacity:0.5;
+}
+
+.subtitle{
+  text-align:center;
+  font-size:1rem;
+  letter-spacing:0.15em;
+  opacity:0.6;
+  margin-bottom:8vh;
+}
+
+.section-grid{
+  display:grid;
+  grid-template-columns:1fr;
+  border-top:1px solid var(--color-border);
+  margin-bottom:6vh;
+}
+
+@media screen and (min-width:60em){
+  .section-grid{
+    grid-template-columns:1fr 1fr;
+  }
+  .block:nth-child(odd){
+    border-right:1px solid var(--color-border);
+  }
+}
+
+.block{
+  padding:4vw;
+  border-bottom:1px solid var(--color-border);
+}
+
+.block__head{
+  display:flex;
+  align-items:center;
+  margin-bottom:2.5rem;
+}
+
+.block__head::before{
+  content:'';
+  width:15px;
+  height:15px;
+  flex:none;
+  border:1px solid var(--color-link);
+  background:var(--color-bg-date);
+  margin-right:12px;
+}
+
+.block__title{
+  font-weight:400;
+  font-size:clamp(1.5rem,4vw,2.25rem);
+  margin:0;
+  letter-spacing:0.05em;
+}
+
+.step{
+  margin-bottom:2.6rem;
+}
+
+.step:last-child{
+  margin-bottom:0;
+}
+
+.step__label{
+  display:flex;
+  align-items:center;
+  font-size:0.95rem;
+  opacity:0.55;
+  letter-spacing:0.15em;
+  margin-bottom:0.9rem;
+}
+
+.step__label::before{
+  content:'';
+  width:6px;
+  height:6px;
+  margin-right:10px;
+  background:var(--color-link);
+}
+
+.cmd{
+  position:relative;
+  display:block;
+  padding:1.1rem 1.2rem 1.1rem 2rem;
+  border:1px solid var(--color-border);
+  font-size:1.05rem;
+  letter-spacing:0.02em;
+  color:var(--color-text);
+  transition:background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+.cmd::before{
+  content:'+';
+  position:absolute;
+  left:0.8rem;
+  color:var(--color-link);
+}
+
+.cmd:hover{
+  background-color:var(--color-bg-date);
+  border-color:var(--color-link);
+  color:var(--color-text);
+}
+
+.cmd:hover::before{
+  color:#fff;
+}
+
+.or{
+  text-align:center;
+  font-size:0.85rem;
+  opacity:0.4;
+  letter-spacing:0.2em;
+  margin:0.9rem 0;
+}
+
+.note{
+  font-size:0.85rem;
+  opacity:0.45;
+  letter-spacing:0.05em;
+  margin-top:0.8rem;
+}
+
+.note b{
+  opacity:1;
+  color:var(--color-text);
+}
+
+.foot{
+  display:flex;
+  justify-content:space-between;
+  padding:2rem;
+  border-top:1px solid var(--color-border);
+  font-size:0.85rem;
+  opacity:0.5;
+  letter-spacing:0.15em;
+}
+
+.foot span b{
+  opacity:1;
+  color:var(--color-link);
+  font-weight:400;
+}
+
+@media screen and (max-width:33em){
+  .foot{
+    flex-direction:column;
+    gap:0.6rem;
+  }
+}
+
+</style>
+</head>
+<body>
+
+<div class="frame">
+  <h1 class="frame__title">WHITEX FORENSIC</h1>
+  <span class="frame__index">Case File // 010</span>
+</div>
+
+<main>
+
+  <h1 class="title">
+    <span>BOOTING</span>
+    <span>PROCESS</span>
+  </h1>
+  <p class="subtitle">Understanding the step-by-step process that takes a computer from power-on to a fully loaded operating system</p>
+
+  <div class="section-grid">
+    <section class="block">
+      <div class="block__head">
+        <h2 class="block__title">LINUX BOOT PROCESS</h2>
+      </div>
+      <div class="step">
+        <div class="step__label">BIOS/UEFI INITIALIZATION</div>
+        <div class="note">WHEN THE COMPUTER IS TURNED ON THE BIOS (BASIC INPUT/OUTPUT SYSTEM) OR UEFI (UNIFIED EXTENSIBLE FIRMWARE INTERFACE) INITIALIZES THE HARDWARE. EXAMPLE: THE BIOS PERFORMS POST (POWER ON SELF TEST) TO CHECK THE HARDWARE COMPONENTS.</div>
+      </div>
+      <div class="step">
+        <div class="step__label">BOOTLOADER STAGE</div>
+        <div class="note">THE BIOS/UEFI LOOKS FOR A BOOTLOADER ON THE STORAGE DEVICE (LIKE GRUB - GRAND UNIFIED BOOTLOADER). EXAMPLE: GRUB IS LOADED FROM THE MASTER BOOT RECORD (MBR).</div>
+      </div>
+      <div class="step">
+        <div class="step__label">KERNEL LOADING</div>
+        <div class="note">THE BOOTLOADER LOADS THE LINUX KERNEL INTO MEMORY. EXAMPLE: GRUB LOADS THE KERNEL FILE (EG "/boot/vmlinuz-linux").</div>
+      </div>
+      <div class="step">
+        <div class="step__label">INIT SYSTEM</div>
+        <div class="note">THE KERNEL STARTS THE INITIAL PROCESS ("INIT" OR "SYSTEMD") WHICH MANAGES SYSTEM INITIALIZATION. EXAMPLE: SYSTEMD STARTS AND MANAGES THE SYSTEM SERVICES.</div>
+      </div>
+      <div class="step">
+        <div class="step__label">TARGETS</div>
+        <div class="note">THE SYSTEM ENTERS A SPECIFIC TARGET WHICH DEFINES THE STATE OF THE MACHINE. EXAMPLE: THE SYSTEM ENTERS GRAPHICAL MODE FOR THE USER LOGIN SCREEN.</div>
+      </div>
+    </section>
+    <section class="block">
+      <div class="block__head">
+        <h2 class="block__title">WINDOWS BOOT PROCESS (BIOS/UEFI INITIALIZATION)</h2>
+      </div>
+      <div class="step">
+        <div class="step__label"></div>
+        <div class="note">THE COMPUTER'S BIOS OR UEFI INITIALIZES THE HARDWARE AND PERFORMS A POST. EXAMPLE: THE BIOS CHECKS THE RAM AND OTHER COMPONENTS.</div>
+      </div>
+      <div class="step">
+        <div class="step__label">BOOT MANAGER</div>
+        <div class="note">THE BIOS/UEFI LOADS THE WINDOWS BOOT MANAGER (BOOTMGR.EXE). EXAMPLE: BOOT MANAGER IS FOUND ON THE ACTIVE PARTITION.</div>
+      </div>
+      <div class="step">
+        <div class="step__label">BOOT LOADER</div>
+        <div class="note">BOOT MANAGER LOADS THE WINDOWS OS LOADER (WINLOAD.EXE). EXAMPLE: WINLOAD.EXE LOADS ESSENTIAL DRIVERS AND THE KERNEL (NTOSKRNL.EXE).</div>
+      </div>
+      <div class="step">
+        <div class="step__label">KERNEL INITIALIZATION</div>
+        <div class="note">THE KERNEL INITIALIZES THE HAL (HARDWARE ABSTRACTION LAYER) AND CORE SYSTEM PROCESSES. EXAMPLE: NTOSKRNL.EXE STARTS ESSENTIAL SERVICES AND DRIVERS.</div>
+      </div>
+      <div class="step">
+        <div class="step__label">SESSION MANAGER</div>
+        <div class="note">THE SESSION MANAGER SUBSYSTEM (SMSS.EXE) INITIALIZES USER SESSIONS. EXAMPLE: SMSS.EXE SETS UP THE SYSTEM ENVIRONMENT AND LOADS THE WINLOGON PROCESS.</div>
+      </div>
+      <div class="step">
+        <div class="step__label">WINLOGON AND EXPLORER</div>
+        <div class="note">THE WINLOGON PROCESS (WINLOGON.EXE) HANDLES USER LOGIN. EXAMPLE: AFTER LOGIN "EXPLORER.EXE" IS STARTED, LAUNCHING THE WINDOWS DESKTOP ENVIRONMENT.</div>
+      </div>
+    </section>
+    <section class="block">
+      <div class="block__head">
+        <h2 class="block__title">MAC OS BOOT PROCESS - EFI INITIALIZATION</h2>
+      </div>
+      <div class="step">
+        <div class="step__label"></div>
+        <div class="note">THE MAC EFI (EXTENSIBLE FIRMWARE INTERFACE) INITIALIZES THE HARDWARE. EXAMPLE: EFI PERFORMS A HARDWARE CHECK SIMILAR TO POST.</div>
+      </div>
+      <div class="step">
+        <div class="step__label">BOOT.EFI</div>
+        <div class="note">EFI LOADS THE "BOOT.EFI" FILE, WHICH IS THE MAC BOOT LOADER. EXAMPLE: BOOT.EFI IS LOCATED IN THE EFI SYSTEM PARTITION.</div>
+      </div>
+      <div class="step">
+        <div class="step__label">KERNEL LOADING</div>
+        <div class="note">BOOT.EFI LOADS THE MACOS KERNEL (MACH-KERNEL). EXAMPLE: MACH-KERNEL IS LOADED INTO MEMORY.</div>
+      </div>
+      <div class="step">
+        <div class="step__label">LAUNCHD</div>
+        <div class="note">THE KERNEL STARTS THE LAUNCHD PROCESS WHICH MANAGES SYSTEM INITIALIZATION AND SERVICES. EXAMPLE: LAUNCHD REPLACES THE OLDER "INIT" PROCESS.</div>
+      </div>
+      <div class="step">
+        <div class="step__label">SYSTEM INITIALIZATION</div>
+        <div class="note">"LAUNCHD" INITIALIZES SYSTEM SERVICES AND STARTS THE LOGIN WINDOW. EXAMPLE: "LAUNCHD" STARTS SERVICES LIKE THE WINDOW SERVER AND USER ENVIRONMENT.</div>
+      </div>
+    </section>
+    <section class="block">
+      <div class="block__head">
+        <h2 class="block__title">BOOTING PROCESS - EXAMPLE SCENARIO SUMMARY</h2>
+      </div>
+      <div class="step">
+        <div class="step__label"></div>
+        <div class="note">IMAGINE YOU PRESS THE POWER BUTTON ON THREE DIFFERENT COMPUTERS: ONE RUNNING LINUX, ONE WINDOWS, AND ONE MAC OS.</div>
+      </div>
+      <div class="step">
+        <div class="step__label">LINUX</div>
+        <div class="note">THE BIOS INITIALIZES HARDWARE, GRUB LOADS, THE LINUX KERNEL STARTS, "SYSTEMD" INITIALIZES, AND YOU SEE THE LOGIN SCREEN.</div>
+      </div>
+      <div class="step">
+        <div class="step__label">WINDOWS</div>
+        <div class="note">THE BIOS INITIALIZES HARDWARE, THE WINDOWS BOOT MANAGER LOADS, "WINLOAD.EXE" STARTS THE KERNEL, SMSS.EXE SETS UP THE SYSTEM, AND YOU SEE THE WINDOWS LOGIN SCREEN.</div>
+      </div>
+      <div class="step">
+        <div class="step__label">MAC</div>
+        <div class="note">THE EFI INITIALIZES HARDWARE, BOOT.EFI LOADS, THE MAC KERNEL STARTS, "LAUNCHD" INITIALIZES, AND YOU SEE THE MAC LOGIN SCREEN.</div>
+      </div>
+    </section>
+  </div>
+
+  <div class="foot">
+    <span>Link Status: <b>Encrypted</b></span>
+  </div>
+
+</main>
+
+</body>
+</html>

@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Knowledge Terminal — Media Extraction Protocol</title>
+<link rel="stylesheet" href="https://use.typekit.net/fiv8wyx.css">
+
+<style>
+
+*,
+*::after,
+*::before{
+  box-sizing:border-box;
+}
+
+:root{
+  font-size:12px;
+  --color-text: rgba(255,255,255,0.95);
+  --color-bg: #0c0b10;
+  --color-link: rgb(124 20 244 / 90%);
+  --color-bg-date: rgb(96 56 178 / 48%);
+  --color-link-hover: rgb(94 54 176 / 75%);
+  --color-border: rgba(177,177,177,0.3);
+}
+
+body{
+  margin:0;
+  color:var(--color-text);
+  background-color:var(--color-bg);
+  font-family:"ocr-a-std", monospace;
+  text-transform:uppercase;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+
+a{
+  text-decoration:none;
+  color:var(--color-link);
+  outline:none;
+  cursor:pointer;
+}
+
+a:hover{
+  color:var(--color-link-hover);
+}
+
+.frame{
+  position:relative;
+  z-index:10;
+  width:100%;
+  display:grid;
+  grid-template-columns:1fr auto;
+  align-items:center;
+  padding:2rem;
+  gap:1rem;
+}
+
+.frame__title{
+  font-size:1.25rem;
+  margin:0;
+  font-weight:400;
+  letter-spacing:0.05em;
+}
+
+.frame__index{
+  font-size:0.9rem;
+  color:var(--color-text);
+  opacity:0.5;
+  justify-self:end;
+  text-align:right;
+}
+
+.title{
+  font-weight:400;
+  font-size:clamp(2rem,8.5vw,6.5rem);
+  line-height:1.05;
+  text-align:center;
+  margin:10vh auto 4vh;
+  padding-bottom:2vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  width:min-content;
+  min-width:80%;
+  border-bottom:1px solid var(--color-border);
+}
+
+.title span::first-letter{
+  opacity:0.5;
+}
+
+.subtitle{
+  text-align:center;
+  font-size:1rem;
+  letter-spacing:0.15em;
+  opacity:0.6;
+  margin-bottom:8vh;
+}
+
+.section-grid{
+  display:grid;
+  grid-template-columns:1fr;
+  border-top:1px solid var(--color-border);
+  margin-bottom:6vh;
+}
+
+@media screen and (min-width:60em){
+  .section-grid{
+    grid-template-columns:1fr 1fr;
+  }
+  .block:nth-child(odd){
+    border-right:1px solid var(--color-border);
+  }
+}
+
+.block{
+  padding:4vw;
+  border-bottom:1px solid var(--color-border);
+}
+
+.block__head{
+  display:flex;
+  align-items:center;
+  margin-bottom:2.5rem;
+}
+
+.block__head::before{
+  content:'';
+  width:15px;
+  height:15px;
+  flex:none;
+  border:1px solid var(--color-link);
+  background:var(--color-bg-date);
+  margin-right:12px;
+}
+
+.block__title{
+  font-weight:400;
+  font-size:clamp(1.5rem,4vw,2.25rem);
+  margin:0;
+  letter-spacing:0.05em;
+}
+
+.step{
+  margin-bottom:2.6rem;
+}
+
+.step:last-child{
+  margin-bottom:0;
+}
+
+.step__label{
+  display:flex;
+  align-items:center;
+  font-size:0.95rem;
+  opacity:0.55;
+  letter-spacing:0.15em;
+  margin-bottom:0.9rem;
+}
+
+.step__label::before{
+  content:'';
+  width:6px;
+  height:6px;
+  margin-right:10px;
+  background:var(--color-link);
+}
+
+.cmd{
+  position:relative;
+  display:block;
+  padding:1.1rem 1.2rem 1.1rem 2rem;
+  border:1px solid var(--color-border);
+  font-size:1.05rem;
+  letter-spacing:0.02em;
+  color:var(--color-text);
+  transition:background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+.cmd::before{
+  content:'+';
+  position:absolute;
+  left:0.8rem;
+  color:var(--color-link);
+}
+
+.cmd:hover{
+  background-color:var(--color-bg-date);
+  border-color:var(--color-link);
+  color:var(--color-text);
+}
+
+.cmd:hover::before{
+  color:#fff;
+}
+
+.or{
+  text-align:center;
+  font-size:0.85rem;
+  opacity:0.4;
+  letter-spacing:0.2em;
+  margin:0.9rem 0;
+}
+
+.note{
+  font-size:0.85rem;
+  opacity:0.45;
+  letter-spacing:0.05em;
+  margin-top:0.8rem;
+}
+
+.note b{
+  opacity:1;
+  color:var(--color-text);
+}
+
+.foot{
+  display:flex;
+  justify-content:space-between;
+  padding:2rem;
+  border-top:1px solid var(--color-border);
+  font-size:0.85rem;
+  opacity:0.5;
+  letter-spacing:0.15em;
+}
+
+.foot span b{
+  opacity:1;
+  color:var(--color-link);
+  font-weight:400;
+}
+
+@media screen and (max-width:33em){
+  .foot{
+    flex-direction:column;
+    gap:0.6rem;
+  }
+}
+
+</style>
+</head>
+<body>
+
+<div class="frame">
+  <h1 class="frame__title">WHITEX FORENSIC</h1>
+  <span class="frame__index">Case File // 014</span>
+</div>
+
+<main>
+
+  <h1 class="title">
+    <span>WINDOWS REGISTRY</span>
+    <span>FORENSICS</span>
+  </h1>
+  <p class="subtitle">The Windows registry is a hierarchical database that stores low-level settings for the OS and for applications.</p>
+
+  <div class="section-grid">
+    <section class="block">
+      <div class="block__head">
+        <h2 class="block__title">HIVES</h2>
+      </div>
+      <div class="step">
+        <div class="step__label">1) SYSTEM</div>
+        <div class="note">Stores system configurations and services.</div>
+      </div>
+      <div class="step">
+        <div class="step__label">2) SOFTWARE</div>
+        <div class="note">Stores installed software and configurations.</div>
+      </div>
+      <div class="step">
+        <div class="step__label">3) SECURITY</div>
+        <div class="note">Stores security settings and policies.</div>
+      </div>
+      <div class="step">
+        <div class="step__label">4) SAM</div>
+        <div class="note">Stores user account information.</div>
+      </div>
+      <div class="step">
+        <div class="step__label">5) NTUSER.DAT</div>
+        <div class="note">Stores user-specific configuration for each user. All hives are stored in Windows/System32/config. Hives are stored in two separate locations:</div>
+      </div>
+    </section>
+    <section class="block">
+      <div class="block__head">
+        <h2 class="block__title">HKEY_LOCAL_MACHINE (HKLM)</h2>
+      </div>
+      <div class="step">
+        <div class="step__label"></div>
+        <div class="note">system wide settings are stored. Files: SAM, SYSTEM, SOFTWARE, SECURITY.</div>
+      </div>
+      <div class="step">
+        <div class="step__label">HKLM HIVE LOCATION EXAMPLE - SERVICES</div>
+        <div class="note">SYSTEM/ControlSet001/Services/ This location shows a list of all installed services and drivers. REGLOOKUP SYSTEM - IF YOU DON'T KNOW THE PATH</div>
+      </div>
+      <div class="step">
+        <div class="step__label">TOOLS</div>
+        <a class="cmd">reglookup -H -T key -p "/ControlSet001/Services/" Windows/System32/config/SYSTEM</a>
+        <div class="or">— or —</div>
+        <a class="cmd">chntpw -e SYSTEM</a>
+        <div class="or">— or —</div>
+        <a class="cmd">ls</a>
+        <div class="or">— or —</div>
+        <a class="cmd">cd /ControlSet001/Services</a>
+        <div class="or">— or —</div>
+        <a class="cmd">ls</a>
+        <div class="note">Then inside chntpw: You can also see data inside the file using cat.</div>
+      </div>
+    </section>
+    <section class="block">
+      <div class="block__head">
+        <h2 class="block__title">HKEY_CURRENT_USER (HKCU) - settings of the current logged-in user. File: NTUSER.DAT.</h2>
+      </div>
+      <div class="step">
+        <div class="step__label">HKCU HIVE LOCATION EXAMPLE</div>
+        <a class="cmd">reglookup -p "SOFTWARE/Microsoft/Internet Explorer/TypedURLs" users/arshan/NTUSER.DAT</a>
+        <div class="or">— or —</div>
+        <a class="cmd">chntpw -e users/arshan/NTUSER.DAT</a>
+        <div class="or">— or —</div>
+        <a class="cmd">cd SOFTWARE</a>
+        <div class="or">— or —</div>
+        <a class="cmd">cd Microsoft</a>
+        <div class="or">— or —</div>
+        <a class="cmd">cd Internet Explorer</a>
+        <div class="or">— or —</div>
+        <a class="cmd">cd TypedURLs</a>
+        <div class="or">— or —</div>
+        <a class="cmd">ls</a>
+        <div class="or">— or —</div>
+        <a class="cmd">cat url1</a>
+        <div class="note">SOFTWARE/Microsoft/Windows/CurrentVersion/Internet Explorer/TypedURLs THIS LOCATION SHOW TYPED URLS INTO INTERNET EXPLORER Then inside chntpw:</div>
+      </div>
+    </section>
+    <section class="block">
+      <div class="block__head">
+        <h2 class="block__title">EXAMINE BROWSER COOKIES AND HISTORY FILES USING CLI</h2>
+      </div>
+      <div class="step">
+        <div class="step__label"></div>
+        <div class="note">You can use sqlite3 to open browser history and cookies databases directly. I already covered how to use sqlite3 and all possible locations of history and cookies.</div>
+      </div>
+      <div class="step">
+        <div class="step__label">USING GUI TOOLS</div>
+        <a class="cmd">pacman -S sqlitebrowser</a>
+        <div class="or">— or —</div>
+        <a class="cmd">SELECT url, title, visit_count, last_visit_time FROM urls ORDER BY last_visit_time DESC;</a>
+        <div class="or">— or —</div>
+        <a class="cmd">yay -S sqliteman</a>
+        <div class="note">Open the History database in sqlitebrowser, then go to Execute SQL and run: Open sqliteman, load the History database, then run the same SQL query under Execute.</div>
+      </div>
+    </section>
+    <section class="block">
+      <div class="block__head">
+        <h2 class="block__title">EXTRACT LIVE RUNNING OS BROWSER HISTORY</h2>
+      </div>
+      <div class="step">
+        <div class="step__label"></div>
+        <a class="cmd">pip install browser-history</a>
+        <div class="or">— or —</div>
+        <a class="cmd">browser-history -b all</a>
+      </div>
+    </section>
+    <section class="block">
+      <div class="block__head">
+        <h2 class="block__title">EXAMINE WINDOWS FILES AND METADATA ANALYSIS</h2>
+      </div>
+      <div class="step">
+        <div class="step__label"></div>
+        <div class="note">In this section we use basic tools for file and metadata analysis.</div>
+      </div>
+      <div class="step">
+        <div class="step__label">EXAMPLE TOOLS</div>
+        <a class="cmd">exiftool img.jpg</a>
+        <div class="or">— or —</div>
+        <a class="cmd">stat file.txt</a>
+        <div class="or">— or —</div>
+        <a class="cmd">file file.txt</a>
+        <div class="or">— or —</div>
+        <a class="cmd">strings file.txt</a>
+        <div class="or">— or —</div>
+        <a class="cmd">pdfinfo file.pdf</a>
+        <div class="or">— or —</div>
+        <a class="cmd">7z l file.zip</a>
+        <div class="or">— or —</div>
+        <a class="cmd">foremost -i file.txt</a>
+        <div class="note">Requires: pacman -S binutils Requires: pacman -S poppler Requires: pacman -S p7zip</div>
+      </div>
+      <div class="step">
+        <div class="step__label">NOTE ON STEGANOGRAPHY</div>
+        <div class="note">In file and metadata analysis there are countless ways a criminal might hide their data within a file using steganography. Your task is to uncover this hidden data using your techniques.</div>
+      </div>
+    </section>
+    <section class="block">
+      <div class="block__head">
+        <h2 class="block__title">INVESTIGATING WINDOWS LOGS</h2>
+      </div>
+      <div class="step">
+        <div class="step__label"></div>
+        <div class="note">I already covered how to install evtx tools and convert Windows logs (.evtx) to .xml, along with all Windows log locations. Here are alternative methods for reading logs.</div>
+      </div>
+      <div class="step">
+        <div class="step__label">METHOD 1: EVTX_DUMP.PY</div>
+        <a class="cmd">.local/bin/evtx_dump.py log.evtx</a>
+        <div class="note">Useful when you don't want to convert the evtx file to xml.</div>
+      </div>
+      <div class="step">
+        <div class="step__label">METHOD 2: XMLLINT</div>
+        <a class="cmd">pacman -S libxml2</a>
+        <div class="or">— or —</div>
+        <a class="cmd">xmllint --format log.xml</a>
+      </div>
+      <div class="step">
+        <div class="step__label">METHOD 3: XMLSTARLET</div>
+        <a class="cmd">pacman -S xmlstarlet</a>
+        <div class="or">— or —</div>
+        <a class="cmd">xmlstarlet fo log.xml</a>
+        <div class="note">Both xmllint and xmlstarlet are used to pretty-print and open XML files.</div>
+      </div>
+      <div class="step">
+        <div class="step__label">METHOD 4: CONVERT XML TO JSON</div>
+        <a class="cmd">pip install yq</a>
+        <div class="or">— or —</div>
+        <a class="cmd">xq . log.xml > log.json</a>
+        <div class="or">— or —</div>
+        <a class="cmd">jq . log.json</a>
+      </div>
+    </section>
+  </div>
+
+  <div class="foot">
+    <span>Link Status: <b>Encrypted</b></span>
+  </div>
+
+</main>
+
+</body>
+</html>

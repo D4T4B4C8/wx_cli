@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Knowledge Terminal — Media Extraction Protocol</title>
+<link rel="stylesheet" href="https://use.typekit.net/fiv8wyx.css">
+
+<style>
+
+*,
+*::after,
+*::before{
+  box-sizing:border-box;
+}
+
+:root{
+  font-size:12px;
+  --color-text: rgba(255,255,255,0.95);
+  --color-bg: #0c0b10;
+  --color-link: rgb(124 20 244 / 90%);
+  --color-bg-date: rgb(96 56 178 / 48%);
+  --color-link-hover: rgb(94 54 176 / 75%);
+  --color-border: rgba(177,177,177,0.3);
+}
+
+body{
+  margin:0;
+  color:var(--color-text);
+  background-color:var(--color-bg);
+  font-family:"ocr-a-std", monospace;
+  text-transform:uppercase;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+
+a{
+  text-decoration:none;
+  color:var(--color-link);
+  outline:none;
+  cursor:pointer;
+}
+
+a:hover{
+  color:var(--color-link-hover);
+}
+
+.frame{
+  position:relative;
+  z-index:10;
+  width:100%;
+  display:grid;
+  grid-template-columns:1fr auto;
+  align-items:center;
+  padding:2rem;
+  gap:1rem;
+}
+
+.frame__title{
+  font-size:1.25rem;
+  margin:0;
+  font-weight:400;
+  letter-spacing:0.05em;
+}
+
+.frame__index{
+  font-size:0.9rem;
+  color:var(--color-text);
+  opacity:0.5;
+  justify-self:end;
+  text-align:right;
+}
+
+.title{
+  font-weight:400;
+  font-size:clamp(2rem,8.5vw,6.5rem);
+  line-height:1.05;
+  text-align:center;
+  margin:10vh auto 4vh;
+  padding-bottom:2vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  width:min-content;
+  min-width:80%;
+  border-bottom:1px solid var(--color-border);
+}
+
+.title span::first-letter{
+  opacity:0.5;
+}
+
+.subtitle{
+  text-align:center;
+  font-size:1rem;
+  letter-spacing:0.15em;
+  opacity:0.6;
+  margin-bottom:8vh;
+}
+
+.section-grid{
+  display:grid;
+  grid-template-columns:1fr;
+  border-top:1px solid var(--color-border);
+  margin-bottom:6vh;
+}
+
+@media screen and (min-width:60em){
+  .section-grid{
+    grid-template-columns:1fr 1fr;
+  }
+  .block:nth-child(odd){
+    border-right:1px solid var(--color-border);
+  }
+}
+
+.block{
+  padding:4vw;
+  border-bottom:1px solid var(--color-border);
+}
+
+.block__head{
+  display:flex;
+  align-items:center;
+  margin-bottom:2.5rem;
+}
+
+.block__head::before{
+  content:'';
+  width:15px;
+  height:15px;
+  flex:none;
+  border:1px solid var(--color-link);
+  background:var(--color-bg-date);
+  margin-right:12px;
+}
+
+.block__title{
+  font-weight:400;
+  font-size:clamp(1.5rem,4vw,2.25rem);
+  margin:0;
+  letter-spacing:0.05em;
+}
+
+.step{
+  margin-bottom:2.6rem;
+}
+
+.step:last-child{
+  margin-bottom:0;
+}
+
+.step__label{
+  display:flex;
+  align-items:center;
+  font-size:0.95rem;
+  opacity:0.55;
+  letter-spacing:0.15em;
+  margin-bottom:0.9rem;
+}
+
+.step__label::before{
+  content:'';
+  width:6px;
+  height:6px;
+  margin-right:10px;
+  background:var(--color-link);
+}
+
+.cmd{
+  position:relative;
+  display:block;
+  padding:1.1rem 1.2rem 1.1rem 2rem;
+  border:1px solid var(--color-border);
+  font-size:1.05rem;
+  letter-spacing:0.02em;
+  color:var(--color-text);
+  transition:background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+.cmd::before{
+  content:'+';
+  position:absolute;
+  left:0.8rem;
+  color:var(--color-link);
+}
+
+.cmd:hover{
+  background-color:var(--color-bg-date);
+  border-color:var(--color-link);
+  color:var(--color-text);
+}
+
+.cmd:hover::before{
+  color:#fff;
+}
+
+.or{
+  text-align:center;
+  font-size:0.85rem;
+  opacity:0.4;
+  letter-spacing:0.2em;
+  margin:0.9rem 0;
+}
+
+.note{
+  font-size:0.85rem;
+  opacity:0.45;
+  letter-spacing:0.05em;
+  margin-top:0.8rem;
+}
+
+.note b{
+  opacity:1;
+  color:var(--color-text);
+}
+
+.foot{
+  display:flex;
+  justify-content:space-between;
+  padding:2rem;
+  border-top:1px solid var(--color-border);
+  font-size:0.85rem;
+  opacity:0.5;
+  letter-spacing:0.15em;
+}
+
+.foot span b{
+  opacity:1;
+  color:var(--color-link);
+  font-weight:400;
+}
+
+@media screen and (max-width:33em){
+  .foot{
+    flex-direction:column;
+    gap:0.6rem;
+  }
+}
+
+</style>
+</head>
+<body>
+
+<div class="frame">
+  <h1 class="frame__title">WHITEX FORENSIC</h1>
+  <span class="frame__index">Case File // 016</span>
+</div>
+
+<main>
+
+  <h1 class="title">
+    <span>MEMORY FORENSICS</span>
+    <span>INTRODUCTION TO VOLATILITY</span>
+  </h1>
+  <p class="subtitle">Memory acquisition is the process of capturing the contents of a computer's RAM to analyze it later.</p>
+
+  <div class="section-grid">
+    <section class="block">
+      <div class="block__head">
+        <h2 class="block__title">INTRODUCTION TO VOLATILITY</h2>
+      </div>
+      <div class="step">
+        <div class="step__label"></div>
+        <div class="note">Volatility is an open-source memory forensics framework for incident response and malware analysis. It allows investigators to extract digital artifacts from volatile memory (RAM) dumps. Volatility supports memory dumps from a wide variety of operating systems, including Windows, Linux, Mac, and Android. There are two types of Volatility tools: 1) Volatility 2 -> Download using GitHub 2) Volatility 3 -> pacman -S volatility</div>
+      </div>
+    </section>
+    <section class="block">
+      <div class="block__head">
+        <h2 class="block__title">WINDOWS MEMORY ACQUISITION - WINPMEM AND DUMPIT</h2>
+      </div>
+      <div class="step">
+        <div class="step__label">METHOD 1: WINPMEM</div>
+        <a class="cmd">winpmem_mini_x64_rc2.exe arshwin.mem</a>
+        <div class="note">First download WinPMEM. +https://github.com/velocidex/winpmem/releases|WinPMEM Releases Download only "winpmem_mini_x64_rc2.exe" Open your Command Prompt as Administrator, then go to the winpmem.exe location. After acquisition, transfer arshwin.mem to your Linux system for investigation.</div>
+      </div>
+      <div class="step">
+        <div class="step__label">METHOD 2: DUMPIT</div>
+        <a class="cmd">DumpIt.exe</a>
+        <div class="note">Open your MEGA account and download DumpIt (x64). Open your Command Prompt and go to the DumpIt.exe location.</div>
+      </div>
+    </section>
+    <section class="block">
+      <div class="block__head">
+        <h2 class="block__title">MEMORY ANALYSIS USING VOLATILITY - USAGE</h2>
+      </div>
+      <div class="step">
+        <div class="step__label">I AM USING VOLATILITY 3</div>
+        <a class="cmd">pacman -S volatility</a>
+        <div class="or">— or —</div>
+        <a class="cmd">sudo vol -f win.mem windows.<plugin></a>
+        <div class="note">Usage:</div>
+      </div>
+      <div class="step">
+        <div class="step__label">PLUGIN</div>
+        <a class="cmd">windows.info</a>
+        <div class="or">— or —</div>
+        <a class="cmd">windows.verinfo</a>
+        <div class="note">Display basic info about memory image and OS. Display version info for the OS.</div>
+      </div>
+    </section>
+    <section class="block">
+      <div class="block__head">
+        <h2 class="block__title">PROCESS AND MODULE ANALYSIS</h2>
+      </div>
+      <div class="step">
+        <div class="step__label"></div>
+        <a class="cmd">windows.cmdline</a>
+        <div class="or">— or —</div>
+        <a class="cmd">windows.dlllist</a>
+        <div class="or">— or —</div>
+        <a class="cmd">windows.ldrmodules</a>
+        <div class="or">— or —</div>
+        <a class="cmd">windows.modscan</a>
+        <div class="or">— or —</div>
+        <a class="cmd">windows.modules</a>
+        <div class="or">— or —</div>
+        <a class="cmd">windows.pslist</a>
+        <div class="or">— or —</div>
+        <a class="cmd">windows.pstree</a>
+        <div class="or">— or —</div>
+        <a class="cmd">windows.psscan</a>
+        <div class="note">Displays the command line arguments for each process. Lists loaded DLLs for each process. Lists the loaded modules for each process using the PEB. Scans for kernel modules in memory. Lists loaded kernel modules. Lists active processes. Displays the process list as a tree. Scans for process structures in memory.</div>
+      </div>
+    </section>
+    <section class="block">
+      <div class="block__head">
+        <h2 class="block__title">CREDENTIAL AND SECURITY ANALYSIS</h2>
+      </div>
+      <div class="step">
+        <div class="step__label"></div>
+        <a class="cmd">windows.cachedump</a>
+        <div class="or">— or —</div>
+        <a class="cmd">windows.hashdump</a>
+        <div class="or">— or —</div>
+        <a class="cmd">windows.lsadump</a>
+        <div class="or">— or —</div>
+        <a class="cmd">windows.skeleton_key_check</a>
+        <div class="or">— or —</div>
+        <a class="cmd">windows.getservicesids</a>
+        <div class="or">— or —</div>
+        <a class="cmd">windows.getsids</a>
+        <div class="or">— or —</div>
+        <a class="cmd">windows.privileges</a>
+        <div class="or">— or —</div>
+        <a class="cmd">windows.malfind</a>
+        <div class="note">Dumps cached domain credentials from memory. Extracts password hashes from the SAM database. Dumps LSA secrets from the registry. Checks for the presence of skeleton key malware in memory. Retrieves service SIDs from memory. Retrieves SIDs from process tokens. Lists privileges associated with each process. IDENTIFIES POTENTIAL MALICIOUS CODE AND INJECTION IN MEMORY.</div>
+      </div>
+    </section>
+    <section class="block">
+      <div class="block__head">
+        <h2 class="block__title">MEMORY MANAGEMENT AND POOL ANALYSIS</h2>
+      </div>
+      <div class="step">
+        <div class="step__label"></div>
+        <a class="cmd">windows.bigpools</a>
+        <div class="or">— or —</div>
+        <a class="cmd">windows.poolscanner</a>
+        <div class="note">LISTS LARGE MEMORY POOLS ALLOCATED BY THE WINDOWS KERNEL. SCANS FOR POOL ALLOCATIONS WITHIN THE MEMORY IMAGE.</div>
+      </div>
+    </section>
+    <section class="block">
+      <div class="block__head">
+        <h2 class="block__title">REGISTRY ANALYSIS</h2>
+      </div>
+      <div class="step">
+        <div class="step__label"></div>
+        <a class="cmd">windows.registry.certificates</a>
+        <div class="or">— or —</div>
+        <a class="cmd">windows.registry.hivelist</a>
+        <div class="or">— or —</div>
+        <a class="cmd">windows.registry.hivescan</a>
+        <div class="or">— or —</div>
+        <a class="cmd">windows.registry.printkey</a>
+        <div class="or">— or —</div>
+        <a class="cmd">windows.registry.userassist</a>
+        <div class="note">EXTRACT CERTIFICATES FROM THE WINDOWS REGISTRY. LISTS REGISTRY HIVES IN MEMORY. SCANS FOR REGISTRY HIVES IN MEMORY. DISPLAY THE CONTENTS OF A REGISTRY KEY. EXTRACTS USER ASSIST INFORMATION FROM THE REGISTRY.</div>
+      </div>
+    </section>
+    <section class="block">
+      <div class="block__head">
+        <h2 class="block__title">FILE AND DRIVER ANALYSIS</h2>
+      </div>
+      <div class="step">
+        <div class="step__label"></div>
+        <a class="cmd">windows.devicetree</a>
+        <div class="or">— or —</div>
+        <a class="cmd">windows.driverirp</a>
+        <div class="or">— or —</div>
+        <a class="cmd">windows.drivermodule</a>
+        <div class="or">— or —</div>
+        <a class="cmd">windows.dumpfiles</a>
+        <div class="or">— or —</div>
+        <a class="cmd">windows.filescan</a>
+        <div class="or">— or —</div>
+        <a class="cmd">windows.mftscan.ADS</a>
+        <div class="or">— or —</div>
+        <a class="cmd">windows.mftscan.MFTScan</a>
+        <div class="or">— or —</div>
+        <a class="cmd">windows.symlinkscan</a>
+        <div class="note">DISPLAY THE DEVICE TREE. LISTS THE IRP [I/O REQUEST PACKET] HANDLERS FOR DRIVERS. LISTS KERNEL MODULES RELATED TO EACH DRIVER. EXTRACTS FILES FROM MEMORY. SCANS FOR FILE OBJECTS IN MEMORY. SCAN FOR ALTERNATE DATA STREAMS IN THE MFT. SCAN FOR MFT ENTRIES. SCANS FOR SYMBOLIC LINK OBJECTS IN MEMORY.</div>
+      </div>
+    </section>
+    <section class="block">
+      <div class="block__head">
+        <h2 class="block__title">NETWORK AND CONNECTION ANALYSIS</h2>
+      </div>
+      <div class="step">
+        <div class="step__label"></div>
+        <a class="cmd">windows.netscan</a>
+        <div class="or">— or —</div>
+        <a class="cmd">windows.netstat</a>
+        <div class="note">SCANS FOR NETWORK CONNECTION AND SOCKETS. DISPLAY NETWORK CONNECTIONS AND LISTENING SOCKETS.</div>
+      </div>
+    </section>
+    <section class="block">
+      <div class="block__head">
+        <h2 class="block__title">HANDLE AND MUTEX ANALYSIS</h2>
+      </div>
+      <div class="step">
+        <div class="step__label"></div>
+        <a class="cmd">windows.handles</a>
+        <div class="or">— or —</div>
+        <a class="cmd">windows.sessions</a>
+        <div class="or">— or —</div>
+        <a class="cmd">windows.joblinks</a>
+        <div class="note">LISTS OPEN HANDLES IN EACH PROCESS. LISTS ACTIVE SESSIONS ON THE SYSTEM. LISTS JOB OBJECTS AND THE PROCESSES ASSOCIATED WITH THEM.</div>
+      </div>
+    </section>
+    <section class="block">
+      <div class="block__head">
+        <h2 class="block__title">CALLBACK AND SSDT ANALYSIS</h2>
+      </div>
+      <div class="step">
+        <div class="step__label"></div>
+        <a class="cmd">windows.callbacks</a>
+        <div class="or">— or —</div>
+        <a class="cmd">windows.ssdt</a>
+        <div class="note">LISTS REGISTERED CALLBACK FUNCTIONS. LISTS THE SYSTEM SERVICE DESCRIPTOR TABLE ENTRIES.</div>
+      </div>
+    </section>
+    <section class="block">
+      <div class="block__head">
+        <h2 class="block__title">MEMORY AND VAD ANALYSIS</h2>
+      </div>
+      <div class="step">
+        <div class="step__label"></div>
+        <a class="cmd">windows.memmap</a>
+        <div class="or">— or —</div>
+        <a class="cmd">windows.vadinfo</a>
+        <div class="or">— or —</div>
+        <a class="cmd">windows.vadwalk</a>
+        <div class="or">— or —</div>
+        <a class="cmd">windows.vadyarascan</a>
+        <div class="note">DISPLAY MEMORY MAPS FOR EACH PROCESS. LISTS THE VIRTUAL ADDRESS DESCRIPTOR [VAD] INFORMATION FOR EACH PROCESS. WALKS THE VAD TREE FOR EACH PROCESS. SCANS THE VAD USING YARA RULES.</div>
+      </div>
+    </section>
+    <section class="block">
+      <div class="block__head">
+        <h2 class="block__title">MISCELLANEOUS</h2>
+      </div>
+      <div class="step">
+        <div class="step__label"></div>
+        <a class="cmd">windows.crashinfo</a>
+        <div class="or">— or —</div>
+        <a class="cmd">windows.statistics</a>
+        <div class="or">— or —</div>
+        <a class="cmd">windows.strings</a>
+        <div class="or">— or —</div>
+        <a class="cmd">windows.svcscan</a>
+        <div class="or">— or —</div>
+        <a class="cmd">windows.virtmap</a>
+        <div class="note">DISPLAY INFORMATION ABOUT THE SYSTEM CRASH. DISPLAYS VARIOUS STATISTICS ABOUT THE MEMORY IMAGE. EXTRACTS STRINGS FROM THE MEMORY IMAGE. LISTS WINDOWS SERVICES AND THEIR CONFIGURATION. DISPLAYS THE VIRTUAL ADDRESS SPACE MAPPINGS.</div>
+      </div>
+    </section>
+  </div>
+
+  <div class="foot">
+    <span>Link Status: <b>Encrypted</b></span>
+  </div>
+
+</main>
+
+</body>
+</html>

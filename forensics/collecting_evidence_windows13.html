@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Knowledge Terminal — Media Extraction Protocol</title>
+<link rel="stylesheet" href="https://use.typekit.net/fiv8wyx.css">
+
+<style>
+
+*,
+*::after,
+*::before{
+  box-sizing:border-box;
+}
+
+:root{
+  font-size:12px;
+  --color-text: rgba(255,255,255,0.95);
+  --color-bg: #0c0b10;
+  --color-link: rgb(124 20 244 / 90%);
+  --color-bg-date: rgb(96 56 178 / 48%);
+  --color-link-hover: rgb(94 54 176 / 75%);
+  --color-border: rgba(177,177,177,0.3);
+}
+
+body{
+  margin:0;
+  color:var(--color-text);
+  background-color:var(--color-bg);
+  font-family:"ocr-a-std", monospace;
+  text-transform:uppercase;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+
+a{
+  text-decoration:none;
+  color:var(--color-link);
+  outline:none;
+  cursor:pointer;
+}
+
+a:hover{
+  color:var(--color-link-hover);
+}
+
+.frame{
+  position:relative;
+  z-index:10;
+  width:100%;
+  display:grid;
+  grid-template-columns:1fr auto;
+  align-items:center;
+  padding:2rem;
+  gap:1rem;
+}
+
+.frame__title{
+  font-size:1.25rem;
+  margin:0;
+  font-weight:400;
+  letter-spacing:0.05em;
+}
+
+.frame__index{
+  font-size:0.9rem;
+  color:var(--color-text);
+  opacity:0.5;
+  justify-self:end;
+  text-align:right;
+}
+
+.title{
+  font-weight:400;
+  font-size:clamp(2rem,8.5vw,6.5rem);
+  line-height:1.05;
+  text-align:center;
+  margin:10vh auto 4vh;
+  padding-bottom:2vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  width:min-content;
+  min-width:80%;
+  border-bottom:1px solid var(--color-border);
+}
+
+.title span::first-letter{
+  opacity:0.5;
+}
+
+.subtitle{
+  text-align:center;
+  font-size:1rem;
+  letter-spacing:0.15em;
+  opacity:0.6;
+  margin-bottom:8vh;
+}
+
+.section-grid{
+  display:grid;
+  grid-template-columns:1fr;
+  border-top:1px solid var(--color-border);
+  margin-bottom:6vh;
+}
+
+@media screen and (min-width:60em){
+  .section-grid{
+    grid-template-columns:1fr 1fr;
+  }
+  .block:nth-child(odd){
+    border-right:1px solid var(--color-border);
+  }
+}
+
+.block{
+  padding:4vw;
+  border-bottom:1px solid var(--color-border);
+}
+
+.block__head{
+  display:flex;
+  align-items:center;
+  margin-bottom:2.5rem;
+}
+
+.block__head::before{
+  content:'';
+  width:15px;
+  height:15px;
+  flex:none;
+  border:1px solid var(--color-link);
+  background:var(--color-bg-date);
+  margin-right:12px;
+}
+
+.block__title{
+  font-weight:400;
+  font-size:clamp(1.5rem,4vw,2.25rem);
+  margin:0;
+  letter-spacing:0.05em;
+}
+
+.step{
+  margin-bottom:2.6rem;
+}
+
+.step:last-child{
+  margin-bottom:0;
+}
+
+.step__label{
+  display:flex;
+  align-items:center;
+  font-size:0.95rem;
+  opacity:0.55;
+  letter-spacing:0.15em;
+  margin-bottom:0.9rem;
+}
+
+.step__label::before{
+  content:'';
+  width:6px;
+  height:6px;
+  margin-right:10px;
+  background:var(--color-link);
+}
+
+.cmd{
+  position:relative;
+  display:block;
+  padding:1.1rem 1.2rem 1.1rem 2rem;
+  border:1px solid var(--color-border);
+  font-size:1.05rem;
+  letter-spacing:0.02em;
+  color:var(--color-text);
+  transition:background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+.cmd::before{
+  content:'+';
+  position:absolute;
+  left:0.8rem;
+  color:var(--color-link);
+}
+
+.cmd:hover{
+  background-color:var(--color-bg-date);
+  border-color:var(--color-link);
+  color:var(--color-text);
+}
+
+.cmd:hover::before{
+  color:#fff;
+}
+
+.or{
+  text-align:center;
+  font-size:0.85rem;
+  opacity:0.4;
+  letter-spacing:0.2em;
+  margin:0.9rem 0;
+}
+
+.note{
+  font-size:0.85rem;
+  opacity:0.45;
+  letter-spacing:0.05em;
+  margin-top:0.8rem;
+}
+
+.note b{
+  opacity:1;
+  color:var(--color-text);
+}
+
+.foot{
+  display:flex;
+  justify-content:space-between;
+  padding:2rem;
+  border-top:1px solid var(--color-border);
+  font-size:0.85rem;
+  opacity:0.5;
+  letter-spacing:0.15em;
+}
+
+.foot span b{
+  opacity:1;
+  color:var(--color-link);
+  font-weight:400;
+}
+
+@media screen and (max-width:33em){
+  .foot{
+    flex-direction:column;
+    gap:0.6rem;
+  }
+}
+
+</style>
+</head>
+<body>
+
+<div class="frame">
+  <h1 class="frame__title">WHITEX FORENSIC</h1>
+  <span class="frame__index">Case File // 013</span>
+</div>
+
+<main>
+
+  <h1 class="title">
+    <span>COLLECTING EVIDENCE</span>
+    <span>IN WINDOWS USING LINUX</span>
+  </h1>
+  <p class="subtitle">A practical guide to safely acquiring, preserving, and analyzing Windows digital evidence from a Linux forensic environment</p>
+
+  <div class="section-grid">
+    <section class="block">
+      <div class="block__head">
+        <h2 class="block__title">PREPARATION</h2>
+      </div>
+      <div class="step">
+        <div class="step__label"></div>
+        <div class="note">HAVE A CLEAR INCIDENT RESPONSE PLAN.</div>
+      </div>
+    </section>
+    <section class="block">
+      <div class="block__head">
+        <h2 class="block__title">BOOTING THE TARGET MACHINE</h2>
+      </div>
+      <div class="step">
+        <div class="step__label"></div>
+        <div class="note">USE LIVE BOOTABLE USB (LIKE: KALI LINUX, ARCH)</div>
+      </div>
+    </section>
+    <section class="block">
+      <div class="block__head">
+        <h2 class="block__title">DATA ACQUISITION</h2>
+      </div>
+      <div class="step">
+        <div class="step__label">DISK IMAGING</div>
+        <div class="note">CREATE A BIT-BY-BIT COPY OF THE WINDOWS HARD DRIVE.</div>
+      </div>
+      <div class="step">
+        <div class="step__label">TOOLS</div>
+        <a class="cmd">dd if=/dev/sda of=win.dd bs=4M</a>
+        <div class="or">— or —</div>
+        <a class="cmd">dc3dd if=/dev/sda of=win.dd</a>
+        <div class="or">— or —</div>
+        <a class="cmd">dcfldd if=/dev/sda of=win.dd hash=md5,sha256 hashlog=hash.txt</a>
+        <div class="note">USE DC3DD FOR FASTLY CREATE DISK IMAGE USE DCFLDD - IT IS AN ENHANCED VERSION OF DD</div>
+      </div>
+      <div class="step">
+        <div class="step__label">NETWORK DATA CAPTURE</div>
+        <a class="cmd">tcpdump -i wlan0 -w net.pcap</a>
+        <div class="note">IF THE SYSTEM IS LIVE, CAPTURE NETWORK TRAFFIC USING TCPDUMP OR WIRESHARK.</div>
+      </div>
+    </section>
+    <section class="block">
+      <div class="block__head">
+        <h2 class="block__title">EVIDENCE PRESERVATION</h2>
+      </div>
+      <div class="step">
+        <div class="step__label"></div>
+        <div class="note">USE HARDWARE OR SOFTWARE WRITE BLOCKERS TO ENSURE NO DATA MODIFICATION ON THE TARGET DRIVE. COMPUTE AND STORE HASH VALUES OF THE ORIGINAL DATA AND THE IMAGE FOR INTEGRITY.</div>
+      </div>
+      <div class="step">
+        <div class="step__label">TOOLS</div>
+        <a class="cmd">sha256sum drive.dd > out.dd.sha256</a>
+      </div>
+    </section>
+    <section class="block">
+      <div class="block__head">
+        <h2 class="block__title">DATA ANALYSIS</h2>
+      </div>
+      <div class="step">
+        <div class="step__label">MOUNTING THE IMAGE</div>
+        <a class="cmd">mount -o loop,offset=1228 drive.dd /mnt</a>
+        <div class="note">MOUNT THE DISK IMAGE FOR ANALYSIS EXAMPLE (offset=1228):</div>
+      </div>
+      <div class="step">
+        <div class="step__label">FILE SYSTEM ANALYSIS</div>
+        <a class="cmd">fls -r -f ntfs -o1228 win.dd</a>
+        <div class="note">USE TOOL LIKE 'SLEUTHKIT' TO ANALYZE THE FILE SYSTEM IT SHOWS ALL THE DIRECTORY AND ITS FOLDERS INSIDE WIN.DD</div>
+      </div>
+      <div class="step">
+        <div class="step__label">LOG ANALYSIS</div>
+        <a class="cmd">pip install --break-system-packages python-evtx</a>
+        <div class="or">— or —</div>
+        <a class="cmd">evtx_dump system.evtx > system.xml</a>
+        <div class="note">LOGS FILE LOCATION -> windows/system32/winevt/logs/ USEFUL LOG FILES -> system.evtx, application.evtx, security.evtx NOW CONVERT EVTX TO XML</div>
+      </div>
+      <div class="step">
+        <div class="step__label">IF IT GIVES ERROR EVTX_DUMP CMD NOT FOUND</div>
+        <a class="cmd">/home/whitex/.local/bin/evtx_dump.py sys.evtx > sys.xml</a>
+        <div class="or">— or —</div>
+        <a class="cmd">lnav sys.xml</a>
+        <div class="or">— or —</div>
+        <a class="cmd">pacman -S lnav</a>
+      </div>
+      <div class="step">
+        <div class="step__label">BROWSER ARTIFACTS</div>
+        <div class="note">ANALYZE BROWSER HISTORY, COOKIES AND CACHE</div>
+      </div>
+      <div class="step">
+        <div class="step__label">LOCATION OF CHROME</div>
+        <div class="note">\Users\Username\AppData\Local\Google\Chrome\UserData\Default\History</div>
+      </div>
+      <div class="step">
+        <div class="step__label">LOCATION OF FIREFOX</div>
+        <div class="note">\Users\Username\AppData\Roaming\Mozilla\Firefox\Profiles\<profile folder>\places.sqlite</div>
+      </div>
+      <div class="step">
+        <div class="step__label">LOCATION OF MICROSOFT EDGE HISTORY</div>
+        <a class="cmd">sqlite3 History</a>
+        <div class="or">— or —</div>
+        <a class="cmd">.tables</a>
+        <div class="or">— or —</div>
+        <a class="cmd">SELECT url, title, visit_count, last_visit_time FROM urls ORDER BY last_visit_time DESC;</a>
+        <div class="note">\Users\Username\AppData\Local\Microsoft\Edge\User Data\Default\History</div>
+      </div>
+    </section>
+    <section class="block">
+      <div class="block__head">
+        <h2 class="block__title">SPECIALIZED ANALYSIS</h2>
+      </div>
+      <div class="step">
+        <div class="step__label">MEMORY DUMP ANALYSIS</div>
+        <div class="note">Use tools like Volatility to analyze memory dumps.</div>
+      </div>
+      <div class="step">
+        <div class="step__label">MALWARE ANALYSIS</div>
+        <a class="cmd">strings suspicious.exe > out.txt</a>
+        <div class="note">Use tools like radare2, strings and binwalk to analyze potential malware.</div>
+      </div>
+    </section>
+    <section class="block">
+      <div class="block__head">
+        <h2 class="block__title">REPORTING</h2>
+      </div>
+      <div class="step">
+        <div class="step__label">DOCUMENT FINDINGS</div>
+        <div class="note">Compile a detailed report with findings, methodologies and conclusions.</div>
+      </div>
+      <div class="step">
+        <div class="step__label">PRESENT EVIDENCE</div>
+        <div class="note">Ensure the report is clear and understandable for non-technical stakeholders.</div>
+      </div>
+    </section>
+  </div>
+
+  <div class="foot">
+    <span>Link Status: <b>Encrypted</b></span>
+  </div>
+
+</main>
+
+</body>
+</html>

@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Knowledge Terminal — Media Extraction Protocol</title>
+<link rel="stylesheet" href="https://use.typekit.net/fiv8wyx.css">
+
+<style>
+
+*,
+*::after,
+*::before{
+  box-sizing:border-box;
+}
+
+:root{
+  font-size:12px;
+  --color-text: rgba(255,255,255,0.95);
+  --color-bg: #0c0b10;
+  --color-link: rgb(124 20 244 / 90%);
+  --color-bg-date: rgb(96 56 178 / 48%);
+  --color-link-hover: rgb(94 54 176 / 75%);
+  --color-border: rgba(177,177,177,0.3);
+}
+
+body{
+  margin:0;
+  color:var(--color-text);
+  background-color:var(--color-bg);
+  font-family:"ocr-a-std", monospace;
+  text-transform:uppercase;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+
+a{
+  text-decoration:none;
+  color:var(--color-link);
+  outline:none;
+  cursor:pointer;
+}
+
+a:hover{
+  color:var(--color-link-hover);
+}
+
+.frame{
+  position:relative;
+  z-index:10;
+  width:100%;
+  display:grid;
+  grid-template-columns:1fr auto;
+  align-items:center;
+  padding:2rem;
+  gap:1rem;
+}
+
+.frame__title{
+  font-size:1.25rem;
+  margin:0;
+  font-weight:400;
+  letter-spacing:0.05em;
+}
+
+.frame__index{
+  font-size:0.9rem;
+  color:var(--color-text);
+  opacity:0.5;
+  justify-self:end;
+  text-align:right;
+}
+
+.title{
+  font-weight:400;
+  font-size:clamp(2rem,8.5vw,6.5rem);
+  line-height:1.05;
+  text-align:center;
+  margin:10vh auto 4vh;
+  padding-bottom:2vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  width:min-content;
+  min-width:80%;
+  border-bottom:1px solid var(--color-border);
+}
+
+.title span::first-letter{
+  opacity:0.5;
+}
+
+.subtitle{
+  text-align:center;
+  font-size:1rem;
+  letter-spacing:0.15em;
+  opacity:0.6;
+  margin-bottom:8vh;
+}
+
+.section-grid{
+  display:grid;
+  grid-template-columns:1fr;
+  border-top:1px solid var(--color-border);
+  margin-bottom:6vh;
+}
+
+@media screen and (min-width:60em){
+  .section-grid{
+    grid-template-columns:1fr 1fr;
+  }
+  .block:nth-child(odd){
+    border-right:1px solid var(--color-border);
+  }
+}
+
+.block{
+  padding:4vw;
+  border-bottom:1px solid var(--color-border);
+}
+
+.block__head{
+  display:flex;
+  align-items:center;
+  margin-bottom:2.5rem;
+}
+
+.block__head::before{
+  content:'';
+  width:15px;
+  height:15px;
+  flex:none;
+  border:1px solid var(--color-link);
+  background:var(--color-bg-date);
+  margin-right:12px;
+}
+
+.block__title{
+  font-weight:400;
+  font-size:clamp(1.5rem,4vw,2.25rem);
+  margin:0;
+  letter-spacing:0.05em;
+}
+
+.step{
+  margin-bottom:2.6rem;
+}
+
+.step:last-child{
+  margin-bottom:0;
+}
+
+.step__label{
+  display:flex;
+  align-items:center;
+  font-size:0.95rem;
+  opacity:0.55;
+  letter-spacing:0.15em;
+  margin-bottom:0.9rem;
+}
+
+.step__label::before{
+  content:'';
+  width:6px;
+  height:6px;
+  margin-right:10px;
+  background:var(--color-link);
+}
+
+.cmd{
+  position:relative;
+  display:block;
+  padding:1.1rem 1.2rem 1.1rem 2rem;
+  border:1px solid var(--color-border);
+  font-size:1.05rem;
+  letter-spacing:0.02em;
+  color:var(--color-text);
+  transition:background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+.cmd::before{
+  content:'+';
+  position:absolute;
+  left:0.8rem;
+  color:var(--color-link);
+}
+
+.cmd:hover{
+  background-color:var(--color-bg-date);
+  border-color:var(--color-link);
+  color:var(--color-text);
+}
+
+.cmd:hover::before{
+  color:#fff;
+}
+
+.or{
+  text-align:center;
+  font-size:0.85rem;
+  opacity:0.4;
+  letter-spacing:0.2em;
+  margin:0.9rem 0;
+}
+
+.note{
+  font-size:0.85rem;
+  opacity:0.45;
+  letter-spacing:0.05em;
+  margin-top:0.8rem;
+}
+
+.note b{
+  opacity:1;
+  color:var(--color-text);
+}
+
+.foot{
+  display:flex;
+  justify-content:space-between;
+  padding:2rem;
+  border-top:1px solid var(--color-border);
+  font-size:0.85rem;
+  opacity:0.5;
+  letter-spacing:0.15em;
+}
+
+.foot span b{
+  opacity:1;
+  color:var(--color-link);
+  font-weight:400;
+}
+
+@media screen and (max-width:33em){
+  .foot{
+    flex-direction:column;
+    gap:0.6rem;
+  }
+}
+
+</style>
+</head>
+<body>
+
+<div class="frame">
+  <h1 class="frame__title">WHITEX FORENSIC</h1>
+  <span class="frame__index">Case File // 019</span>
+</div>
+
+<main>
+
+  <h1 class="title">
+    <span>DARK WEB</span>
+    <span>FORENSICS</span>
+  </h1>
+  <p class="subtitle">Investigating hidden online environments to identify digital evidence, trace activities, and support secure and lawful forensic investigations</p>
+
+  <div class="section-grid">
+    <section class="block">
+      <div class="block__head">
+        <h2 class="block__title">UNDERSTANDING DARK WEB</h2>
+      </div>
+      <div class="step">
+        <div class="step__label">1.1) STRUCTURE AND ACCESSIBILITY</div>
+        <div class="note">DARK WEB IS A SMALL PART OF THE DEEP WEB, WHICH INCLUDES ALL ONLINE CONTENT NOT INDEXED BY TRADITIONAL SEARCH ENGINES. THE DARK WEB REQUIRES SPECIFIC SOFTWARE LIKE TOR (THE ONION ROUTER) TO ACCESS.</div>
+      </div>
+      <div class="step">
+        <div class="step__label">1.2) COMMON USES</div>
+        <div class="note">IT IS KNOWN FOR ILLEGAL ACTIVITIES SUCH AS DRUG TRAFFICKING, ILLEGAL ARMS SALES AND HUMAN TRAFFICKING. IT IS ALSO USED BY INDIVIDUALS SEEKING PRIVACY AND FREEDOM FROM CENSORSHIP, INCLUDING JOURNALISTS AND ACTIVISTS.</div>
+      </div>
+      <div class="step">
+        <div class="step__label">1.3) FORENSIC CHALLENGES</div>
+      </div>
+      <div class="step">
+        <div class="step__label">ANONYMITY AND ENCRYPTION</div>
+        <div class="note">TRACKING INDIVIDUALS OR ACTIVITIES IS CHALLENGING DUE TO THE USE OF ENCRYPTION AND ANONYMITY TOOLS.</div>
+      </div>
+    </section>
+    <section class="block">
+      <div class="block__head">
+        <h2 class="block__title">IDENTIFY TRACES OF TOR BROWSER IN LINUX</h2>
+      </div>
+      <div class="step">
+        <div class="step__label">CHECK FOR TOR BROWSER DIRECTORY</div>
+        <a class="cmd">ls ~/tor-browser_en-US</a>
+      </div>
+      <div class="step">
+        <div class="step__label">LIST CONTENTS OF THE TOR DATA DIRECTORY</div>
+        <a class="cmd">ls ~/tor-browser_en-US/Browser/TorBrowser/Data</a>
+      </div>
+      <div class="step">
+        <div class="step__label">CHECK FOR RUNNING TOR PROCESSES</div>
+        <a class="cmd">ps aux | grep tor</a>
+      </div>
+      <div class="step">
+        <div class="step__label">CHECK FOR ACTIVE NETWORK CONNECTIONS ON TYPICAL TOR PORTS</div>
+        <a class="cmd">netstat -tulwn | grep 9050</a>
+      </div>
+      <div class="step">
+        <div class="step__label">SEARCH FOR TOR-RELATED LOGS IN SYSTEM LOGS</div>
+        <a class="cmd">journalctl | grep tor</a>
+        <div class="or">— or —</div>
+        <a class="cmd">dmesg | grep tor</a>
+      </div>
+    </section>
+    <section class="block">
+      <div class="block__head">
+        <h2 class="block__title">IDENTIFY TRACES OF TOR BROWSER IN WINDOWS</h2>
+      </div>
+      <div class="step">
+        <div class="step__label">MOUNT WIN.DD</div>
+      </div>
+      <div class="step">
+        <div class="step__label">SEARCH FOR TOR BROWSER DIRECTORIES</div>
+        <a class="cmd">find /mnt/win.dd -type d -iname "*tor*"</a>
+      </div>
+      <div class="step">
+        <div class="step__label">CHECK COMMON USER PROFILE DIRECTORIES</div>
+        <a class="cmd">ls /mnt/win.dd/Users/<name>/AppData/Local</a>
+        <div class="or">— or —</div>
+        <a class="cmd">ls /mnt/win.dd/Users/<name>/AppData/Roaming</a>
+      </div>
+      <div class="step">
+        <div class="step__label">CHECK WINDOWS PREFETCH FILES</div>
+        <a class="cmd">ls /mnt/windd/Windows/Prefetch | grep -i tor</a>
+      </div>
+    </section>
+    <section class="block">
+      <div class="block__head">
+        <h2 class="block__title">PERFORMING TOR BROWSER FORENSICS</h2>
+      </div>
+      <div class="step">
+        <div class="step__label">MOUNT WIN.DD</div>
+      </div>
+      <div class="step">
+        <div class="step__label">4.1) IDENTIFY INSTALLATION DIRECTORIES</div>
+        <a class="cmd">ls /mnt/win.dd/Program Files</a>
+        <div class="or">— or —</div>
+        <a class="cmd">ls /mnt/win.dd/Program Files (x86)</a>
+        <div class="or">— or —</div>
+        <a class="cmd">ls /mnt/win.dd/Users/<name>/AppData/Local</a>
+        <div class="or">— or —</div>
+        <a class="cmd">ls /mnt/win.dd/Users/<name>/AppData/Roaming</a>
+        <div class="or">— or —</div>
+        <a class="cmd">ls /mnt/win.dd/Users/<name>/Downloads</a>
+        <div class="note">TOR BROWSER CAN BE INSTALLED IN VARIOUS LOCATIONS. COMMON DIRECTORIES INCLUDE:</div>
+      </div>
+      <div class="step">
+        <div class="step__label">4.2) SEARCH FOR TOR BROWSER FILES AND DIRECTORIES</div>
+        <a class="cmd">find /mnt/win.dd -type d -iname "*tor*"</a>
+        <div class="or">— or —</div>
+        <a class="cmd">find /mnt/win.dd -type f -iname "*tor*"</a>
+        <div class="note">USE THE FIND COMMAND TO SEARCH FOR TOR-RELATED FILES AND DIRECTORIES.</div>
+      </div>
+      <div class="step">
+        <div class="step__label">4.3) ANALYZE BROWSER ARTIFACTS</div>
+        <a class="cmd">ls /mnt/win.dd/Users/<name>/AppData/Local/Tor Browser</a>
+        <div class="or">— or —</div>
+        <a class="cmd">ls /mnt/win.dd/Users/<name>/AppData/Roaming/Tor Browser</a>
+        <div class="note">CHECK FOR BROWSER ARTIFACTS SUCH AS HISTORY, CACHE, AND CONFIGURATION FILES.</div>
+      </div>
+      <div class="step">
+        <div class="step__label">4.4) INSPECT WINDOWS PREFETCH FILES</div>
+        <a class="cmd">ls /mnt/win.dd/Windows/Prefetch | grep -i tor</a>
+        <div class="note">WINDOWS PREFETCH FILES CAN INDICATE IF AND WHEN TOR BROWSER WAS EXECUTED.</div>
+      </div>
+      <div class="step">
+        <div class="step__label">4.5) EXAMINE WINDOWS EVENT LOGS</div>
+        <a class="cmd">ls /mnt/win.dd/Windows/System32/winevt/Logs</a>
+        <div class="note">LOOK AT THE WINDOWS EVENT LOGS FOR ANY ENTRIES RELATED TO TOR.</div>
+      </div>
+    </section>
+  </div>
+
+  <div class="foot">
+    <span>Link Status: <b>Encrypted</b></span>
+  </div>
+
+</main>
+
+</body>
+</html>
