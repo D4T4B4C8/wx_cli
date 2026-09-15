@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Retro Dither Wave Effect</title>
+<style>
+        /* Replicating the CSS styles provided */
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            overflow: hidden;
+        }
+
+        .dither-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        /* The 100% width, 600px height parent container from your original React snippet */
+        .wrapper {
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+        }
+        
+        #canvas-container {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .sidebar,
+        .topbar,
+        .window {
+            z-index: 10;
+        }
+    
+
+/* MERGED DEMO CSS */
+
+
+:root{
+
+/* CHANGE ONLY THIS */
+--accent:#87f8fa;
+
+--bg:#050505;
+--panel:#090909;
+
+--border:var(--accent);
+--text:#FFFFFF;
+--glow:var(--accent);
+
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Consolas, monospace;
+}
+
+body{
+background:#000;
+overflow:hidden;
+color:var(--text);
+height:100vh;
+}
+
+/* Sidebar */
+
+.sidebar{
+position:fixed;
+left:10px;
+top:10px;
+bottom:10px;
+width:220px;
+background:rgba(0,0,0,.85);
+border:1px solid var(--border);
+padding:15px;
+z-index:5;
+}
+
+.logo{
+font-size:20px;
+margin-bottom:20px;
+font-weight:bold;
+}
+
+.menu button{
+width:100%;
+margin-bottom:8px;
+padding:10px;
+background:black;
+border:1px solid var(--border);
+color:var(--text);
+cursor:pointer;
+}
+
+.menu button:hover{
+box-shadow:0 0 15px var(--glow);
+}
+
+/* Top Bar */
+
+.topbar{
+position:fixed;
+left:250px;
+right:20px;
+top:10px;
+height:60px;
+background:rgba(0,0,0,.8);
+border:1px solid var(--border);
+display:flex;
+align-items:center;
+padding:0 20px;
+z-index:5;
+}
+
+
+/* Windows */
+
+.window{
+position:absolute;
+background:rgba(0,0,0,.95);
+border:1px solid var(--border);
+box-shadow:0 0 15px rgba(94,255,247,.2);
+width:500px;
+height:350px;
+z-index:10;
+}
+
+.titlebar{
+height:35px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:0 10px;
+border-bottom:1px solid var(--border);
+cursor:move;
+}
+
+.close{
+cursor:pointer;
+}
+
+.content{
+padding:15px;
+height:calc(100% - 35px);
+overflow:auto;
+}
+
+.note{
+margin-bottom:15px;
+padding:10px;
+border:1px solid rgba(94,255,247,.2);
+}
+
+.note h3{
+margin-bottom:10px;
+}
+
+pre{
+white-space:pre-wrap;
+color:#ffd38a;
+}
+
+/* Sidebar */</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+<div class="wrapper">
+<div class="dither-container" id="canvas-container"></div>
+</div>
+<script>
+        // --- Configuration Props (Matching your React defaults & overrides) ---
+        const props = {
+            waveSpeed: 0.05,
+            waveFrequency: 3.0,
+            waveAmplitude: 0.3,
+            waveColor: new THREE.Color(0.5, 0.5, 0.5), // [0.5, 0.5, 0.5]
+            colorNum: 4.0,
+            pixelSize: 2.0,
+            disableAnimation: false,
+            enableMouseInteraction: true,
+            mouseRadius: 0.2
+        };
+
+        // --- Shaders ---
+        const vertexShader = `
+            varying vec2 vUv;
+            void main() {
+                vUv = uv;
+                gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+            }
+        `;
+
+        // Combined Wave Generation + Bayer Dithering into a single high-performance fragment shader
+        const fragmentShader = `
+            precision highp float;
+            varying vec2 vUv;
+            
+            uniform vec2 resolution;
+            uniform float time;
+            uniform float waveSpeed;
+            uniform float waveFrequency;
+            uniform float waveAmplitude;
+            uniform vec3 waveColor;
+            uniform vec2 mousePos;
+            uniform int enableMouseInteraction;
+            uniform float mouseRadius;
+            uniform float colorNum;
+            uniform float pixelSize;
+
+            // Bayer 8x8 Matrix flattened into an array
+            // Custom array indexing used for compatibility across standard WebGL contexts
+            float getBayerValue(int index) {
+                float bayer[64];
+                bayer[0]=0.0/64.0;  bayer[1]=48.0/64.0; bayer[2]=12.0/64.0; bayer[3]=60.0/64.0; bayer[4]=3.0/64.0;  bayer[5]=51.0/64.0; bayer[6]=15.0/64.0; bayer[7]=63.0/64.0;
+                bayer[8]=32.0/64.0; bayer[9]=16.0/64.0; bayer[10]=44.0/64.0;bayer[11]=28.0/64.0;bayer[12]=35.0/64.0; bayer[13]=19.0/64.0; bayer[14]=47.0/64.0; bayer[15]=31.0/64.0;
+                bayer[16]=8.0/64.0; bayer[17]=56.0/64.0; bayer[18]=4.0/64.0; bayer[19]=52.0/64.0;bayer[20]=11.0/64.0; bayer[21]=59.0/64.0; bayer[22]=7.0/64.0;  bayer[23]=55.0/64.0;
+                bayer[24]=40.0/64.0;bayer[25]=24.0/64.0; bayer[26]=36.0/64.0;bayer[27]=20.0/64.0;bayer[28]=43.0/64.0; bayer[29]=27.0/64.0; bayer[30]=39.0/64.0; bayer[31]=23.0/64.0;
+                bayer[32]=2.0/64.0; bayer[33]=50.0/64.0; bayer[34]=14.0/64.0;bayer[35]=62.0/64.0;bayer[36]=1.0/64.0;  bayer[37]=49.0/64.0; bayer[38]=13.0/64.0; bayer[39]=61.0/64.0;
+                bayer[40]=34.0/64.0;bayer[41]=18.0/64.0; bayer[42]=46.0/64.0;bayer[43]=30.0/64.0;bayer[44]=33.0/64.0; bayer[45]=17.0/64.0; bayer[46]=45.0/64.0; bayer[47]=29.0/64.0;
+                bayer[48]=10.0/64.0;bayer[49]=58.0/64.0; bayer[50]=6.0/64.0; bayer[51]=54.0/64.0;bayer[52]=9.0/64.0;  bayer[53]=57.0/64.0; bayer[54]=5.0/64.0;  bayer[55]=53.0/64.0;
+                bayer[56]=42.0/64.0;bayer[57]=26.0/64.0; bayer[58]=38.0/64.0;bayer[59]=22.0/64.0;bayer[60]=41.0/64.0; bayer[61]=25.0/64.0; bayer[62]=37.0/64.0; bayer[63]=21.0/64.0;
+                
+                for (int i = 0; i < 64; i++) {
+                    if (i == index) return bayer[i];
+                }
+                return 0.0;
+            }
+
+            vec4 mod289(vec4 x) { return x - floor(x * (1.0/289.0)) * 289.0; }
+            vec4 permute(vec4 x) { return mod289(((x * 34.0) + 1.0) * x); }
+            vec4 taylorInvSqrt(vec4 r) { return 1.79284291400159 - 0.85373472095314 * r; }
+            vec2 fade(vec2 t) { return t*t*t*(t*(t*6.0-15.0)+10.0); }
+
+            float cnoise(vec2 P) {
+                vec4 Pi = floor(P.xyxy) + vec4(0.0,0.0,1.0,1.0);
+                vec4 Pf = fract(P.xyxy) - vec4(0.0,0.0,1.0,1.0);
+                Pi = mod289(Pi);
+                vec4 ix = Pi.xzxz; vec4 iy = Pi.yyww; vec4 fx = Pf.xzxz; vec4 fy = Pf.yyww;
+                vec4 i = permute(permute(ix) + iy);
+                vec4 gx = fract(i * (1.0/41.0)) * 2.0 - 1.0;
+                vec4 gy = abs(gx) - 0.5; vec4 tx = floor(gx + 0.5); gx = gx - tx;
+                vec2 g00 = vec2(gx.x, gy.x); vec2 g10 = vec2(gx.y, gy.y);
+                vec2 g01 = vec2(gx.z, gy.z); vec2 g11 = vec2(gx.w, gy.w);
+                vec4 norm = taylorInvSqrt(vec4(dot(g00,g00), dot(g01,g01), dot(g10,g10), dot(g11,g11)));
+                g00 *= norm.x; g01 *= norm.y; g10 *= norm.z; g11 *= norm.w;
+                float n00 = dot(g00, vec2(fx.x, fy.x)); float n10 = dot(g10, vec2(fx.y, fy.y));
+                float n01 = dot(g01, vec2(fx.z, fy.z)); float n11 = dot(g11, vec2(fx.w, fy.w));
+                vec2 fade_xy = fade(Pf.xy);
+                vec2 n_x = mix(vec2(n00, n01), vec2(n10, n11), fade_xy.x);
+                return 2.3 * mix(n_x.x, n_x.y, fade_xy.y);
+            }
+
+            float fbm(vec2 p) {
+                float value = 0.0; float amp = 1.0; float freq = waveFrequency;
+                for (int i = 0; i < 4; i++) {
+                    value += amp * abs(cnoise(p));
+                    p *= freq; amp *= waveAmplitude;
+                }
+                return value;
+            }
+
+            float pattern(vec2 p) {
+                vec2 p2 = p - time * waveSpeed;
+                return fbm(p + fbm(p2)); 
+            }
+
+            vec3 dither(vec2 uv, vec3 color) {
+                vec2 scaledCoord = floor(uv * resolution / pixelSize);
+                int x = int(mod(scaledCoord.x, 8.0));
+                int y = int(mod(scaledCoord.y, 8.0));
+                
+                float threshold = getBayerValue(y * 8 + x) - 0.25;
+                float stepVal = 1.0 / (colorNum - 1.0);
+                color += threshold * stepVal;
+                
+                float bias = 0.2;
+                color = clamp(color - bias, 0.0, 1.0);
+                return floor(color * (colorNum - 1.0) + 0.5) / (colorNum - 1.0);
+            }
+
+            void main() {
+                // Pixelate incoming UV coordinates
+                vec2 normalizedPixelSize = pixelSize / resolution;
+                vec2 uvPixel = normalizedPixelSize * floor(vUv / normalizedPixelSize);
+
+                // Build Fluid Base
+                vec2 uv = uvPixel - 0.5;
+                uv.x *= resolution.x / resolution.y;
+                
+                float f = pattern(uv);
+                
+                if (enableMouseInteraction == 1) {
+                    vec2 mouseNDC = (mousePos / resolution - 0.5) * vec2(1.0, -1.0);
+                    mouseNDC.x *= resolution.x / resolution.y;
+                    float dist = length(uv - mouseNDC);
+                    float effect = 1.0 - smoothstep(0.0, mouseRadius, dist);
+                    f -= 0.5 * effect;
+                }
+                
+                vec3 col = mix(vec3(0.0), waveColor, f);
+                
+                // Pass final color evaluation through the dithering function
+                gl_FragColor = vec4(dither(vUv, col), 1.0);
+            }
+        `;
+
+        // --- Setup Environment ---
+        const container = document.getElementById('canvas-container');
+        const scene = new THREE.Scene();
+        
+        // Orthographic camera mapping a 1:1 pixel/plane structure
+        const camera = new THREE.OrthographicCamera(-0.5, 0.5, 0.5, -0.5, 0.1, 10);
+        camera.position.z = 1;
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+        renderer.setPixelRatio(1); // Explicitly matched to dpr={1} from your code
+        container.appendChild(renderer.domElement);
+
+        // --- Setup Uniforms ---
+        const uniforms = {
+            time: { value: 0 },
+            resolution: { value: new THREE.Vector2() },
+            waveSpeed: { value: props.waveSpeed },
+            waveFrequency: { value: props.waveFrequency },
+            waveAmplitude: { value: props.waveAmplitude },
+            waveColor: { value: props.waveColor },
+            mousePos: { value: new THREE.Vector2() },
+            enableMouseInteraction: { value: props.enableMouseInteraction ? 1 : 0 },
+            mouseRadius: { value: props.mouseRadius },
+            colorNum: { value: props.colorNum },
+            pixelSize: { value: props.pixelSize }
+        };
+
+        // Create the geometry plane filling the camera scene completely
+        const geometry = new THREE.PlaneGeometry(1, 1);
+        const material = new THREE.ShaderMaterial({
+            vertexShader: vertexShader,
+            fragmentShader: fragmentShader,
+            uniforms: uniforms
+        });
+        const mesh = new THREE.Mesh(geometry, material);
+        scene.add(mesh);
+
+        // --- Event Listeners & Layout Handlers ---
+        function resize() {
+            const width = container.clientWidth;
+            const height = container.clientHeight;
+            renderer.setSize(width, height);
+            uniforms.resolution.value.set(width, height);
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        // Screen to canvas pointer coordinates tracker
+        window.addEventListener('mousemove', (e) => {
+            if (!props.enableMouseInteraction) return;
+            const rect = renderer.domElement.getBoundingClientRect();
+            // Calculate mouse coordinate map relative to canvas offset layout boundaries
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            uniforms.mousePos.value.set(x, y);
+        });
+
+        // --- Animation Loop ---
+        const clock = new THREE.Clock();
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            if (!props.disableAnimation) {
+                uniforms.time.value = clock.getElapsedTime();
+            }
+
+            renderer.render(scene, camera);
+        }
+
+        animate();
+    </script>
+<div class="sidebar">
+<div class="logo">KNOWLEDGE VAULT</div>
+<div class="menu">
+   <button onclick="window.location.href='images/extract373.html'">
+   HOW TO EXTRACT WORDS IN IMAGE
+   </button>
+   <button onclick="window.location.href='images/mix334.html'">
+   HOW TO MIX IMAGES USING GMIC
+   </button>
+   <button onclick="window.location.href='images/jp2a218.html'">
+   JPG FOR TERMINAL BANNERS
+   </button>
+   <button onclick="window.location.href='images/chafa217.html'">
+   JPG TO ASCII
+   </button>
+   <button onclick="window.location.href='images/healing56.html'">
+   HOW TO REMOVE ANY TEXT OR THING IN THE IMAGE USING GIMP
+   </button>
+   <button onclick="window.location.href='images/remove_bg32.html'">
+   REMOVE BG USING GIMP
+   </button>
+   <button onclick="window.location.href='images/gmic28.html'">
+   GMIC FILTERS
+   </button>
+</div>
+</div><div class="topbar">
+<h2>WHITEX DATABASE</h2>
+</div><script>
+
+/* Notes */
+
+const cliData = [
+{
+title:"Miller",
+content:"mlr --csv cat file.csv"
+},
+{
+title:"jq",
+content:"jq '.name' file.json"
+},
+{
+title:"grep",
+content:"grep -R 'password' ."
+}
+];
+
+const netData = [
+{
+title:"Nmap",
+content:"nmap -sV 192.168.1.1"
+},
+{
+title:"Ping",
+content:"ping google.com"
+}
+];
+
+const linuxData = [
+{
+title:"Find",
+content:"find / -name test.txt"
+},
+{
+title:"lsblk",
+content:"lsblk -f"
+}
+];
+
+const webData = [
+{
+title:"Flexbox",
+content:"display:flex;"
+},
+{
+title:"Grid",
+content:"display:grid;"
+}
+];
+
+/* Window System */
+
+let z = 100;
+
+function openWindow(title,data){
+
+let win=document.createElement("div");
+win.className="window";
+win.style.left=260+Math.random()*200+"px";
+win.style.top=100+Math.random()*100+"px";
+
+win.innerHTML=`
+<div class="titlebar">
+<span>${title}</span>
+<span class="close">✕</span>
+</div>
+
+<div class="content">
+${data.map(item=>`
+<div class="note">
+<h3>${item.title}</h3>
+<pre>${item.content}</pre>
+</div>
+`).join("")}
+</div>
+`;
+
+document.body.appendChild(win);
+
+win.querySelector(".close").onclick=()=>{
+win.remove();
+};
+
+drag(win);
+
+}
+
+/* Drag */
+
+function drag(el){
+
+const title=el.querySelector(".titlebar");
+
+let x=0,y=0,px=0,py=0;
+
+title.onmousedown=(e)=>{
+
+el.style.zIndex=++z;
+
+px=e.clientX;
+py=e.clientY;
+
+document.onmousemove=(e)=>{
+
+x=px-e.clientX;
+y=py-e.clientY;
+
+px=e.clientX;
+py=e.clientY;
+
+el.style.top=(el.offsetTop-y)+"px";
+el.style.left=(el.offsetLeft-x)+"px";
+};
+
+document.onmouseup=()=>{
+document.onmousemove=null;
+};
+};
+
+}
+
+</script></body>
+</html>

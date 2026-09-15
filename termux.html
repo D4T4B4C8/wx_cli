@@ -1,0 +1,686 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Knowledge Vault</title>
+
+<!-- ress: minimal CSS reset (needed by the cloth simulation) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ress@5.0.2/dist/ress.min.css" />
+
+<style>
+
+:root{
+
+/* CHANGE ONLY THIS */
+--accent:#90e3fc;
+
+--bg:#050505;
+--panel:#090909;
+
+--border:var(--accent);
+--text:#FFFFFF;
+--glow:var(--accent);
+
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Consolas, monospace;
+}
+
+html {
+background: #000;
+overscroll-behavior: none;
+}
+
+body,
+main {
+position: relative;
+width: 100%;
+height: 100%;
+}
+
+a {
+color: inherit;
+text-decoration: none;
+}
+
+ul {
+list-style: none;
+}
+
+html, body{
+overflow:hidden;
+color:var(--text);
+height:100vh;
+}
+
+/* Cloth simulation canvas sits behind the UI */
+canvas{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100vh;
+z-index:0;
+}
+
+.sidebar{
+  overflow-y:auto;
+  scrollbar-width:thin;
+}
+
+/* Sidebar */
+
+.sidebar{
+position:fixed;
+left:10px;
+top:10px;
+bottom:10px;
+width:220px;
+background:rgba(0,0,0,.85);
+border:1px solid var(--border);
+padding:15px;
+z-index:5;
+}
+
+.logo{
+font-size:20px;
+margin-bottom:20px;
+font-weight:bold;
+}
+
+.menu button{
+width:100%;
+margin-bottom:8px;
+padding:10px;
+background:black;
+border:1px solid var(--border);
+color:var(--text);
+cursor:pointer;
+}
+
+.menu button:hover{
+box-shadow:0 0 15px var(--glow);
+}
+
+/* Top Bar */
+
+.topbar{
+position:fixed;
+left:250px;
+right:20px;
+top:10px;
+height:60px;
+background:rgba(0,0,0,.8);
+border:1px solid var(--border);
+display:flex;
+align-items:center;
+padding:0 20px;
+z-index:5;
+}
+
+
+/* Windows */
+
+.window{
+position:absolute;
+background:rgba(0,0,0,.95);
+border:1px solid var(--border);
+box-shadow:0 0 15px rgba(94,255,247,.2);
+width:500px;
+height:350px;
+z-index:10;
+}
+
+.titlebar{
+height:35px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:0 10px;
+border-bottom:1px solid var(--border);
+cursor:move;
+}
+
+.close{
+cursor:pointer;
+}
+
+.content{
+padding:15px;
+height:calc(100% - 35px);
+overflow:auto;
+}
+
+.note{
+margin-bottom:15px;
+padding:10px;
+border:1px solid rgba(94,255,247,.2);
+}
+
+.note h3{
+margin-bottom:10px;
+}
+
+pre{
+white-space:pre-wrap;
+color:#ffd38a;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- ===== Cloth simulation background ===== -->
+<canvas></canvas>
+
+<script type="module">
+// ====================================================
+// Bundled from: src/scripts/Particle.ts, Constraint.ts, Gui.ts, entry.ts
+// TypeScript types stripped; logic left unchanged.
+// ====================================================
+
+import { Pane } from 'https://cdn.jsdelivr.net/npm/tweakpane@4.0.5/dist/tweakpane.min.js'
+import * as EssentialsPlugin from 'https://cdn.jsdelivr.net/npm/@tweakpane/plugin-essentials@0.2.1/dist/tweakpane-plugin-essentials.min.js'
+
+// ---- Particle.ts ----
+class Particle {
+  constructor(ctx, x, y, radius, isPinned = false) {
+    this.ctx = ctx
+    this.radius = radius
+    this.isPinned = isPinned
+    this.position = [x, y]
+    this.prevPosition = [x, y]
+    this.acceleration = [x, y]
+  }
+
+  applyForce(force) {
+    if (!this.isPinned) {
+      this.acceleration[0] += force[0]
+      this.acceleration[1] -= force[1]
+    }
+  }
+
+  update(timeStep) {
+    if (!this.isPinned) {
+      const velo = [this.position[0] - this.prevPosition[0], this.position[1] - this.prevPosition[1]]
+      this.prevPosition = [...this.position]
+      this.position[0] += velo[0] + this.acceleration[0] * timeStep * timeStep
+      this.position[1] += velo[1] + this.acceleration[1] * timeStep * timeStep
+      this.acceleration = [0, 0] // reset
+    }
+  }
+
+  constrainToBounds() {
+    const { width, height } = this.ctx.canvas
+
+    if (this.position[0] < this.radius) this.position[0] = this.radius
+    if (this.position[0] > width - this.radius) this.position[0] = width - this.radius
+
+    if (this.position[1] < this.radius) this.position[1] = this.radius
+    if (this.position[1] > height - this.radius) this.position[1] = height - this.radius
+  }
+
+  draw() {
+    this.ctx.fillStyle = '#fff'
+
+    this.ctx.beginPath()
+    this.ctx.arc(this.position[0], this.position[1], this.radius, 0, Math.PI * 2)
+    this.ctx.fill()
+    this.ctx.closePath()
+  }
+}
+
+// ---- Constraint.ts ----
+class Constraint {
+  constructor(ctx, p1, p2, active = true) {
+    this.ctx = ctx
+    this.p1 = p1
+    this.p2 = p2
+    this.active = active
+
+    this.initialLength = Math.hypot(
+      p2.position[0] - p1.position[0],
+      p2.position[1] - p1.position[1],
+    )
+  }
+
+  satisfy() {
+    if (!this.active) return
+
+    const delta = [
+      this.p2.position[0] - this.p1.position[0],
+      this.p2.position[1] - this.p1.position[1],
+    ]
+    const currentLenght = Math.hypot(...delta)
+    const difference = (currentLenght - this.initialLength) / currentLenght
+    const correction = [
+      delta[0] * 0.5 * difference,
+      delta[1] * 0.5 * difference,
+    ]
+
+    if (!this.p1.isPinned) {
+      this.p1.position[0] += correction[0]
+      this.p1.position[1] += correction[1]
+    }
+    if (!this.p2.isPinned) {
+      this.p2.position[0] -= correction[0]
+      this.p2.position[1] -= correction[1]
+    }
+  }
+
+  deactive() {
+    this.active = false
+  }
+
+  draw() {
+    if (!this.active) return
+
+    this.ctx.strokeStyle = '#fff'
+
+    this.ctx.beginPath()
+    this.ctx.moveTo(this.p1.position[0], this.p1.position[1])
+    this.ctx.lineTo(this.p2.position[0], this.p2.position[1])
+    this.ctx.stroke()
+    this.ctx.closePath()
+  }
+}
+
+// ---- Gui.ts ----
+class TweakPane extends Pane {
+  constructor() {
+    super()
+    this.registerPlugin(EssentialsPlugin)
+    this.custom()
+
+    this.title = ''
+    this.hidden = true
+  }
+
+  custom() {
+    document.querySelector('.tp-dfwv')?.style.setProperty('width', 'fit-content')
+    document.querySelector('.tp-dfwv')?.style.setProperty('user-select', 'none')
+    document.querySelector('.tp-dfwv .tp-rotv_c')?.style.setProperty('display', 'block')
+  }
+
+  addFpsBlade(label) {
+    this.hidden = false
+    this.fps = this.addBlade({ view: 'fpsgraph', label: label ?? 'fps' })
+  }
+
+  updateFps() {
+    if (!this.fps) this.addFpsBlade()
+
+    this.fps?.end()
+    this.fps?.begin()
+  }
+}
+
+const pane = new TweakPane()
+
+// ---- entry.ts ----
+const dpr = window.devicePixelRatio
+
+const canvas = document.querySelector('canvas')
+canvas.width = window.innerWidth * dpr
+canvas.height = window.innerHeight * dpr
+
+const ctx = canvas.getContext('2d')
+
+window.addEventListener('resize', () => {
+  canvas.width = window.innerWidth * dpr
+  canvas.height = window.innerHeight * dpr
+  createScene()
+})
+
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible') {
+    clock.restart()
+  }
+})
+
+const clock = {
+  prev: performance.now(),
+  current: performance.now(),
+  dt: 0,
+  et: 0,
+  update: () => {
+    clock.current = performance.now()
+    clock.dt = clock.current - clock.prev
+    clock.et += clock.dt
+    clock.prev = clock.current
+  },
+  restart: () => {
+    clock.prev = performance.now()
+    clock.current = performance.now()
+  },
+}
+
+const params = {
+  gravity: -9.8,
+  row: 40,
+  col: 40,
+  distance: 0,
+  resolve: 30,
+}
+params.distance = Math.min(canvas.width, canvas.height) / (params.row + 2)
+
+const particles = []
+const constraints = []
+let animationId = null
+
+// ====================================================
+let isMouseDown = false
+
+canvas.addEventListener('mousedown', (e) => e.button === 0 && (isMouseDown = true))
+canvas.addEventListener('mouseup', (e) => e.button === 0 && (isMouseDown = false))
+canvas.addEventListener('mousemove', (e) => {
+  isMouseDown && tearCloth([e.clientX * dpr, e.clientY * dpr], constraints)
+})
+
+canvas.addEventListener('touchstart', (e) => 0 < e.touches.length && (isMouseDown = true))
+canvas.addEventListener('touchend', (e) => 0 < e.touches.length && (isMouseDown = false))
+canvas.addEventListener('touchmove', (e) => {
+  if (0 < e.touches.length && isMouseDown) {
+    tearCloth([e.touches[0].clientX * dpr, e.touches[0].clientY * dpr], constraints)
+  }
+})
+
+function tearCloth(mouse, constraints) {
+  findNearestConstraint(mouse, constraints)?.deactive()
+}
+
+function findNearestConstraint(mouse, constraints) {
+  let nearestConstraint = null
+  let minDistance = params.distance * 2
+
+  for (const constraint of constraints) {
+    const distance = pointToSegmentDistance(mouse, constraint.p1, constraint.p2)
+    if (distance < minDistance) {
+      minDistance = distance
+      nearestConstraint = constraint
+    }
+  }
+
+  return nearestConstraint
+}
+
+function pointToSegmentDistance(mouse, p1, p2) {
+  const [x1, y1, x2, y2] = [...p1.position, ...p2.position]
+  const [mx, my] = mouse
+
+  const [ABx, ABy] = [x2 - x1, y2 - y1]
+  const [APx, APy] = [mx - x1, my - y1]
+  const [BPx, BPy] = [mx - x2, my - y2]
+
+  const AB_AP = ABx * APx + ABy * APy
+  const AB_AB = ABx * ABx + ABy * ABy
+  const t = AB_AP / AB_AB
+
+  // Project point P on the line segment AB
+  if (t < 0.0) {
+    // P is closer to A
+    return Math.sqrt(APx * APx + APy * APy)
+  } else if (1.0 < t) {
+    // P is closer to B
+    return Math.sqrt(BPx * BPx + BPy * BPy)
+  } else {
+    // projection point is on the segment
+    const proj_x = x1 + t * ABx
+    const proj_y = y1 + t * ABy
+    return Math.sqrt((mx - proj_x) * (mx - proj_x) + (my - proj_y) * (my - proj_y))
+  }
+}
+
+// ====================================================
+function createPhysics() {
+  constraints.length = 0
+  particles.length = 0
+
+  // prettier-ignore
+  const offset = [
+	(params.col - 1) * params.distance / 2,
+	(params.row - 1) * params.distance / 2,
+]
+
+  for (let row = 0; row < params.row; row++) {
+    for (let col = 0; col < params.col; col++) {
+      particles.push(
+        // prettier-ignore
+        new Particle(
+          ctx,
+          col * params.distance + canvas.width / 2 - offset[0],
+          row * params.distance + canvas.height / 2 - offset[1],
+          params.distance * 0.1,
+          row === 0,
+        ),
+      )
+    }
+  }
+
+  for (let row = 0; row < params.row; row++) {
+    for (let col = 0; col < params.col; col++) {
+      if (col < params.col - 1) {
+        // prettier-ignore
+        constraints.push(new Constraint(
+					ctx,
+					particles[row * params.col + col],
+					particles[row * params.col + col + 1]
+				))
+      }
+      if (row < params.row - 1) {
+        // prettier-ignore
+        constraints.push(new Constraint(
+					ctx,
+					particles[row * params.col + col],
+					particles[(row + 1) * params.col + col]
+				))
+      }
+    }
+  }
+}
+
+function clearCanvas() {
+  ctx.beginPath()
+  ctx.clearRect(0, 0, canvas.width, canvas.height)
+  ctx.fillStyle = '#0e0e0e'
+  ctx.fillRect(0, 0, canvas.width, canvas.height)
+}
+
+function draw() {
+  pane.updateFps()
+  clock.update()
+
+  clearCanvas()
+
+  for (const particle of particles) {
+    particle.applyForce([0, params.gravity])
+    particle.update(Math.min(1000 / 60, clock.dt * 0.01))
+    particle.constrainToBounds()
+    particle.draw()
+  }
+
+  for (let i = 0; i < params.resolve; i++) {
+    for (const constraint of constraints) {
+      constraint.satisfy()
+      if (i === params.resolve - 1) constraint.draw()
+    }
+  }
+
+  animationId = requestAnimationFrame(draw)
+}
+
+function createScene() {
+  if (animationId) cancelAnimationFrame(animationId)
+
+  params.distance = Math.min(canvas.width, canvas.height) / (params.row + 2)
+
+  createPhysics()
+  clock.restart()
+  draw()
+}
+
+createScene()
+
+// ====================================================
+pane.addButton({ title: 'reset scene' }).on('click', () => {
+  createScene()
+})
+</script>
+
+<!-- ===== Knowledge Vault UI overlay ===== -->
+
+<div class="sidebar">
+<div class="logo">KNOWLEDGE VAULT</div>
+
+<div class="menu">
+   <button onclick="window.location.href='termux/image258.html'">
+   OPEN IMAGE IN TERMUX
+   </button>
+   <button onclick="window.location.href='termux/tmux153.html'">
+   HOW TO DIVIDE TERMUX SCREEN HORIZONTALY AND VERTICALY
+   </button>
+   <button onclick="window.location.href='termux/repo74.html'">
+   HOW TO CHANGE TERMUX REPO
+   </button>
+
+</div>
+</div>
+
+
+<div class="topbar">
+<h2>WHITEX DATABASE</h2>
+</div>
+
+<script>
+
+/* Notes */
+
+const cliData = [
+{
+title:"Miller",
+content:"mlr --csv cat file.csv"
+},
+{
+title:"jq",
+content:"jq '.name' file.json"
+},
+{
+title:"grep",
+content:"grep -R 'password' ."
+}
+];
+
+const netData = [
+{
+title:"Nmap",
+content:"nmap -sV 192.168.1.1"
+},
+{
+title:"Ping",
+content:"ping google.com"
+}
+];
+
+const linuxData = [
+{
+title:"Find",
+content:"find / -name test.txt"
+},
+{
+title:"lsblk",
+content:"lsblk -f"
+}
+];
+
+const webData = [
+{
+title:"Flexbox",
+content:"display:flex;"
+},
+{
+title:"Grid",
+content:"display:grid;"
+}
+];
+
+/* Window System */
+
+let z = 100;
+
+function openWindow(title,data){
+
+let win=document.createElement("div");
+win.className="window";
+win.style.left=260+Math.random()*200+"px";
+win.style.top=100+Math.random()*100+"px";
+
+win.innerHTML=`
+<div class="titlebar">
+<span>${title}</span>
+<span class="close">✕</span>
+</div>
+
+<div class="content">
+${data.map(item=>`
+<div class="note">
+<h3>${item.title}</h3>
+<pre>${item.content}</pre>
+</div>
+`).join("")}
+</div>
+`;
+
+document.body.appendChild(win);
+
+win.querySelector(".close").onclick=()=>{
+win.remove();
+};
+
+drag(win);
+
+}
+
+/* Drag */
+
+function drag(el){
+
+const title=el.querySelector(".titlebar");
+
+let x=0,y=0,px=0,py=0;
+
+title.onmousedown=(e)=>{
+
+el.style.zIndex=++z;
+
+px=e.clientX;
+py=e.clientY;
+
+document.onmousemove=(e)=>{
+
+x=px-e.clientX;
+y=py-e.clientY;
+
+px=e.clientX;
+py=e.clientY;
+
+el.style.top=(el.offsetTop-y)+"px";
+el.style.left=(el.offsetLeft-x)+"px";
+};
+
+document.onmouseup=()=>{
+document.onmousemove=null;
+};
+};
+
+}
+
+</script>
+
+</body>
+</html>

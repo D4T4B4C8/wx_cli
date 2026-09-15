@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Knowledge Vault</title>
+
+<style>
+:root {
+  /* Theme Settings */
+  --accent: #90e3fc;
+  --bg: #050505;
+  --panel: #090909;
+  --border: var(--accent);
+  --text: #FFFFFF;
+  --glow: var(--accent);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Consolas, monospace;
+}
+.sidebar{
+  overflow-y:auto;
+  scrollbar-width:thin;
+}
+body {
+  background: #000;
+  overflow: hidden;
+  color: var(--text);
+  height: 100vh;
+  position: relative;
+}
+
+/* Background Canvas Layer */
+canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1; /* Sits completely behind the UI dashboard */
+}
+
+/* Sidebar */
+.sidebar {
+  position: fixed;
+  left: 10px;
+  top: 10px;
+  bottom: 10px;
+  width: 220px;
+  background: rgba(0, 0, 0, .85);
+  border: 1px solid var(--border);
+  padding: 15px;
+  z-index: 5;
+}
+
+.logo {
+  font-size: 20px;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+.menu button {
+  width: 100%;
+  margin-bottom: 8px;
+  padding: 10px;
+  background: black;
+  border: 1px solid var(--border);
+  color: var(--text);
+  cursor: pointer;
+}
+
+.menu button:hover {
+  box-shadow: 0 0 15px var(--glow);
+}
+
+/* Top Bar */
+.topbar {
+  position: fixed;
+  left: 250px;
+  right: 20px;
+  top: 10px;
+  height: 60px;
+  background: rgba(0, 0, 0, .8);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  z-index: 5;
+}
+
+/* Windows */
+.window {
+  position: absolute;
+  background: rgba(0, 0, 0, .95);
+  border: 1px solid var(--border);
+  box-shadow: 0 0 15px rgba(245, 73, 39, .2); /* Updated glow matching accent color */
+  width: 500px;
+  height: 350px;
+  z-index: 10;
+}
+
+.titlebar {
+  height: 35px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 10px;
+  border-bottom: 1px solid var(--border);
+  cursor: move;
+}
+
+.close {
+  cursor: pointer;
+}
+
+.content {
+  padding: 15px;
+  height: calc(100% - 35px);
+  overflow: auto;
+}
+
+.note {
+  margin-bottom: 15px;
+  padding: 10px;
+  border: 1px solid rgba(245, 73, 39, .2); /* Updated border matching accent color */
+}
+
+.note h3 {
+  margin-bottom: 10px;
+}
+
+pre {
+  white-space: pre-wrap;
+  color: #ffd38a;
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="c"></canvas>
+
+<div class="sidebar">
+  <div class="logo">KNOWLEDGE VAULT</div>
+  <div class="menu">
+   <button onclick="window.location.href='windows/netsh557.html'">
+   SHOW WIFI PSSWD IN WINDOWS
+   </button>
+   <button onclick="window.location.href='windows/sfc556.html'">
+   SCAN YOUR WINDOW IN CMD
+   </button>
+   <button onclick="window.location.href='windows/intresting-cmd521.html'">
+   CMD INTERESTING COMMANDS
+   </button>
+   <button onclick="window.location.href='windows/sdcard501.html'">
+   FORMAT SD CARD USING COMMAND PROMPT
+   </button>
+   <button onclick="window.location.href='windows/removegrub486.html'">
+   HOW TO REMOVE GRUB OS WINDOW PAGES
+   </button>
+   <button onclick="window.location.href='windows/virus483.html'">
+   REMOVE WINDOWS VIRUS
+   </button>
+   <button onclick="window.location.href='windows/rmdir471.html'">
+   DELETE DIRECTORY IN CMD
+   </button>
+   <button onclick="window.location.href='windows/cls470.html'">
+   CLEAR SCREEN IN CMD
+   </button>
+   <button onclick="window.location.href='windows/del469.html'">
+   DELETE FILE IN CMD
+   </button>
+   <button onclick="window.location.href='windows/copy468.html'">
+   COPY FILE IN CMD
+   </button>
+   <button onclick="window.location.href='windows/openfile467.html'">
+   OPEN FILE IN CMD
+   </button>
+   <button onclick="window.location.href='windows/modify466.html'">
+   MODIFY FILE NAME IN CMD
+   </button>
+   <button onclick="window.location.href='windows/file465.html'">
+   HOW TO CREATE FILE IN WINDOWS CMD
+   </button>
+   <button onclick="window.location.href='windows/ram435.html'">
+   RAM INFO IN WINDOWS
+   </button>
+   <button onclick="window.location.href='windows/storage434.html'">
+   STORAGE INFO IN WINDOWS
+   </button>
+   <button onclick="window.location.href='windows/cpu433.html'">
+   CPU INFO IN WINDOWS
+   </button>
+   <button onclick="window.location.href='windows/browser430.html'">
+   SEE BROWSER HISTORY IN WINDOWS
+   </button>
+   <button onclick="window.location.href='windows/batwin335.html'">
+   HOW TO CHECK BATTERY LIFE OF LAPTOP IN WINDOWS
+   </button>
+   <button onclick="window.location.href='windows/choco332.html'">
+   [CHOCOLATEY] THE WINDOWS PKG MANAGER
+   </button>
+   <button onclick="window.location.href='windows/winger331.html'">
+   COMMAND PROMPT PKG MANAGER
+   </button>
+   <button onclick="window.location.href='windows/fast264.html'">
+   FAST UP YOUR WINDOWS OS
+   </button>
+   <button onclick="window.location.href='windows/reset247.html'">
+   RESET WINDOWS USING CMD PROMPT
+   </button>
+   <button onclick="window.location.href='windows/wifi131.html'">
+   HOW TO CONNECT WIFI USING CMD PROMPT
+   </button>
+   <button onclick="window.location.href='windows/w10112.html'">
+   HOW TO DOWNLOAD WINDOWS 10 AND BOOT INTO USB
+   </button>
+   <button onclick="window.location.href='windows/bypass109.html'">
+   HOW TO BYPASS WINDOWS 10 LOGIN PAGE
+   </button>
+   <button onclick="window.location.href='windows/hide101.html'">
+   HOW TO HIDE FOLDER IN WINDOWS
+   </button>
+   <button onclick="window.location.href='windows/shutd97.html'">
+   SLIDE TO SHUT DOWN WINDOWS
+   </button>
+    
+  </div>
+</div>
+
+<div class="topbar">
+  <h2>WHITEX DATABASE</h2>
+</div>
+
+<script>
+/* Data Vault Structures */
+const cliData = [
+  { title: "Miller", content: "mlr --csv cat file.csv" },
+  { title: "jq", content: "jq '.name' file.json" },
+  { title: "grep", content: "grep -R 'password' ." }
+];
+
+const netData = [
+  { title: "Nmap", content: "nmap -sV 192.168.1.1" },
+  { title: "Ping", content: "ping google.com" }
+];
+
+const linuxData = [
+  { title: "Find", content: "find / -name test.txt" },
+  { title: "lsblk", content: "lsblk -f" }
+];
+
+const webData = [
+  { title: "Flexbox", content: "display:flex;" },
+  { title: "Grid", content: "display:grid;" }
+];
+
+/* Window System Mechanics */
+let z = 100;
+
+function openWindow(title, data) {
+  let win = document.createElement("div");
+  win.className = "window";
+  win.style.left = 260 + Math.random() * 200 + "px";
+  win.style.top = 100 + Math.random() * 100 + "px";
+
+  win.innerHTML = `
+    <div class="titlebar">
+      <span>${title}</span>
+      <span class="close">✕</span>
+    </div>
+    <div class="content">
+      ${data.map(item => `
+        <div class="note">
+          <h3>${item.title}</h3>
+          <pre>${item.content}</pre>
+        </div>
+      `).join("")}
+    </div>
+  `;
+
+  document.body.appendChild(win);
+
+  win.querySelector(".close").onclick = () => {
+    win.remove();
+  };
+
+  drag(win);
+}
+
+/* Window Drag Mechanics */
+function drag(el) {
+  const title = el.querySelector(".titlebar");
+  let x = 0, y = 0, px = 0, py = 0;
+
+  title.onmousedown = (e) => {
+    // Bring window to top of active document stacks
+    el.style.zIndex = ++z;
+    px = e.clientX;
+    py = e.clientY;
+
+    document.onmousemove = (e) => {
+      x = px - e.clientX;
+      y = py - e.clientY;
+      px = e.clientX;
+      py = e.clientY;
+
+      el.style.top = (el.offsetTop - y) + "px";
+      el.style.left = (el.offsetLeft - x) + "px";
+    };
+
+    document.onmouseup = () => {
+      document.onmousemove = null;
+    };
+  };
+}
+
+/* ========================================================================= */
+/* Canvas Orbital Background Implementation                                  */
+/* ========================================================================= */
+
+window.requestAnimFrame = (function() {
+  return window.requestAnimationFrame ||
+         window.webkitRequestAnimationFrame ||
+         window.mozRequestAnimationFrame ||
+         window.oRequestAnimationFrame ||
+         window.msRequestAnimationFrame ||
+         function(callback) {
+           window.setTimeout(callback, 1000 / 60);
+         };
+})();
+
+document.onselectstart = function() {
+  return false;
+};
+
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+const dpr = window.devicePixelRatio || 1;
+
+let cw = window.innerWidth;
+let ch = window.innerHeight;
+canvas.width = cw * dpr;
+canvas.height = ch * dpr;
+ctx.scale(dpr, dpr);
+
+function rand(rMin, rMax) {
+  return Math.floor(Math.random() * (rMax - rMin + 1)) + rMin;
+}
+
+ctx.lineCap = 'round';
+let orbs = [];
+let trail = true;
+
+function createOrb(mx, my) {
+  const dx = (cw / 2) - mx;
+  const dy = (ch / 2) - my;
+  const dist = Math.sqrt(dx * dx + dy * dy);
+  const baseAngle = Math.atan2(dy, dx);
+  
+  const isRed = Math.random() > 0.5;
+  const orbColor = isRed ? 'rgba(245, 73, 39, 1)' : 'rgba(255, 255, 255, 1)';
+
+  orbs.push({
+    x: mx,
+    y: my,
+    lastX: mx,
+    lastY: my,
+    color: orbColor,
+    angle: baseAngle + Math.PI / 2,
+    size: rand(1, 3) / 2,
+    centerX: cw / 2,
+    centerY: ch / 2,
+    radius: dist,
+    speed: (rand(5, 10) / 1000) * (dist / 750) + 0.015,
+    update() {
+      this.lastX = this.x;
+      this.lastY = this.y;
+      this.x = this.centerX + Math.sin(this.angle * -1) * this.radius;
+      this.y = this.centerY + Math.cos(this.angle * -1) * this.radius;
+      this.angle += this.speed;
+    },
+    draw() {
+      ctx.strokeStyle = this.color;
+      ctx.lineWidth = this.size;
+      ctx.beginPath();
+      ctx.moveTo(this.lastX, this.lastY);
+      ctx.lineTo(this.x, this.y);
+      ctx.stroke();
+    }
+  });
+}
+
+// User interactions mapping
+function onMouseDown(e) {
+  // Only spawn background trails if user didn't click inside active sidebar, topbar, or panels
+  if (e.target.closest('.sidebar') || e.target.closest('.topbar') || e.target.closest('.window')) {
+    return;
+  }
+  const rect = canvas.getBoundingClientRect();
+  const mx = e.clientX - rect.left;
+  const my = e.clientY - rect.top;
+  createOrb(mx, my);
+  window.addEventListener('mousemove', onMouseMove);
+}
+
+function onMouseMove(e) {
+  const rect = canvas.getBoundingClientRect();
+  const mx = e.clientX - rect.left;
+  const my = e.clientY - rect.top;
+  createOrb(mx, my);
+}
+
+function onMouseUp() {
+  window.removeEventListener('mousemove', onMouseMove);
+}
+
+window.addEventListener('mousedown', onMouseDown);
+window.addEventListener('mouseup', onMouseUp);
+
+// Initial system generation loop
+let count = 100;
+while (count--) {
+  createOrb(cw / 2, ch / 2 + (count * 2));
+}
+
+function loop() {
+  requestAnimFrame(loop);
+  if (trail) {
+    ctx.fillStyle = 'rgba(0,0,0,0.1)';
+    ctx.fillRect(0, 0, cw, ch);
+  } else {
+    ctx.clearRect(0, 0, cw, ch);
+  }
+  for (let i = 0; i < orbs.length; i++) {
+    for (let j = 0; j < 3; j++) {
+      orbs[i].update();
+      orbs[i].draw();
+    }
+  }
+}
+loop();
+
+window.addEventListener('resize', function() {
+  cw = window.innerWidth;
+  ch = window.innerHeight;
+  canvas.width = cw * dpr;
+  canvas.height = ch * dpr;
+  ctx.scale(dpr, dpr);
+});
+</script>
+
+</body>
+</html>

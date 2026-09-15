@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Knowledge Vault</title>
+
+<style>
+
+:root {
+  --accent: #90e3fc;
+  --border: var(--accent);
+  --text:   #FFFFFF;
+  --glow:   var(--accent);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Consolas, monospace;
+}
+
+body {
+  background: #07192f;
+  overflow: hidden;
+  color: var(--text);
+  height: 100vh;
+}
+
+.sidebar{
+  overflow-y:auto;
+  scrollbar-width:thin;
+}
+/* ── Vanta background ── */
+
+#vanta {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+}
+
+/* ── Sidebar ── */
+
+.sidebar {
+  position: fixed;
+  left: 10px;
+  top: 10px;
+  bottom: 10px;
+  width: 220px;
+  background: rgba(0, 0, 0, .75);
+  border: 1px solid var(--border);
+  padding: 15px;
+  z-index: 5;
+  backdrop-filter: blur(6px);
+}
+
+.logo {
+  font-size: 20px;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+.menu button {
+  width: 100%;
+  margin-bottom: 8px;
+  padding: 10px;
+  background: rgba(0, 0, 0, .6);
+  border: 1px solid var(--border);
+  color: var(--text);
+  cursor: pointer;
+  transition: box-shadow .2s;
+}
+
+.menu button:hover {
+  box-shadow: 0 0 15px var(--glow);
+}
+
+/* ── Top Bar ── */
+
+.topbar {
+  position: fixed;
+  left: 250px;
+  right: 20px;
+  top: 10px;
+  height: 60px;
+  background: rgba(0, 0, 0, .7);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  z-index: 5;
+  backdrop-filter: blur(6px);
+}
+
+/* ── Floating Windows ── */
+
+.window {
+  position: absolute;
+  background: rgba(0, 0, 0, .92);
+  border: 1px solid var(--border);
+  box-shadow: 0 0 20px rgba(245, 73, 39, .25);
+  width: 500px;
+  height: 350px;
+  z-index: 10;
+  backdrop-filter: blur(8px);
+}
+
+.titlebar {
+  height: 35px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 10px;
+  border-bottom: 1px solid var(--border);
+  cursor: move;
+  user-select: none;
+}
+
+.close {
+  cursor: pointer;
+}
+
+.close:hover {
+  opacity: .7;
+}
+
+.content {
+  padding: 15px;
+  height: calc(100% - 35px);
+  overflow: auto;
+}
+
+.note {
+  margin-bottom: 15px;
+  padding: 10px;
+  border: 1px solid rgba(245, 73, 39, .25);
+}
+
+.note h3 {
+  margin-bottom: 10px;
+}
+
+pre {
+  white-space: pre-wrap;
+  color: #ffd38a;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- Vanta animated background -->
+<div id="vanta"></div>
+
+<!-- Sidebar -->
+<div class="sidebar">
+  <div class="logo">KNOWLEDGE VAULT</div>
+  <div class="menu">
+   <button onclick="window.location.href='web/localworld2537.html'">
+   USE YOUR LOCAL HOST, WORLD WIDE HTTPS INCLUDED (METHOD 2)
+   </button>
+   <button onclick="window.location.href='web/localworld536.html'">
+   USE YOUR LOCAL HOST ALL OVER THE WORLD USING SSH (FIRST METHOD)
+   </button>
+   <button onclick="window.location.href='web/localhost525.html'">
+   CREATE YOUR LOCAL HOST PAGE
+   </button>
+   <button onclick="window.location.href='web/lynx496.html'">
+   OPEN ANY WEBSITE IN TERMINAL
+   </button>
+   <button onclick="window.location.href='web/codeing476.html'">
+   HOW TO SHOW ANY WEBSITE CODING IN TERMINAL
+   </button>
+   <button onclick="window.location.href='web/downloadimage456.html'">
+   DOWNLOAD IMAGES IN URL.TXT
+   </button>
+   <button onclick="window.location.href='web/wget455.html'">
+   DOWNLOAD ALL IMAGES USING WEBSITES USING WGET
+   </button>
+   <button onclick="window.location.href='web/waybackcli445.html'">
+   HOW TO DOWNLOAD WAY BACK MACHINE IN LINUX
+   </button>
+   <button onclick="window.location.href='web/wayback444.html'">
+   TIME TRAVEL INSIDE WEBSITES
+   </button>
+   <button onclick="window.location.href='web/headinfo385.html'">
+   GAIN HEADER INFO USING CURL
+   </button>
+   <button onclick="window.location.href='web/header384.html'">
+   HOW TO SEND HEADER REQUEST USING CURL
+   </button>
+   <button onclick="window.location.href='web/post377.html'">
+   HOW TO SEND POST REQUEST USING CURL
+   </button>
+   <button onclick="window.location.href='web/drib367.html'">
+   FIND DIRECTORIES OF ANY WEBSITE WITH DIRB
+   </button>
+   <button onclick="window.location.href='web/nikto366.html'">
+   HOW TO SCAN ANY WEBSITE WITH NIKTO
+   </button>
+   <button onclick="window.location.href='web/root246.html'">
+   IF YOU WANT TO RUN ANY WEB RELATED TOOL IN ROOT
+   </button>
+   <button onclick="window.location.href='web/w3m219.html'">
+   RUN ANY WEBSITE, PIC, VIDEO IN TERMINAL
+   </button>
+   <button onclick="window.location.href='web/bomba161.html'">
+   HOW TO READ ANY BLOG/ARTICAL IN CLI
+   </button>
+   <button onclick="window.location.href='web/wikit126.html'">
+   A CLI TOOL TO SEARCH WIKIPEDIA ON LINUX
+   </button>
+   <button onclick="window.location.href='web/gau71.html'">
+   HOW TO FIND URLS OF ANY WEBSITE
+   </button>
+   <button onclick="window.location.href='web/assetfinder70.html'">
+   HOW TO FIND SUBDOMAINS OF ANY WEBSITE
+   </button>
+   <button onclick="window.location.href='web/wordpress_file27.html'">
+   INCREASE THE MAXIMUM UPLOAD BACKUP FILE SIZE IN WORDPRESS
+   </button>
+   <button onclick="window.location.href='web/backup_wordpress26.html'">
+   BACKUP YOUR WORDPRESS SITE
+   </button>
+   <button onclick="window.location.href='web/wordpress22.html'">
+   INSTALL WORDPRESS ON LINUX
+   </button>
+   <button onclick="window.location.href='web/short5.html'">
+   FIND SHORT LINKS DETAILS
+   </button>
+    
+  </div>
+</div>
+
+<!-- Top Bar -->
+<div class="topbar">
+  <h2>WHITEX DATABASE</h2>
+</div>
+
+<!-- ── Three.js + Vanta.js via CDN ── -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vanta@0.5.24/dist/vanta.birds.min.js"></script>
+
+<script>
+
+/* ── Vanta init ── */
+VANTA.BIRDS({
+  el: '#vanta',
+  mouseControls: true,
+  touchControls: true,
+  gyroControls: false,
+  backgroundColor: 0x07192f,
+  color1: 0xff4d6d,
+  color2: 0x46e0ff,
+  colorMode: 'varianceGradient',
+  birdSize: 1.1,
+  wingSpan: 28,
+  speedLimit: 4.2,
+  separation: 26,
+  alignment: 22,
+  cohesion: 18,
+  quantity: 4
+});
+
+/* ── Note data ── */
+
+const cliData = [
+  { title: 'Miller',  content: 'mlr --csv cat file.csv' },
+  { title: 'jq',      content: "jq '.name' file.json" },
+  { title: 'grep',    content: "grep -R 'password' ." }
+];
+
+const netData = [
+  { title: 'Nmap',    content: 'nmap -sV 192.168.1.1' },
+  { title: 'Ping',    content: 'ping google.com' }
+];
+
+const linuxData = [
+  { title: 'Find',    content: 'find / -name test.txt' },
+  { title: 'lsblk',  content: 'lsblk -f' }
+];
+
+const webData = [
+  { title: 'Flexbox', content: 'display:flex;' },
+  { title: 'Grid',    content: 'display:grid;' }
+];
+
+/* ── Window system ── */
+
+let z = 100;
+
+function openWindow(title, data) {
+  const win = document.createElement('div');
+  win.className = 'window';
+  win.style.left = (260 + Math.random() * 200) + 'px';
+  win.style.top  = (80  + Math.random() * 120) + 'px';
+
+  win.innerHTML = `
+    <div class="titlebar">
+      <span>${title}</span>
+      <span class="close">✕</span>
+    </div>
+    <div class="content">
+      ${data.map(item => `
+        <div class="note">
+          <h3>${item.title}</h3>
+          <pre>${item.content}</pre>
+        </div>
+      `).join('')}
+    </div>
+  `;
+
+  document.body.appendChild(win);
+  win.querySelector('.close').onclick = () => win.remove();
+  drag(win);
+}
+
+/* ── Drag ── */
+
+function drag(el) {
+  const bar = el.querySelector('.titlebar');
+  let x = 0, y = 0, px = 0, py = 0;
+
+  bar.onmousedown = e => {
+    el.style.zIndex = ++z;
+    px = e.clientX;
+    py = e.clientY;
+
+    document.onmousemove = e => {
+      x = px - e.clientX;
+      y = py - e.clientY;
+      px = e.clientX;
+      py = e.clientY;
+      el.style.top  = (el.offsetTop  - y) + 'px';
+      el.style.left = (el.offsetLeft - x) + 'px';
+    };
+
+    document.onmouseup = () => { document.onmousemove = null; };
+  };
+}
+
+</script>
+</body>
+</html>

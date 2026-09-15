@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Knowledge Vault</title>
+
+<style>
+:root{
+  /* CHANGE ONLY THIS */
+  --accent:#90e3fc;
+
+  --bg:#050505;
+  --panel:#090909;
+
+  --border:var(--accent);
+  --text:#FFFFFF;
+  --glow:var(--accent);
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Consolas, monospace;
+}
+
+body{
+  background:#000;
+  overflow:hidden;
+  color:var(--text);
+  height:100vh;
+  position: relative;
+}
+.sidebar{
+  overflow-y:auto;
+  scrollbar-width:thin;
+}
+/* Background Canvas */
+canvas {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.hint-text {
+  color: #444;
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  user-select: none;
+  font-family: Consolas, monospace;
+  font-size: 12px;
+  z-index: 2;
+}
+
+/* Sidebar */
+.sidebar{
+  position:fixed;
+  left:10px;
+  top:10px;
+  bottom:10px;
+  width:220px;
+  background:rgba(0,0,0,.85);
+  border:1px solid var(--border);
+  padding:15px;
+  z-index:5;
+}
+
+.logo{
+  font-size:20px;
+  margin-bottom:20px;
+  font-weight:bold;
+}
+
+.menu button{
+  width:100%;
+  margin-bottom:8px;
+  padding:10px;
+  background:black;
+  border:1px solid var(--border);
+  color:var(--text);
+  cursor:pointer;
+}
+
+.menu button:hover{
+  box-shadow:0 0 15px var(--glow);
+}
+
+/* Top Bar */
+.topbar{
+  position:fixed;
+  left:250px;
+  right:20px;
+  top:10px;
+  height:60px;
+  background:rgba(0,0,0,.8);
+  border:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  padding:0 20px;
+  z-index:5;
+}
+
+/* Windows */
+.window{
+  position:absolute;
+  background:rgba(0,0,0,.95);
+  border:1px solid var(--border);
+  box-shadow:0 0 15px var(--glow);
+  width:500px;
+  height:350px;
+  z-index:10;
+}
+
+.titlebar{
+  height:35px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:0 10px;
+  border-bottom:1px solid var(--border);
+  cursor:move;
+}
+
+.close{
+  cursor:pointer;
+}
+
+.content{
+  padding:15px;
+  height:calc(100% - 35px);
+  overflow:auto;
+}
+
+.note{
+  margin-bottom:15px;
+  padding:10px;
+  border:1px solid rgba(245, 73, 39, 0.2);
+}
+
+.note h3{
+  margin-bottom:10px;
+}
+
+pre{
+  white-space:pre-wrap;
+  color:#ffd38a;
+}
+</style>
+</head>
+
+<body>
+
+<canvas></canvas>
+<span class="hint-text">drag background to rotate spiral</span>
+
+<div class="sidebar">
+  <div class="logo">KNOWLEDGE VAULT</div>
+  <div class="menu">
+   <button onclick="window.location.href='error/library229.html'">
+   WHEN TERMUX GIVES YOU ERROR IN APT INSTALLING
+   </button>
+   <button onclick="window.location.href='error/pgpsig199.html'">
+   PGP SIGNATURE ERROR
+   </button>
+   <button onclick="window.location.href='error/pip173.html'">
+   IF PIP GIVE YOU ERROR EXTERNALLY-MANAGED-ENVIRONMENT
+   </button>
+   <button onclick="window.location.href='error/sudoers141.html'">
+   NO SUDOERS ERROR
+   </button>
+   <button onclick="window.location.href='error/gpgme132.html'">
+   IF YOU ARE FACEING GPGME ERROR WHILE UPGRADING ARCH
+   </button>
+   <button onclick="window.location.href='error/pgp99.html'">
+   ARCH PGP KEYS ERROR [FIX]
+   </button>
+   <button onclick="window.location.href='error/corrupted_boot35.html'">
+   HOW TO RECOVER CORRUPTED BOOT PARTITION
+   </button>
+   <button onclick="window.location.href='error/uuid20.html'">
+   DEVICE UUID NOT FOUND
+   </button>
+   <button onclick="window.location.href='error/termite17.html'">
+   TERMITE INSTALLATION ERROR
+   </button>
+    
+			
+  </div>
+</div>
+
+<div class="topbar">
+  <h2>WHITEX DATABASE</h2>
+</div>
+
+<script>
+/* Data Vault */
+const cliData = [
+  { title:"Miller", content:"mlr --csv cat file.csv" },
+  { title:"jq", content:"jq '.name' file.json" },
+  { title:"grep", content:"grep -R 'password' ." }
+];
+
+const netData = [
+  { title:"Nmap", content:"nmap -sV 192.168.1.1" },
+  { title:"Ping", content:"ping google.com" }
+];
+
+const linuxData = [
+  { title:"Find", content:"find / -name test.txt" },
+  { title:"lsblk", content:"lsblk -f" }
+];
+
+const webData = [
+  { title:"Flexbox", content:"display:flex;" },
+  { title:"Grid", content:"display:grid;" }
+];
+
+/* Window System */
+let z = 100;
+
+function openWindow(title, data){
+  let win = document.createElement("div");
+  win.className = "window";
+  win.style.left = 260 + Math.random() * 200 + "px";
+  win.style.top = 100 + Math.random() * 100 + "px";
+
+  win.innerHTML = `
+    <div class="titlebar">
+      <span>${title}</span>
+      <span class="close">✕</span>
+    </div>
+    <div class="content">
+      ${data.map(item => `
+        <div class="note">
+          <h3>${item.title}</h3>
+          <pre>${item.content}</pre>
+        </div>
+      `).join("")}
+    </div>
+  `;
+
+  document.body.appendChild(win);
+
+  // Focus window on dynamic spawn
+  win.style.zIndex = ++z;
+  win.addEventListener('mousedown', () => {
+    win.style.zIndex = ++z;
+  });
+
+  win.querySelector(".close").onclick = () => {
+    win.remove();
+  };
+
+  drag(win);
+}
+
+/* Drag Windows */
+function drag(el){
+  const title = el.querySelector(".titlebar");
+  let x = 0, y = 0, px = 0, py = 0;
+
+  title.onmousedown = (e) => {
+    e.stopPropagation(); // Prevents background interaction when dragging window
+    el.style.zIndex = ++z;
+    px = e.clientX;
+    py = e.clientY;
+
+    document.onmousemove = (e) => {
+      x = px - e.clientX;
+      y = py - e.clientY;
+      px = e.clientX;
+      py = e.clientY;
+
+      el.style.top = (el.offsetTop - y) + "px";
+      el.style.left = (el.offsetLeft - x) + "px";
+    };
+
+    document.onmouseup = () => {
+      document.onmousemove = null;
+    };
+  };
+}
+
+/* Interactive Spiral Engine */
+(function () {
+  const canvas = document.querySelector('canvas');
+  const context = canvas.getContext('2d');
+
+  let time = 0;
+  let velocity = 0.1;
+  let velocityTarget = 0.1;
+  let width;
+  let height;
+  let lastX;
+  let lastY;
+
+  const MAX_OFFSET = 400;
+  const SPACING = 4;
+  const POINTS = MAX_OFFSET / SPACING;
+  const PEAK = MAX_OFFSET * 0.25;
+  const POINTS_PER_LAP = 6;
+  const SHADOW_STRENGTH = 6;
+
+  // Grabs the current accent color dynamically from your CSS configurations
+  function getAccentColor() {
+    return getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#F54927';
+  }
+
+  function resize() {
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
+  }
+
+  function step() {
+    time += velocity;
+    velocity += (velocityTarget - velocity) * 0.3;
+
+    clear();
+    render();
+
+    requestAnimationFrame(step);
+  }
+
+  function clear() {
+    context.clearRect(0, 0, width, height);
+  }
+
+  function render() {
+    const cx = width / 2;
+    const cy = height / 2;
+    const themeColor = getAccentColor();
+
+    context.globalCompositeOperation = 'lighter';
+    context.strokeStyle = themeColor;
+    context.shadowColor = themeColor;
+    context.lineWidth = 2;
+    context.beginPath();
+
+    for (let i = POINTS; i > 0; i--) {
+      const value = i * SPACING + (time % SPACING);
+      const ax = Math.sin(value / POINTS_PER_LAP) * Math.PI;
+      const ay = Math.cos(value / POINTS_PER_LAP) * Math.PI;
+      let x = ax * value;
+      let y = ay * value * 0.35;
+      const o = 1 - (Math.min(value, PEAK) / PEAK);
+      y -= Math.pow(o, 2) * 200;
+      y += 200 * value / MAX_OFFSET;
+      y += (x / cx) * width * 0.1;
+      context.globalAlpha = 1 - (value / MAX_OFFSET);
+      context.shadowBlur = SHADOW_STRENGTH * o;
+      context.lineTo(cx + x, cy + y);
+      context.stroke();
+      context.beginPath();
+      context.moveTo(cx + x, cy + y);
+    }
+    context.lineTo(cx, cy - 200);
+    context.lineTo(cx, 0);
+    context.stroke();
+  }
+
+  function onMouseDown(event) {
+    // Prevent backdrop drag when targeting interactive UI panels
+    if (event.target.closest('.sidebar') || event.target.closest('.topbar') || event.target.closest('.window')) {
+      return;
+    }
+    lastX = event.clientX;
+    lastY = event.clientY;
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
+  }
+
+  function onMouseMove(event) {
+    let vx = (event.clientX - lastX) / 100;
+    let vy = (event.clientY - lastY) / 100;
+    if (event.clientY < height / 2) vx *= -1;
+    if (event.clientX > width / 2) vy *= -1;
+    velocityTarget = vx + vy;
+    lastX = event.clientX;
+    lastY = event.clientY;
+  }
+
+  function onMouseUp() {
+    document.removeEventListener('mousemove', onMouseMove);
+    document.removeEventListener('mouseup', onMouseUp);
+  }
+
+  function onTouchStart(event) {
+    if (event.target.closest('.sidebar') || event.target.closest('.topbar') || event.target.closest('.window')) {
+      return;
+    }
+    lastX = event.touches[0].clientX;
+    lastY = event.touches[0].clientY;
+    document.addEventListener('touchmove', onTouchMove);
+    document.addEventListener('touchend', onTouchEnd);
+  }
+
+  function onTouchMove(event) {
+    let vx = (event.touches[0].clientX - lastX) / 100;
+    let vy = (event.touches[0].clientY - lastY) / 100;
+    if (event.touches[0].clientY < height / 2) vx *= -1;
+    if (event.touches[0].clientX > width / 2) vy *= -1;
+    velocityTarget = vx + vy;
+    lastX = event.touches[0].clientX;
+    lastY = event.touches[0].clientY;
+  }
+
+  function onTouchEnd() {
+    document.removeEventListener('touchmove', onTouchMove);
+    document.removeEventListener('touchend', onTouchEnd);
+  }
+
+  resize();
+  step();
+  window.addEventListener('resize', resize);
+  window.addEventListener('mousedown', onMouseDown);
+  document.addEventListener('touchstart', onTouchStart, { passive: false });
+})();
+</script>
+
+</body>
+</html>

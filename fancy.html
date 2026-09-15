@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Knowledge Vault</title>
+
+  <style>
+    * { 
+      margin: 0; 
+      padding: 0; 
+      box-sizing: border-box; 
+    }
+    
+    html, body { 
+      width: 100%; 
+      height: 100%; 
+      background: #000; 
+      overflow: hidden; 
+    }
+.sidebar{
+  overflow-y:auto;
+  scrollbar-width:thin;
+}
+    #canvas { 
+      display: block; 
+      width: 100%; 
+      height: 100%; 
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 1;
+    }
+
+    #hint {
+      position: fixed; 
+      bottom: 40px; 
+      left: 50%; 
+      transform: translateX(-50%);
+      color: rgba(255,255,255,0.35); 
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 11px; 
+      letter-spacing: 0.25em; 
+      text-transform: uppercase;
+      pointer-events: none; 
+      transition: opacity 1.5s ease;
+      z-index: 2;
+    }
+
+    :root {
+      /* CHANGE ONLY THIS */
+      --accent:#de85ff;
+      --bg:#050505;
+      --panel:#090909;
+      --border:var(--accent);
+      --text:#FFFFFF;
+      --glow:var(--accent);
+    }
+
+    body {
+      color: var(--text);
+      font-family: Consolas, monospace;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      position: fixed;
+      left: 10px;
+      top: 10px;
+      bottom: 10px;
+      width: 220px;
+      background: rgba(0,0,0,.85);
+      border: 1px solid var(--border);
+      padding: 15px;
+      z-index: 5;
+    }
+
+    .logo {
+      font-size: 20px;
+      margin-bottom: 20px;
+      font-weight: bold;
+    }
+
+    .menu button {
+      width: 100%;
+      margin-bottom: 8px;
+      padding: 10px;
+      background: black;
+      border: 1px solid var(--border);
+      color: var(--text);
+      cursor: pointer;
+    }
+
+    .menu button:hover {
+      box-shadow: 0 0 15px var(--glow);
+    }
+
+    /* Top Bar */
+    .topbar {
+      position: fixed;
+      left: 250px;
+      right: 20px;
+      top: 10px;
+      height: 60px;
+      background: rgba(0,0,0,.8);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      z-index: 5;
+    }
+
+    /* Windows */
+    .window {
+      position: absolute;
+      background: rgba(0,0,0,.95);
+      border: 1px solid var(--border);
+      box-shadow: 0 0 15px rgba(94,255,247,.2);
+      width: 500px;
+      height: 350px;
+      z-index: 10;
+    }
+
+    .titlebar {
+      height: 35px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 10px;
+      border-bottom: 1px solid var(--border);
+      cursor: move;
+    }
+
+    .close {
+      cursor: pointer;
+    }
+
+    .content {
+      padding: 15px;
+      height: calc(100% - 35px);
+      overflow: auto;
+    }
+
+    .note {
+      margin-bottom: 15px;
+      padding: 10px;
+      border: 1px solid rgba(94,255,247,.2);
+    }
+
+    .note h3 {
+      margin-bottom: 10px;
+    }
+
+    pre {
+      white-space: pre-wrap;
+      color: #ffd38a;
+    }
+  </style>
+</head>
+
+<body>
+
+  <canvas id="canvas"></canvas>
+  <div id="hint">Click to transition &nbsp;·&nbsp; Move cursor to interact</div>
+
+  <div class="sidebar">
+    <div class="logo">KNOWLEDGE VAULT</div>
+    <div class="menu">
+   <button onclick="window.location.href='fancy/banner583.html'">
+   CREATE ANY IMAGE INTO YOUR LINUX BANNER
+   </button>
+   <button onclick="window.location.href='fancy/figlet546.html'">
+   MAKE YOUR BANNER IN TERMINAL USING FIGLET
+   </button>
+   <button onclick="window.location.href='fancy/star278.html'">
+   STAR WARS MOVIE IN LINUX
+   </button>
+   <button onclick="window.location.href='fancy/weather277.html'">
+   CHECK WEATHER OF ANY STATE USING CURL
+   </button>
+   <button onclick="window.location.href='fancy/speech236.html'">
+   TEXT TO SPEECH
+   </button>
+   <button onclick="window.location.href='fancy/ssh223.html'">
+   HOW TO SET SSH BANNER
+   </button>
+   <button onclick="window.location.href='fancy/toilet222.html'">
+   TOILET DIFFERENT CMD
+   </button>
+      <button onclick="window.location.href='cli.html'">CLI TOOLS</button>
+      <button onclick="openWindow('Networking', netData)">NETWORKING</button>
+      <button onclick="openWindow('Linux', linuxData)">LINUX</button>
+      <button onclick="openWindow('Web Dev', webData)">WEB DEV</button>
+    </div>
+  </div>
+
+  <div class="topbar">
+    <h2>WHITEX DATABASE</h2>
+  </div>
+
+  <script src="images.js"></script>	
+
+  <script>
+    /* =========================================================================
+       1. KNOWLEDGE VAULT DATA & SYSTEM LOGIC (from demo_cleanbg.html)
+       ========================================================================= */
+    const cliData = [
+      { title: "Miller", content: "mlr --csv cat file.csv" },
+      { title: "jq", content: "jq '.name' file.json" },
+      { title: "grep", content: "grep -R 'password' ." }
+    ];
+
+    const netData = [
+      { title: "Nmap", content: "nmap -sV 192.168.1.1" },
+      { title: "Ping", content: "ping google.com" }
+    ];
+
+    const linuxData = [
+      { title: "Find", content: "find / -name test.txt" },
+      { title: "lsblk", content: "lsblk -f" }
+    ];
+
+    const webData = [
+      { title: "Flexbox", content: "display:flex;" },
+      { title: "Grid", content: "display:grid;" }
+    ];
+
+    let z = 100;
+
+    function openWindow(title, data) {
+      let win = document.createElement("div");
+      win.className = "window";
+      win.style.left = 260 + Math.random() * 200 + "px";
+      win.style.top = 100 + Math.random() * 100 + "px";
+
+      win.innerHTML = `
+        <div class="titlebar">
+          <span>${title}</span>
+          <span class="close">✕</span>
+        </div>
+        <div class="content">
+          ${data.map(item => `
+            <div class="note">
+              <h3>${item.title}</h3>
+              <pre>${item.content}</pre>
+            </div>
+          `).join("")}
+        </div>
+      `;
+
+      document.body.appendChild(win);
+
+      win.querySelector(".close").onclick = () => {
+        win.remove();
+      };
+
+      drag(win);
+    }
+
+    function drag(el) {
+      const title = el.querySelector(".titlebar");
+      let x = 0, y = 0, px = 0, py = 0;
+
+      title.onmousedown = (e) => {
+        el.style.zIndex = ++z;
+        px = e.clientX;
+        py = e.clientY;
+
+        document.onmousemove = (e) => {
+          x = px - e.clientX;
+          y = py - e.clientY;
+          px = e.clientX;
+          py = e.clientY;
+          el.style.top = (el.offsetTop - y) + "px";
+          el.style.left = (el.offsetLeft - x) + "px";
+        };
+
+        document.onmouseup = () => {
+          document.onmousemove = null;
+        };
+      };
+    }
+
+    /* =========================================================================
+       2. EVIL ANGEL WEBGL WALLPAPER SYSTEM (from i5.html)
+       ========================================================================= */
+    const IMG1_B64 = EMBEDDED_IMAGES.img1;
+    const IMG2_B64 = EMBEDDED_IMAGES.img2;
+
+    const VERT_SRC = `#version 300 es
+      precision highp float;
+      in vec2 a_position;
+      out vec2 v_uv;
+      void main() {
+        v_uv = a_position * 0.5 + 0.5;
+        gl_Position = vec4(a_position, 0.0, 1.0);
+      }
+    `;
+
+    const FRAG_SRC = `#version 300 es
+      precision highp float;
+
+      uniform sampler2D u_tex0;
+      uniform sampler2D u_tex1;
+      uniform float     u_time;
+      uniform float     u_transition;
+      uniform vec2      u_resolution;
+      uniform vec2      u_mouse;
+      uniform vec2      u_velocity;
+      uniform float     u_mouseSpeed;
+
+      in  vec2 v_uv;
+      out vec4 fragColor;
+
+      vec2 hash2(vec2 p) {
+        p = vec2(dot(p, vec2(127.1, 311.7)), dot(p, vec2(269.5, 183.3)));
+        return fract(sin(p) * 43758.5453123);
+      }
+
+      float noise(vec2 p) {
+        vec2 i = floor(p);
+        vec2 f = fract(p);
+        vec2 u = f * f * (3.0 - 2.0 * f);
+        float a = dot(hash2(i + vec2(0.0,0.0)), f - vec2(0.0,0.0));
+        float b = dot(hash2(i + vec2(1.0,0.0)), f - vec2(1.0,0.0));
+        float c = dot(hash2(i + vec2(0.0,1.0)), f - vec2(0.0,1.0));
+        float d = dot(hash2(i + vec2(1.0,1.0)), f - vec2(1.0,1.0));
+        return mix(mix(a,b,u.x), mix(c,d,u.x), u.y);
+      }
+
+      float fbm(vec2 p) {
+        float v = 0.0; float a = 0.5; float f = 1.0;
+        for (int i = 0; i < 6; i++) {
+          v += a * noise(p * f);
+          f *= 2.1; a *= 0.48;
+        }
+        return v;
+      }
+
+      vec2 flowField(vec2 uv, float t) {
+        float eps = 0.01;
+        float n  = fbm(uv * 3.0 + t * 0.12);
+        float nx = fbm(uv * 3.0 + vec2(eps,0.0) + t * 0.12);
+        float ny = fbm(uv * 3.0 + vec2(0.0,eps) + t * 0.12);
+        vec2 grad = vec2((nx-n)/eps, (ny-n)/eps);
+        return vec2(-grad.y, grad.x) * 0.012;
+      }
+
+      vec2 mouseForce(vec2 uv) {
+        float aspect  = u_resolution.x / u_resolution.y;
+        vec2  delta   = (uv - u_mouse) * vec2(aspect, 1.0);
+        float dist    = length(delta);
+        float radius  = 0.22 + u_mouseSpeed * 0.15;
+        float falloff = 1.0 - smoothstep(0.0, radius, dist);
+        float falloff2= falloff * falloff;
+        vec2  pushDir = normalize(u_velocity + vec2(1e-5));
+        float push    = falloff2 * u_mouseSpeed * 0.055;
+        float ripple  = sin(dist * 28.0 - u_time * 4.5) * 0.5 + 0.5;
+        float ring    = falloff * ripple * 0.008;
+        return pushDir * push + normalize(delta + vec2(1e-5)) * ring;
+      }
+
+      float vignette(vec2 uv) {
+        vec2 v = uv * 2.0 - 1.0;
+        return 1.0 - dot(v,v) * 0.38;
+      }
+
+      vec2 coverUV(vec2 uv, float texAspect, float canvasAspect) {
+        vec2 scale = vec2(1.0);
+        if (canvasAspect > texAspect) scale.y = texAspect / canvasAspect;
+        else                          scale.x = canvasAspect / texAspect;
+        return (uv - 0.5) * scale + 0.5;
+      }
+
+      uniform vec2 u_texAspect;
+
+      void main() {
+        vec2 uv = v_uv;
+        float canvasAspect = u_resolution.x / u_resolution.y;
+
+        vec2 flow  = flowField(uv, u_time);
+        vec2 force = mouseForce(uv);
+        vec2 dUV   = uv + flow + force;
+
+        float maskNoise = fbm(uv * 2.5 - u_time * 0.08);
+        float edgeWidth = 0.18;
+        float threshold = u_transition * (1.0 + edgeWidth) - edgeWidth * 0.5;
+        float mask      = smoothstep(threshold - edgeWidth, threshold + edgeWidth, maskNoise);
+
+        float edgeProx  = 1.0 - abs(mask - 0.5) * 2.0;
+        float edgeDist  = edgeProx * edgeProx * 0.022;
+        vec2  edgeShift = (vec2(fbm(uv*5.0+u_time*0.3), fbm(uv*5.0+u_time*0.3+7.3))*2.0-1.0);
+        dUV += edgeShift * edgeDist;
+
+        vec2 uv0 = coverUV(dUV + flow * 0.3,  u_texAspect.x, canvasAspect);
+        vec2 uv1 = coverUV(dUV - flow * 0.2,  u_texAspect.y, canvasAspect);
+
+        vec4 col0 = texture(u_tex0, uv0);
+        vec4 col1 = texture(u_tex1, uv1);
+        vec4 col  = mix(col0, col1, mask);
+
+        float lum = dot(col.rgb, vec3(0.299,0.587,0.114));
+        col.rgb = mix(vec3(lum), col.rgb, 0.88);
+        col.rgb = col.rgb * 0.95 + 0.018;
+        float br = dot(col.rgb, vec3(0.333));
+        col.rgb = mix(col.rgb+vec3(0.0,0.01,0.025), col.rgb+vec3(0.02,0.005,-0.01), br);
+        col.rgb *= vignette(v_uv);
+
+        float grain = (noise(v_uv * u_resolution * 0.5 + u_time * 97.3) - 0.5) * 0.028;
+        col.rgb += grain;
+
+        fragColor = col;
+      }
+    `;
+
+    class EvilAngelGL {
+      constructor(canvas) {
+        this.canvas = canvas;
+        this.gl = null;
+        this.program = null;
+        this.uLocs = {};
+        this.textures = [null, null];
+        this.texAspects = [1.0, 1.0];
+        this.texturesReady = [false, false];
+        this.startTime = performance.now();
+        this.time = 0;
+        this.mouse       = { x: 0.5, y: 0.5 };
+        this.targetMouse = { x: 0.5, y: 0.5 };
+        this.velocity    = { x: 0.0, y: 0.0 };
+        this.rawVelocity = { x: 0.0, y: 0.0 };
+        this.mouseSpeed  = 0.0;
+        this.transition       = 0.0;
+        this.targetTransition = 0.0;
+        
+        this.init();
+      }
+
+      compileShader(src, type) {
+        const gl = this.gl;
+        const s  = gl.createShader(type);
+        gl.shaderSource(s, src);
+        gl.compileShader(s);
+        if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
+          console.error(gl.getShaderInfoLog(s));
+          return null;
+        }
+        return s;
+      }
+
+      buildProgram(vs, fs) {
+        const gl   = this.gl;
+        const vert = this.compileShader(vs, gl.VERTEX_SHADER);
+        const frag = this.compileShader(fs, gl.FRAGMENT_SHADER);
+        const prog = gl.createProgram();
+        gl.attachShader(prog, vert);
+        gl.attachShader(prog, frag);
+        gl.linkProgram(prog);
+        if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) {
+          console.error(gl.getProgramInfoLog(prog));
+          return null;
+        }
+        return prog;
+      }
+
+      init() {
+        const gl = this.canvas.getContext('webgl2', { antialias: false, alpha: false });
+        if (!gl) { alert('WebGL2 not supported'); return; }
+        this.gl = gl;
+        this.program = this.buildProgram(VERT_SRC, FRAG_SRC);
+        this.setupGeometry();
+        this.setupUniforms();
+        this.loadTextures();
+        this.bindEvents();
+        this.resize();
+        this.loop();
+      }
+
+      setupGeometry() {
+        const gl  = this.gl;
+        const vao = gl.createVertexArray();
+        gl.bindVertexArray(vao);
+        const buf = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, -1,1, 1,-1, 1,1]), gl.STATIC_DRAW);
+        const loc = gl.getAttribLocation(this.program, 'a_position');
+        gl.enableVertexAttribArray(loc);
+        gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+        this.vao = vao;
+      }
+
+      setupUniforms() {
+        const gl = this.gl;
+        gl.useProgram(this.program);
+        this.uLocs = {
+          tex0:       gl.getUniformLocation(this.program, 'u_tex0'),
+          tex1:       gl.getUniformLocation(this.program, 'u_tex1'),
+          time:       gl.getUniformLocation(this.program, 'u_time'),
+          transition: gl.getUniformLocation(this.program, 'u_transition'),
+          resolution: gl.getUniformLocation(this.program, 'u_resolution'),
+          mouse:      gl.getUniformLocation(this.program, 'u_mouse'),
+          velocity:   gl.getUniformLocation(this.program, 'u_velocity'),
+          mouseSpeed: gl.getUniformLocation(this.program, 'u_mouseSpeed'),
+          texAspect:  gl.getUniformLocation(this.program, 'u_texAspect'),
+        };
+        gl.uniform1i(this.uLocs.tex0, 0);
+        gl.uniform1i(this.uLocs.tex1, 1);
+      }
+
+      createBlankTex(index) {
+        const gl  = this.gl;
+        const tex = gl.createTexture();
+        gl.activeTexture(gl.TEXTURE0 + index);
+        gl.bindTexture(gl.TEXTURE_2D, tex);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([0,0,0,255]));
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+        return tex;
+      }
+
+      uploadToTex(index, img) {
+        const gl = this.gl;
+        gl.activeTexture(gl.TEXTURE0 + index);
+        gl.bindTexture(gl.TEXTURE_2D, this.textures[index]);
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false);
+        this.texAspects[index] = img.naturalWidth / img.naturalHeight;
+        this.texturesReady[index] = true;
+      }
+
+      loadTextures() {
+        this.images = this.getImageList();
+        this.currentIndex = 0;
+        this.nextIndex = 1;
+    
+        this.textures[0] = this.createBlankTex(0);
+        this.textures[1] = this.createBlankTex(1);
+    
+        this.loadImageIntoTexture(0, this.currentIndex);
+    
+        if (this.images.length > 1)
+            this.loadImageIntoTexture(1, this.nextIndex);
+      }
+
+      getImageList() {
+        return Object.keys(EMBEDDED_IMAGES)
+            .sort()
+            .map(k => EMBEDDED_IMAGES[k]);
+      }
+        
+      loadImageIntoTexture(textureIndex, imageIndex) {
+        const src = this.images[imageIndex];
+        const img = new Image();
+        img.onload = () => {
+            this.uploadToTex(textureIndex, img);
+        };
+        img.src = src;
+      }	
+
+      resize() {
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        this.canvas.width  = window.innerWidth  * dpr;
+        this.canvas.height = window.innerHeight * dpr;
+        this.canvas.style.width  = window.innerWidth  + 'px';
+        this.canvas.style.height = window.innerHeight + 'px';
+        this.gl.viewport(0, 0, this.canvas.width, this.canvas.height);
+      }
+
+      bindEvents() {
+        window.addEventListener('resize', () => this.resize());
+
+        const onMove = (nx, ny) => {
+          ny = 1.0 - ny;
+          this.rawVelocity.x = nx - this.targetMouse.x;
+          this.rawVelocity.y = ny - this.targetMouse.y;
+          this.targetMouse.x = nx;
+          this.targetMouse.y = ny;
+        };
+
+        window.addEventListener('mousemove', e =>
+          onMove(e.clientX / window.innerWidth, e.clientY / window.innerHeight));
+
+        window.addEventListener('touchmove', e => {
+          e.preventDefault();
+          const t = e.touches[0];
+          onMove(t.clientX / window.innerWidth, t.clientY / window.innerHeight);
+        }, { passive: false });
+
+        window.addEventListener('click',    () => this.toggle());
+        window.addEventListener('touchend', () => this.toggle());
+
+        const hint = document.getElementById('hint');
+        const hide = () => { if (hint) hint.style.opacity = '0'; };
+        window.addEventListener('mousemove', hide, { once: true });
+        window.addEventListener('click',     hide, { once: true });
+      }
+
+      toggle() {
+        if (this.images.length < 2)
+            return;
+    
+        if (this.transition < 0.5) {
+            this.targetTransition = 1;
+            this.currentIndex = this.nextIndex;
+            this.nextIndex = (this.nextIndex + 1) % this.images.length;
+            this.loadImageIntoTexture(0, this.nextIndex);
+        } else {
+            this.targetTransition = 0;
+            this.currentIndex = this.nextIndex;
+            this.nextIndex = (this.nextIndex + 1) % this.images.length;
+            this.loadImageIntoTexture(1, this.nextIndex);
+        }
+      }
+
+      update(dt) {
+        const lf = 1.0 - Math.pow(0.01, dt * 8.0);
+        const ls = 1.0 - Math.pow(0.01, dt * 3.0);
+
+        this.mouse.x += (this.targetMouse.x - this.mouse.x) * lf;
+        this.mouse.y += (this.targetMouse.y - this.mouse.y) * lf;
+
+        this.velocity.x += (this.rawVelocity.x - this.velocity.x) * ls;
+        this.velocity.y += (this.rawVelocity.y - this.velocity.y) * ls;
+        this.rawVelocity.x *= 0.85;
+        this.rawVelocity.y *= 0.85;
+
+        this.mouseSpeed = Math.min(
+          Math.sqrt(this.velocity.x**2 + this.velocity.y**2) * 30.0, 1.0);
+
+        this.transition += (this.targetTransition - this.transition) *
+          (1.0 - Math.pow(0.001, dt * 1.2));
+      }
+
+      render() {
+        const gl = this.gl;
+        gl.useProgram(this.program);
+        gl.bindVertexArray(this.vao);
+
+        gl.uniform1f(this.uLocs.time,       this.time);
+        gl.uniform1f(this.uLocs.transition, this.transition);
+        gl.uniform2f(this.uLocs.resolution, this.canvas.width, this.canvas.height);
+        gl.uniform2f(this.uLocs.mouse,      this.mouse.x,    this.mouse.y);
+        gl.uniform2f(this.uLocs.velocity,   this.velocity.x, this.velocity.y);
+        gl.uniform1f(this.uLocs.mouseSpeed, this.mouseSpeed);
+        gl.uniform2f(this.uLocs.texAspect,  this.texAspects[0], this.texAspects[1]);
+
+        gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, this.textures[0]);
+        gl.activeTexture(gl.TEXTURE1); gl.bindTexture(gl.TEXTURE_2D, this.textures[1]);
+
+        gl.drawArrays(gl.TRIANGLES, 0, 6);
+      }
+
+      loop() {
+        let last = performance.now();
+        const tick = (now) => {
+          const dt = Math.min((now - last) / 1000, 0.05);
+          last = now;
+          this.time += dt;
+          this.update(dt);
+          this.render();
+          requestAnimationFrame(tick);
+        };
+        requestAnimationFrame(tick);
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => new EvilAngelGL(document.getElementById('canvas')));
+  </script>
+  
+</body>
+</html>

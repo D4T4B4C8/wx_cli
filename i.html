@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Knowledge Vault</title>
+
+<style>
+
+:root{
+--bg:#050505;
+--panel:#090909;
+--border:#90e3fc;
+--text:#FFFFFF;
+--glow:#90e3fc;
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Consolas, monospace;
+}
+
+body{
+background:var(--bg);
+overflow:hidden;
+color:var(--text);
+height:100vh;
+}
+
+.sidebar{
+  overflow-y:auto;
+  scrollbar-width:thin;
+}
+/* Boot Screen */
+
+#boot{
+position:fixed;
+inset:0;
+background:black;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+z-index:9999;
+}
+
+.boot-text{
+font-size:22px;
+margin-bottom:20px;
+}
+
+.progress{
+width:400px;
+height:20px;
+border:1px solid var(--border);
+}
+
+.bar{
+height:100%;
+width:0%;
+background:var(--border);
+}
+
+/* Animated Grid */
+
+.grid{
+position:fixed;
+inset:0;
+background:
+linear-gradient(rgba(255,157,0,.08) 1px, transparent 1px),
+linear-gradient(90deg, rgba(255,157,0,.08) 1px, transparent 1px);
+background-size:40px 40px;
+animation:gridmove 20s linear infinite;
+}
+
+@keyframes gridmove{
+from{transform:translateY(0);}
+to{transform:translateY(40px);}
+}
+
+
+/* Sidebar */
+
+.sidebar{
+position:fixed;
+left:10px;
+top:10px;
+bottom:10px;
+width:220px;
+background:rgba(0,0,0,.85);
+border:1px solid var(--border);
+padding:15px;
+z-index:5;
+overflow-y:auto;
+scrollbar-width:thin;
+}
+
+.logo{
+font-size:20px;
+margin-bottom:20px;
+font-weight:bold;
+}
+
+.menu button{
+width:100%;
+margin-bottom:8px;
+padding:10px;
+background:black;
+border:1px solid var(--border);
+color:var(--text);
+cursor:pointer;
+}
+
+.menu button:hover{
+box-shadow:0 0 15px var(--glow);
+}
+
+/* Top Bar */
+
+.topbar{
+position:fixed;
+left:250px;
+right:20px;
+top:10px;
+height:60px;
+background:rgba(0,0,0,.8);
+border:1px solid var(--border);
+display:flex;
+align-items:center;
+padding:0 20px;
+z-index:5;
+}
+
+
+/* Windows */
+
+.window{
+position:absolute;
+background:rgba(0,0,0,.95);
+border:1px solid var(--border);
+box-shadow:0 0 15px rgba(255,157,0,.2);
+width:500px;
+height:350px;
+z-index:10;
+}
+
+.titlebar{
+height:35px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:0 10px;
+border-bottom:1px solid var(--border);
+cursor:move;
+}
+
+.close{
+cursor:pointer;
+}
+
+.content{
+padding:15px;
+height:calc(100% - 35px);
+overflow:auto;
+}
+
+.note{
+margin-bottom:15px;
+padding:10px;
+border:1px solid rgba(255,157,0,.2);
+}
+
+.note h3{
+margin-bottom:10px;
+}
+
+pre{
+white-space:pre-wrap;
+color:#ffd38a;
+}
+
+/* Particles */
+
+.particle{
+position:fixed;
+width:2px;
+height:2px;
+background:var(--border);
+opacity:.4;
+animation:float linear infinite;
+}
+
+@keyframes float{
+from{
+transform:translateY(100vh);
+}
+to{
+transform:translateY(-100px);
+}
+}
+
+#monsterArea{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100vw;
+    height:100vh;
+    overflow:hidden;
+    z-index:0;
+    pointer-events:none;
+}
+#monsterArea{
+    z-index:0;
+}
+
+.grid{
+    z-index:1;
+}
+
+.sidebar,
+.topbar,
+.window{
+    z-index:10;
+}
+</style>
+</head>
+
+<body>
+
+<div id="boot">
+<div class="boot-text">INITIALIZING KNOWLEDGE VAULT...</div>
+<div class="progress">
+<div class="bar"></div>
+</div>
+</div>
+
+<div class="grid"></div>
+
+
+<div class="sidebar">
+<div class="logo">KNOWLEDGE VAULT</div>
+
+<div class="menu">
+<button onclick="window.location.href='cli.html'">
+CLI
+</button>
+<button onclick="window.location.href='forensics.html'">
+FORENSICS
+</button>
+<button onclick="window.location.href='web.html'">
+WEB TOOLS
+</button>
+<button onclick="window.location.href='net.html'">
+NET TOOLS
+</button>
+<button onclick="window.location.href='conf.html'">
+.CONFIG
+</button>
+<button onclick="window.location.href='crypt.html'">
+CRYPTOGRAPHI
+</button>
+<button onclick="window.location.href='error.html'">
+ERRORS
+</button>
+<button onclick="window.location.href='hacking.html'">
+HACKING
+</button>
+<button onclick="window.location.href='info.html'">
+INFORMATION GATHERING
+</button>
+<button onclick="window.location.href='mesg.html'">
+MESSAGES
+</button>
+<button onclick="window.location.href='os.html'">
+OS
+</button>
+<button onclick="window.location.href='prog.html'">
+PROGRAMMING
+</button>
+<button onclick="window.location.href='steg.html'">
+STEGANOGRAPHI
+</button>
+<button onclick="window.location.href='termux.html'">
+TERMUX
+</button>
+<button onclick="window.location.href='theory.html'">
+THEORY
+</button>
+<button onclick="window.location.href='wifi.html'">
+WIFI
+</button>
+<button onclick="window.location.href='windows.html'">
+WINDOWS
+</button>
+<button onclick="window.location.href='scan.html'">
+SCANNING
+</button>
+
+</div>
+</div>
+
+
+<div class="topbar">
+<h2>WHITEX DATABASE</h2>
+</div>
+<div id="monsterArea"></div>
+
+
+<script>
+
+/* Boot */
+
+let width = 0;
+let interval = setInterval(()=>{
+width += 2;
+document.querySelector(".bar").style.width = width + "%";
+
+if(width >= 100){
+clearInterval(interval);
+setTimeout(()=>{
+document.getElementById("boot").remove();
+},500);
+}
+},40);
+
+/* Particles */
+
+for(let i=0;i<100;i++){
+let p=document.createElement("div");
+p.className="particle";
+p.style.left=Math.random()*100+"vw";
+p.style.animationDuration=(5+Math.random()*15)+"s";
+document.body.appendChild(p);
+}
+
+/* Notes */
+
+const cliData = [
+{
+title:"Miller",
+content:"mlr --csv cat file.csv"
+},
+{
+title:"jq",
+content:"jq '.name' file.json"
+},
+{
+title:"grep",
+content:"grep -R 'password' ."
+}
+];
+
+const netData = [
+{
+title:"Nmap",
+content:"nmap -sV 192.168.1.1"
+},
+{
+title:"Ping",
+content:"ping google.com"
+}
+];
+
+const linuxData = [
+{
+title:"Find",
+content:"find / -name test.txt"
+},
+{
+title:"lsblk",
+content:"lsblk -f"
+}
+];
+
+const webData = [
+{
+title:"Flexbox",
+content:"display:flex;"
+},
+{
+title:"Grid",
+content:"display:grid;"
+}
+];
+
+/* Window System */
+
+let z = 100;
+
+function openWindow(title,data){
+
+let win=document.createElement("div");
+win.className="window";
+win.style.left=260+Math.random()*200+"px";
+win.style.top=100+Math.random()*100+"px";
+
+win.innerHTML=`
+<div class="titlebar">
+<span>${title}</span>
+<span class="close">✕</span>
+</div>
+
+<div class="content">
+${data.map(item=>`
+<div class="note">
+<h3>${item.title}</h3>
+<pre>${item.content}</pre>
+</div>
+`).join("")}
+</div>
+`;
+
+document.body.appendChild(win);
+
+win.querySelector(".close").onclick=()=>{
+win.remove();
+};
+
+drag(win);
+
+}
+
+/* Drag */
+
+function drag(el){
+
+const title=el.querySelector(".titlebar");
+
+let x=0,y=0,px=0,py=0;
+
+title.onmousedown=(e)=>{
+
+el.style.zIndex=++z;
+
+px=e.clientX;
+py=e.clientY;
+
+document.onmousemove=(e)=>{
+
+x=px-e.clientX;
+y=py-e.clientY;
+
+px=e.clientX;
+py=e.clientY;
+
+el.style.top=(el.offsetTop-y)+"px";
+el.style.left=(el.offsetLeft-x)+"px";
+};
+
+document.onmouseup=()=>{
+document.onmousemove=null;
+};
+};
+
+}
+
+/* Search */
+
+
+</script>
+<script src="script.js"></script>
+</body>
+</html>
