@@ -1,0 +1,1674 @@
+#
+$
+*CRACK ZIP PASSWD WITHOUT KNOWING PASSWD
+-zip2john passwd.zip > new.txt
+[if you want to use your word list then john --format=pkzip new.txt --wordlist=w.txt]
+convert your passwd zip to text file
+-john new.txt
+-john new.txt --show
+
+========================================
+
+#
+$
+*FIND ANY HASH IN LINUX
+-apt install name-that-hash
+name-that-hash -t LDP245KU48 => MD5 HASH
+
+========================================
+
+#
+$
+*SOME IMP WEBSITES / APPS
+f.lf main (Little fighter 2 game)
+windows93.net (window screen open)
+prankx.com (create fake chat pages)
+snapdrop.net (for transfer file easily)
+
+========================================
+
+#
+$
+*LINUX COMMAND
+whatis -> It is give you some small info about the command.
+Ex: whatis cat
+-echo Hi> s.txt
+[This will write text in a file]
+-echo Hey >> s.txt
+[This will add another line in the file]
+-ls -l /var/log > test.txt
+[TRY THIS EXAMPLE]
+
+========================================
+
+#
+$
+*IF SOME FILE START WITH - SO YOU CAN USE THIS CMD
+-cat < peanuts.txt > b.txt
+[This will copy all the file to the another file]
+-cat ./-
+
+========================================
+
+#
+$
+*SHOW WIFI LIST IN CLI
+-nmcli d wifi list ifname wlan0
+[option 1]
+-iw wlan0 scan
+[option 2]
+
+========================================
+
+#
+$
+*HOW TO CONNECT OR DISCONNECT ANY NETWORK
+-nmcli d wifi connect "mrf" password aaaaaaa ifname wlan0
+-nmcli d disconnect wlan0
+[option 1]
+-wpa_passphrase "mrf" >> f.conf aaaaaaaa
+[option 2]
+-wpa_supplicant -D wext -i wlan0 -c f.conf
+
+========================================
+
+#
+$
+*HOW TO CHECK YOUR WIFI IS CONNECTED OR NOT
+-nmcli d
+[OR]
+-iw wlan0 link
+
+========================================
+
+#
+$
+*ASSIGN IP IN LINUX
+-dhclient wlan0
+
+========================================
+
+#
+$
+*HOW TO CONNECT BLUETOOTH IN TERMINAL
+-hciconfig hci0 up
+-hcitool dev
+-hcitool -i hci0 scan
+-bluetoothctl
+-connect [MAC ADDR]
+-paired-devices
+
+========================================
+
+#
+$
+*HOW TO FIND SYSTEM STORAGE
+-sudo lshw -short -c disk
+
+========================================
+
+#
+$
+*HOW TO FIND SYSTEM RAM
+-sudo lshw -c memory
+[OR]
+-sudo dmidecode --type 17
+
+========================================
+
+#
+$
+*HOW TO SEE WHO IS CONNECTED IN YOUR NETWORK
+step 1 -netdiscover -r 192.168.1.1/24
+[OR]
+step 2 -nmap -sn 192.168.1.1/24
+
+========================================
+
+#
+$
+*OPEN 2 FILE AND SHOW 3 HEAD LINES
+-head -n 3 file1 file2
+
+========================================
+
+#
+$
+*IF YOU WANT TO FIND 5 LETTER WORD FILE
+-ls ?????
+
+========================================
+
+#
+$
+*IF YOU WANT TO FIND SOME ALPHABET WORD FILE
+-ls [ac]*
+[OR]
+-ls [ac]???
+
+========================================
+
+#
+$
+*FUN COMMANDS IN LINUX
+(Try your self)
+-sudo apt install xcowsay
+-xcowsay Hello
+-sudo apt install sl
+-sl
+-sudo apt install libaa-bin
+-aafire
+[OR]
+-apt install caca-fire
+-cacafire
+-apt install x11-apps
+-xeyes
+-apt install aview
+-asciiview s.jpg
+-apt install yes
+-yes you are lol
+
+========================================
+
+#
+$
+*DIFFERENCE B/W TWO FILES
+-diff a.txt b.txt
+
+========================================
+
+#
+$
+*HOW TO FIND INFORMATION ABOUT OUR LINUX SYSTEM
+-lsb_release -a
+
+========================================
+
+#
+$
+*IF THE LINUX GIVE ERROR IN REPO USE THIS CMD
+-apt update --allow-insecure-repositories
+
+========================================
+
+#
+$
+*HOW TO SCAN LIVE HOSTS IN YOUR NETWORK
+-arp-scan -l
+
+========================================
+
+#
+$
+*HOW TO CHANGE HOST NAME OF ANY IP OR LOCAL HOST
+-vi /etc/hosts
+127.0.0.1 lol.com
+
+========================================
+
+#
+$
+*HOW TO SCAN ANY WEBSITE WITH NIKTO
+-nikto -host 192.168.1.0
+
+========================================
+
+#
+$
+*FIND DIRECTORIES OF ANY WEBSITE WITH DIRB
+(This tool same like gobuster)
+-dirb http://192.168.0.0
+(More similar tools are: dirsearch, wfuzz, dirbuster)
+
+========================================
+
+#
+$
+*HOW TO BRUTE FORCE WORDPRESS SITE WITH WPSCAN
+-wpscan --url http://localhost/mrf -U u.txt -P p.txt
+
+========================================
+
+#
+$
+*BRUTE FORCE WORDPRESS WITH METASPLOIT
+-use auxiliary/scanner/http/wordpress-login-enum
+-set rhosts 127.0.0.1
+-set targeturi /mrf
+-set user_file u.txt
+-set pass_file p.txt
+-run
+
+========================================
+
+#
+$
+*HOW TO RUN SHELL COMMAND IN COMMAND SHELL USING PYTHON
+-python -c 'import pty; pty.spawn("/bin/bash")'
+
+========================================
+
+#
+$
+*PDF TO JPG
+-sudo apt install poppler-utils
+-pdftoppm -png f.pdf lol
+
+========================================
+
+#
+$
+*REMOVE PASSWORD FROM PDF
+-qpdf --password="lol" --decrypt lock.pdf unlock.pdf
+
+========================================
+
+#
+$
+*HOW TO EXTRACT WORDS IN IMAGE
+-apt install tesseract-ocr
+-tesseract f.png lol
+
+========================================
+
+#
+$
+*HOW TO CREATE PDF
+-apt install imagemagick
+-vi /etc/ImageMagick-6/policy.xml
+(Find pattern="PDF" and enter "Read|Write" in rights option) for ex: rights="Read|Write"
+-convert f.jpg f.pdf
+
+========================================
+
+#
+$
+*HOW TO OPEN ANY PDF AND IMG
+-open f.pdf
+
+========================================
+
+#
+$
+*SET PASSWD IN YOUR PDF
+-pdftk i.pdf output o.pdf owner_pw xyz user_pw lol
+
+========================================
+
+#
+$
+*HOW TO SEND POST REQUEST USING CURL
+-curl -X POST -d 'username=lol' -d 'password=lol' http://lol.com
+
+========================================
+
+#
+$
+*HOW TO EXTRACT ANY BINARY FILE USING BINWALK
+-binwalk lol.jpeg
+-binwalk -D='.*' lol.jpeg
+[OR]
+-binwalk --dd='.*' lol.jpg
+
+========================================
+
+#
+$
+*XOR CRYPTOGRAPHY CALCULATOR IN LINUX
+-gdb -q -ex 'print/x 0xd0c15 ^ 0x101f8' -ex q
+[OR]
+-calc
+base(16)
+xor(0xd0c15, 0x101f8)
+
+========================================
+
+#
+$
+*HOW TO CREATE BINARY FILE
+-shc -U -f sum.sh
+-mv sum.sh.x sum.bin
+-./sum.bin
+
+========================================
+
+#
+$
+*HIDE ANY THING IN A IMAGE THEN EXTRACT IT WITH BINWALK
+-cat a.jpg l.jpg > h.jpg
+-binwalk h.jpg
+
+========================================
+
+#
+$
+*FIND ALL INFORMATION ABOUT IMAGE AND AUDIO FILE
+-exiftool A.jpg
+
+========================================
+
+#
+$
+*CHANGE JAVA VERSION
+-update-java-alternatives --list
+-sudo update-java-alternatives --set /usr/lib/jvm/JAVA
+
+========================================
+
+#
+$
+*HOW TO SEND HEADER REQUEST USING CURL
+-curl -H "user-agent: lol" http://127.0.0.1
+(If the website want referer then)
+-curl -H "user-agent: lol" -H "referer: fake.com" http://127.0.0.1
+[OR]
+-curl -A "lol" -e "fake.com" http://127.0.0.1.com
+
+========================================
+
+#
+$
+*GAIN HEADER INFO USING CURL
+-curl -I http://127.0.0.1
+
+========================================
+
+#
+$
+*HOW TO FIND WORDPRESS USERS AND PLUGINS
+-wpscan --url https://lol.com --enumerate u --disable-tls-checks
+-wpscan --url https://lol.com --enumerate ap --disable-tls-checks
+
+========================================
+
+#
+$
+*TRACE ROUTE
+-tcptraceroute www.google.com => TCP
+-traceroute www.lol.com => UDP
+
+========================================
+
+#
+$
+*SHOW HEX FILES USING HEXDUMP OR XXD
+-hexdump -C file
+-xxd file
+
+========================================
+
+#
+$
+*FIND DTMF USING MULTIMON-NG
+-multimon-ng -a DTMF -t wav "phone.wav"
+
+========================================
+
+#
+$
+*HOW TO CREATE JPG TO WAV FILE
+-base64 img.jpg
+-base64 img.jpg | minimodem --tx 1200 -f img.wav
+-open img.wav
+Decode
+-minimodem --rx 1200 -f img.wav | base64 -d > img.jpg
+
+========================================
+
+#
+$
+*HOW TO CREATE MORSE AUDIO FILE
+-echo "Hi lol" | morse
+Decode
+-morse2ascii -m p.wav 2>/dev/null
+
+========================================
+
+#
+$
+*HOW TO CREATE ENCRYPTED RADIO WAVE
+-echo "Hello world" | minimodem --tx 110 -f l.wav
+(for file)
+-cat a.log | minimodem --tx 110
+(Decode the audio)
+-minimodem --rx 110
+(Now open the audio file in your phone or second terminal)
+
+========================================
+
+#
+$
+*HOW TO START A AUDIO FILE IN LINUX
+-mpv a.wav
+[OR]
+-open b.mp3
+
+========================================
+
+#
+$
+*CREATE FILE IN LINUX
+-touch msg.txt
+[OR]
+-mkfifo msg.log
+
+========================================
+
+#
+$
+*DIFFERENT WAY TO ENCRYPT YOUR FILE
+-cat a.log | minimodem --tx 1200 -f l.wav
+(encode)
+-minimodem --rx 1200 -f l.wav
+(decode)
+
+========================================
+
+#
+$
+*HOW TO OPEN STICKER BOX IN PLUMA EDITOR
+-ctrl + ;
+
+========================================
+
+#
+$
+*HOW TO UNZIP RAR FILE
+-unrar x lol.rar
+
+========================================
+
+#
+$
+*HOW TO RECOVER DELETED DATA
+-sudo fdisk -l
+(select your usb)
+-sudo foremost -i /dev/sdb1
+
+========================================
+
+#
+$
+*INCREASE VIDEO QUALITY
+-ffmpeg -i v.wav -qscale 0 o.mp4
+[OR]
+-ffmpeg -i v.wav -c:a copy -s hd720 o.mkv
+
+========================================
+
+#
+$
+*GATHER VIDEO INFORMATION
+-ffmpeg -i v.wav -hide_banner
+
+========================================
+
+#
+$
+*CHANGE VIDEO EXTENSION WITHOUT CHANGING QUALITY OR ANYTHING
+-ffmpeg -i v.wav -c:v copy -c:a libvorbis o.avi
+(-c:v = for video, -c:a = for audio)
+
+========================================
+
+#
+$
+*EXTRACT AUDIO FROM VIDEO
+BASIC
+(common bit rate 96k, 128k, 192k, 256k, 320k)
+-ffmpeg -i v.mp4 -vn -ab 192k a.mp3
+Advance
+-ffmpeg -i v.mp4 -vn -ar 44100 -ac 2 -b:a 128k -f mp3 a.mp3
+(-ar = audio frequency, -ac = audio channel)
+#
+$
+*MUTE AUDIO IN VIDEO
+-ffmpeg -i v.mp4 -an o.mp4
+
+========================================
+
+#
+$
+*EXTRACT IMAGE FROM VIDEO
+Ext one img
+-ffmpeg -i v.mp4 -r 1 -f image2 o.jpg
+Ext All img
+-ffmpeg -i v.mp4 -r 1 -f image2 o-%3d.jpg
+
+========================================
+
+#
+$
+*HOW TO HIDE MESSAGE IN A IMAGE WITH OUTGUESS
+-outguess -k 1234 -d h.txt w.jpg new.jpg
+Extract
+-outguess -k 1234 -r new.jpg new.txt
+
+========================================
+
+#
+$
+*HOW TO INCREASE IMAGE QUALITY
+-convert -enhance -equalize -contrast img.jpg
+[OR]
+-ffmpeg -i a.jpg -qscale 0 new.png
+(Easy qulty)
+-ffmpeg -i a.jpg -qscale 0 new.TIF
+(medium qulty)
+-ffmpeg -i a.jpg -qscale 0 new.BMP
+(Best qulty)
+
+========================================
+
+#
+$
+*HOW TO REMOVE MULTIPLE WORD IN THE FILE
+-sed -e 's-\(Hi\|Hello\|lol\)*--ig' lol.txt
+[OR]
+-awk '{gsub("Hi\\|Hello\\|lol","");print}' lol.txt
+
+========================================
+
+#
+$
+*HOW TO REMOVE WHOLE LINE IN THE FILE
+-grep -v "first_word" lol.txt
+[OR]
+-awk '!/Wel/' lol.txt
+[OR]
+-sed -i '/Wel/d' lol.txt
+
+========================================
+
+#
+$
+*GREP YOUTUBE VIDEOS
+-youtube-dl [URL]
+
+========================================
+
+#
+$
+*HOW TO RECOVER CORRUPTED VIDEO FILE
+-https://fix.video
+[If it recover the video then download the sample file]
+-https://www.onlineconverter.com/repair-mp4
+[upld the dmg video then the sample vdo]
+
+========================================
+
+#
+$
+*CHANGE VIDEO RESOLUTION
+-ffmpeg -i v.mov -s 1024x576 -c:a o.mov
+
+========================================
+
+#
+$
+*ADD POSTER IMG TO AUDIO TURN AUDIO INTO VDO
+-ffmpeg -loop 1 -i im.jpg -i a.mp3 -c:v libx264 -c:a aac -strict experimental -b:a 192k -shortest o.mp4
+
+========================================
+
+#
+$
+*ADD SUBTITLES TO VIDEO
+-ffmpeg -i v.mp4 -i subtitles.stx -c:v copy -c:a copy -preset veryfast -c:s mov-text -map 0 -map 1 o.mp4
+
+========================================
+
+#
+$
+*COMPRESS VIDEO AND AUDIO
+-ffmpeg -i v.mp4 -c:v libx264 -crf 28 o.mov
+-ffmpeg -i v.mov -b:v 1000k -bufsize 1000k o.mov
+[Increase the number to increase qlty of vdo]
+audio
+-ffmpeg -i a.mp3 -ab 128k o.mp3
+
+========================================
+
+#
+$
+*CUT MEDIA FILES
+-ffmpeg -i v.mp4 -t 5 o.mp4
+[4 seconds]
+[OR]
+-ffmpeg -i v.mp4 -t 00:00:05 o.mov
+
+========================================
+
+#
+$
+*CROP MEDIA FILE OR AUDIO FILE
+-ffmpeg -i v.mp4 -ss 00:01:30 -to 00:01:40 o.mp4
+
+========================================
+
+#
+$
+*SPLIT MEDIA FILE
+-ffmpeg -i v.mp4 -t 00:00:30 o1.mp4
+[start with 30]
+-ss 00:00:30 o2.mp4
+[end with 30]
+
+========================================
+
+#
+$
+*RECORD YOUR LAPTOP SCREEN
+-ffmpeg -f x11grab -s $(xdpyinfo | grep dimensions | awk '{print $2;3}') -i :0.0 o.mp4
+
+========================================
+
+#
+$
+*RECORD YOUR WEBCAM
+-ffmpeg -i /dev/video0 o.mp4
+
+========================================
+
+#
+$
+*RECORD YOUR AUDIO
+-ffmpeg -f alsa -i default o.mp3
+
+========================================
+
+#
+$
+*RECORD YOUR LAPTOP SCREEN AND ADD BGM
+-ffmpeg -f x11grab -s $(xdpyinfo | grep dimensions | awk '{print $2;3}') -i :0.0 -i Music.mp3 -c:a copy o.mp4
+
+========================================
+
+#
+$
+*JS OBFUSCATION
+Encoding
+-git clone http://github.com/aemkei/Jsfuck
+-cd Jsfuck; php -S 127.0.0.1:8181
+P= lol man
+E= ([+[])[]
+[This enc look like this]
+Decription
+-git clone https://github.com/lelinhtinh/deyjs
+-cd deyjs; bundle install
+-sudo npm install workbox-cli --global
+-npm start
+[OR]
+-deobfuscatejavascript.com/index-html#
+
+========================================
+
+#
+$
+*ROTATE YOUR VIDEO FILE
+-ffmpeg -i v.mov -vf "rotate=90*PI/180" o.mp4
+[OR]
+-ffmpeg -i v.mov -vf "rotate=PI" o.mp4
+
+========================================
+
+#
+$
+*HOW TO INCREASE AUDIO VOICE
+-ffmpeg -i v.mp3 -af "volume=10" v.wav
+
+========================================
+
+#
+$
+*FAST OR SLOW VIDEO
+-ffmpeg -i v.mov -vf "setpts=0.5*PTS" o.mkv
+
+========================================
+
+#
+$
+*CONVERT TS FILE TO MP4
+-ffmpeg -y -i 03.ts -acodec copy -ar 44100 -ab 96k -codec ac -vbsf h264_mp4toannexb o.mp4
+
+========================================
+
+#
+$
+*ALTERNATE OF CAT
+-APT install BAT
+-BATCAT lol.txt
+
+========================================
+
+#
+$
+*HOW TO FIND STORED WIFI PASSWD IN LINUX
+-sudo cat /etc/NetworkManager/system-connections/wifiname
+
+========================================
+
+#
+$
+*FIND OUT IP INFO USING CURL
+-nslookup google.com
+-curl ipinfo.io/192.168.1.1
+
+========================================
+
+#
+$
+*SEE BROWSER HISTORY IN WINDOWS
+-cd C:\
+-ipconfig /displaydns > o.txt
+
+========================================
+
+#
+$
+*CPU INFO IN LINUX
+-inxi -c
+[Best]
+[OR]
+-cat /proc/cpuinfo
+[GOOD]
+[OR]
+-sudo lshw -c cpu
+[Normal]
+
+========================================
+
+#
+$
+*HOW MANY PROCESSOR IN SYSTEM
+-nproc
+
+========================================
+
+#
+$
+*CPU INFO IN WINDOWS
+[OR]
+-wmic memorychip list full
+
+========================================
+
+#
+$
+*LAPTOP NAME INFO IN LINUX
+-hostnamectl
+
+========================================
+
+#
+$
+*HOW TO CHANGE HOST NAME
+-hostname lol
+-hostnamectl set-hostname lol
+
+========================================
+
+#
+$
+*FIND SSH-HOST KEY WITH NMAP
+-nmap --script=ssh-hostkey.nse 192.168.1.7
+
+========================================
+
+#
+$
+*BRUTE FORCE SSH USERNAME AND PASS WITH NMAP
+-nmap --script=ssh-brute.nse 192.168.1.7
+
+========================================
+
+#
+$
+*USEFUL SCANS IN NMAP
+-nmap -sT 192.168.1.7
+-nmap -sS 192.168.1.7
+-nmap -sU 192.168.1.7
+-nmap -sA 192.168.1.7
+
+========================================
+
+#
+$
+*FIND DNS INFO USING DNSENUM
+-dnsenum google.com
+
+========================================
+
+#
+$
+*HELPFUL TERMINAL IN LINUX
+1. Tilix - KETTY
+2. Terminator
+
+========================================
+
+#
+$
+*FIND EMAILS WITH THE HARVESTER
+-git clone https://github.com/laramies/theHarvester.git
+-python theHarvester.py -d google.com -l500 -b google
+
+========================================
+
+#
+$
+*SEE FIREFOX BROWSER HISTORY IN LINUX
+-sqlite3 ~/.mozilla/firefox/6m12xzlz.default-release/places.sqlite "SELECT datetime(moz_historyvisits.visit_date/1000000,'unixepoch'), moz_places.url FROM moz_places, moz_historyvisits WHERE moz_places.id = moz_historyvisits.places_id" | sort | less
+[OR]
+-sqlite3 ~/.mozilla/firefox/6m12xzlz.default-release/places.sqlite
+SELECT url FROM moz_places;
+(In every sys this code is different)
+
+========================================
+
+#
+$
+*FIND WEBSITE INFO USING WHATWEB
+-whatweb -v google.com
+
+========================================
+
+#
+$
+*TIME TRAVEL INSIDE WEBSITES
+-go install github.com/tomnomnom/waybackurls@latest
+-cp /root/go/bin/waybackurls /usr/local/bin
+-waybackurls -dates https://nasa.gov
+[OR]
+(If you want to see how nasa look in 1996)
+-https://web.archive.org
+(now type the website name and select the date)
+
+========================================
+
+#
+$
+*HOW TO DOWNLOAD WAY BACK MACHINE IN LINUX
+-sudo gem install wayback-machine-downloader
+-wayback-machine-downloader https://lol.com
+
+========================================
+
+#
+$
+*HOW TO USE WAY BACK MACHINE IN LINUX
+-wayback-machine-downloader https://nasa.com -t 1996
+-cd website
+(now see the old 1996 nasa website)
+
+========================================
+
+#
+$
+*ANOTHER PKG INSTALLER
+(If apt give you error then run)
+-sudo aptitude install mynewpkg
+
+========================================
+
+#
+$
+*HOW TO COMPRESS AND UNCOMPRESS ZLIB FILE
+-zlib-flate -compress=9 < lol.txt > ball.txt
+-zlib-flate -uncompress < lol.zlib > f.txt
+
+========================================
+
+#
+$
+*HOW TO ENCRYPT PYTHON SCRIPT
+-pip install pyarmor
+-pyarmor obfuscate lolll.py
+-cd dist
+-python lolll.py
+
+========================================
+
+#
+$
+*ENCRIPTION AND DECRIPTION WITH OPENSSL
+-openssl list -cipher-commands
+(This will show all cipher list)
+Enc
+-openssl enc -aes-256-cbc -base64 -in c.txt -out x.txt
+dec
+-openssl enc -aes-256-cbc -d -base64 -in x.txt
+(you can also decrypt base64)
+-openssl enc -d -base64 -in b.txt
+
+========================================
+
+#
+$
+*ENC OR DEC WITH PUBLIC AND PRIVATE KEY
+(First create private key)
+-openssl genrsa -out pkey.pem 2048
+(Then create public key)
+-openssl rsa -in pkey.pem -pubout -out pukey.pem
+(NOW ENC)
+-openssl rsautl -encrypt -in msg.txt -out enc.txt -inkey pukey.pem -pubin
+(NOW DEC)
+-openssl rsautl -decrypt -in enc.txt -out msg.txt -inkey pkey.pem
+
+========================================
+
+#
+$
+*HOW TO CREATE LINK OF ANY FILE AND DIRECTORY
+-ln -s lol.txt lol1.txt
+-ls -l
+-ln -s /opt/lamb/htdocs mrf
+-cd mrf
+
+========================================
+
+#
+$
+*HOW TO DELETE HISTORY
+-history 09
+[Delete only one]
+-history -c
+[Delete All]
+
+========================================
+
+#
+$
+*ALTERNATE OF FIND SYSTEM STORAGE COMMAND
+-smartctl -i /dev/sda
+-hdparm -I /dev/sda
+
+========================================
+
+#
+$
+*HOW TO DECODE LOOP BASE64 USING PYTHON
+import base64
+f = open('ctf', 'r')
+ctf = f.read()
+while True:
+    ctf = base64.b64decode(ctf).decode("utf-8")
+    if '{' in ctf:
+        print(ctf)
+        break
+
+========================================
+
+#
+$
+*HOW TO ENCRYPT LOOP BASE64 MSG USING BASH
+echo -e -n "word="
+read h
+a=$(echo "$h" | base64)
+echo "$a"
+b=$(echo "$a" | base64)
+echo "$b"
+d=$(echo "$b" | base64)
+echo "$d"
+
+========================================
+
+#
+$
+*HOW TO GREP JPG URLS OR ANY THINGS IN A WEBSITE
+-curl web > lol.txt
+-grep -EO "https?://\S+?\.jpg" lol.txt > l.txt
+[starting word]
+[ending word]
+#
+$
+*DOWNLOAD ALL IMAGES USING WEBSITES USING WGET
+-wget -nd -r -P /Desktop/new/ -A jpeg,jpg,bmp,gif,png https://lol.com
+
+========================================
+
+#
+$
+*DOWNLOAD IMAGES IN URL.TXT (EXTRACTED BY GREP)
+-wget -i url.txt
+
+========================================
+
+#
+$
+*IMAGE TO VIDEO
+-ffmpeg -framerate 1 -pattern_type glob -i '*.jpg' -c:v libx264 -r 30 -pix_fmt yuv420p o.mp4
+[Change seconds 0.1 if you want slow]
+
+========================================
+
+#
+$
+*URL IMAGE.TXT TO VIDEO
+(create file)
+file 'img1.jpg'
+duration 2
+file 'img2.jpg'
+duration 2
+file 'img3.jpg'
+duration 2
+[Input.txt]
+-ffmpeg -f concat -i input.txt -c:v libx264 -r 30 -pix_fmt yuv420p o.mp4
+
+========================================
+
+#
+$
+*IMAGE TO VIDEO WITH MP3 IN SLIDE SHOW MODE
+[NO gaps in the paragraph "-"]
+[Change the number #If you want 3 photos then change to 3]
+-ffmpeg -loop 1 -t 5 -i h1.jpg -loop 1 -t 5 -i h2.jpg -i b.mp3 -filter_complex "[0:v]scale=1280:720:force_original_aspect_ratio=decrease,pad=1280:720:(ow-iw)/2:(oh-ih)/2,setsar=1,fade=t=out:st=4:d=1[v0];[1:v]scale=1280:720:force_original_aspect_ratio=decrease,pad=1280:720:(ow-iw)/2:(oh-ih)/2,setsar=1,fade=t=out:st=4:d=1[v1];[v0][v1]concat=n=2:v=1:a=0,format=yuv420p[v]" -map "[v]" -map 2:a -shortest out.mp4
+
+========================================
+
+#
+$
+*BEST WEBSITE FOR BACKGROUND MUSIC
+-https://pixabay.com/music/search/theme/background music
+
+========================================
+
+#
+$
+*BASE64 XOR IN LINUX
+ENC
+-perl -e '$txt="Hello"; $key="lol"; use MIME::Base64; print encode_base64($txt ^ $key)'
+DEC
+-perl -e '$key="lol"; use MIME::Base64; $txt=decode_base64("DW4MY2S==");print $txt ^ $key'
+(If you want your key as base64 then)
+ENC
+-echo "key" | base64
+-perl -e '$txt="BALL"; use MIME::Base64; $key=decode_base64("xdlm==");print encode_base64($txt ^ $key)'
+dec
+-perl -e 'use MIME::Base64; $key=decode_base64("xdlm==");$txt=decode_base64("bdklm==");print $txt ^ $key'
+
+========================================
+
+#
+$
+*BASE64 XOR DECODE USING PYTHON
+import base64
+key = "xD6KF02UrE5Sm"
+[(B64 key)]
+txt = "h2KUrE5=="
+[(B64 txt)]
+a = base64.b64decode(key)
+b = base64.b64decode(txt)
+c = []
+l = len(a)
+i = 0
+while i < l:
+    c.append(chr(a[i] ^ b[i]))
+    i += 1
+print(c)
+
+========================================
+
+#
+$
+*HOW TO INSTALL MARIA-DB
+-sudo apt install mariadb-server
+-service mysql start
+-sudo mysql
+
+========================================
+
+#
+$
+*HOW TO RUN QUERY USING CLI
+-sudo mysql -D database_name -e "select * from lol"
+
+========================================
+
+#
+$
+*IF YOU WANT TO RUN QUERY IN BASH SCRIPT
+echo -e -n "Enter name"
+read lol
+sudo mysql -D ball -e "select * from ${lol}"
+
+========================================
+
+#
+$
+*HOW TO CREATE FILE IN WINDOWS CMD
+-type nul > lol.txt
+
+========================================
+
+#
+$
+*MODIFY FILE NAME IN CMD
+-ren lol.txt ball.txt
+
+========================================
+
+#
+$
+*OPEN FILE IN CMD
+-notepad ball.txt
+[OR]
+-type ball.txt
+
+========================================
+
+#
+$
+*COPY FILE IN CMD
+-copy ball.txt lol.txt
+
+========================================
+
+#
+$
+*DELETE FILE IN CMD
+-del lol.txt
+
+========================================
+
+#
+$
+*CLEAR SCREEN IN CMD
+-cls
+
+========================================
+
+#
+$
+*DELETE DIRECTORY IN CMD
+-rmdir lol
+
+========================================
+
+#
+$
+*HOW TO BRUTEFORCE LOGIN PAGE USING BURPSUITE
+(Open any website and enter any user or pass then check your burp and see the post link of that website then left click to the post link then send to intruder)
+(Now press clear button and select user or pass then press ADD button then select payloads option and load the pass file) (Please choose 2 file u.txt or p.txt)
+Choose Attack type: cluster bomb
+Now press start Attack
+
+========================================
+
+#
+$
+*ALTERNATE TO RUN SQL QUERY IN LINUX
+mysql << mrf
+sql-query1
+sql-query2
+sql-query3
+mrf
+
+========================================
+
+#
+$
+*FIND ANY RANDOM USER IMAGE OR INFO
+(its help you for fake profile)
+-wget -qO- "https://randomuser.me/api?results=5" | jq
+(No gaps)
+(It give you info+jpg) only 5 people
+-wget -qO- "https://randomuser.me/api?results=10" | jq | grep large | cut -d\" -f4
+(It give you only 10 people jpg links)
+
+========================================
+
+#
+$
+*OPEN JSON FILE IN A BEAUTY FULL WAY
+-apt install jq
+-jq '.' lol.json
+
+========================================
+
+#
+$
+*HOW TO FIND ANY WORD IN A WORD LIST
+-apt install fzf
+for ex
+-wget -qO- http://1000wordlist.txt | fzf
+(if you want to search any word in a file you can use this cmd)
+
+========================================
+
+#
+$
+*HOW TO SHOW ANY WEBSITE CODING IN TERMINAL
+-wget -qO- lol.com
+
+========================================
+
+#
+$
+*BRUTE FORCE LOGIN PAGE WITH HYDRA
+-hydra 127.0.0.1 http-post-form "/mrf/wp-login.php:username=^USER^&password=^PASS^:invalid pass" -L usrl.txt -P pass.txt
+
+========================================
+
+#
+$
+*LOADING BOX IN LINUX
+-apt install dialog
+-for i in {1..100};do echo "$i"; done | dialog --title "Loding" --gauge "you are lol" 10 70 0
+[diff number]
+
+========================================
+
+#
+$
+*DRAW STRAIGHT LINE IN LINUX
+(In past you draw lines like this)
+==================================
+(But now use this)
+-printf "%$(tput cols)s\n" | tr " " "="
+(If you want some specific number of = like 10 or 20)
+-printf "%10s\n" | tr " " "="
+
+========================================
+
+#
+$
+*FIND OS INFO USING CAT
+-cat /etc/os-release
+
+========================================
+
+#
+$
+*YOU CAN ALSO SEE IP WITH THIS CMD
+-/sbin/ifconfig
+
+========================================
+
+#
+$
+*HOW TO RUN MANY OS IN ONE OS USING DOCKER
+-apt install podman
+(It is a subsitute of Docker)
+(Now install distrobox)
+-curl -s https://raw.githubusercontent.com/89luca89/distrobox/main/install | sudo sh
+(Now install kali linux)
+-distrobox-create -n kali --image docker.io/kalilinux/kali-rolling:latest
+(see list of installed os)
+-distrobox-list
+(open os)
+-distrobox-enter kali
+(stop os)
+-distrobox-stop kali
+(Remove os)
+-distrobox-rm kali
+[for more info: Distrobox Github]
+
+========================================
+
+#
+$
+*LINUX IMAGES
+ALMA LINUX = docker.io/library/almalinux:9
+Alpine LINUX = docker.io/library/alpine:latest
+Amazon LINUX = public.ecr.aws/amazonlinux:2022
+Arch LINUX = docker.io/library/archlinux:latest
+Clear LINUX = docker.io/library/clearlinux:latest
+CentOS = quay.io/centos/centos:stream9
+Red HAT = registry.access.redhat.com/ubi9/ubi
+Debian = docker.io/library/debian:stable-backports
+neurodebian = docker.io/library/neurodebian:nd100
+Fedora = registry.fedoraproject.org/fedora:37
+[OR]
+= docker.io/library/fedora:36
+Mageia = docker.io/library/mageia
+opensuse = registry.opensuse.org/opensuse/leap:latest
+OracleLinux = container-registry.oracle.com/os/oraclelinux:8
+Rocky LINUX = docker.io/rockylinux/rockylinux:8
+Scientific LINUX = docker.io/library/sl:7
+Slackware = docker.io/vbatts/slackware:14.2
+ubuntu = docker.io/library/ubuntu:22.04
+Kali = docker.io/kalilinux/kali-rolling:latest
+void linux = ghcr.io/void-linux:latest-full-x86_64
+(How to use these images)
+for ex: distrobox-create -n lol --image docker.io/...
+[Enter any name]
+[But select some image, no mistake]
+
+========================================
+
+#
+$
+*REMOVE WINDOWS VIRUS
+-WIN + R
+-MRT
+(Press ENTER)
+
+========================================
+
+#
+$
+*SYS INFO PRESENT PRETTYFULLY
+-neofetch
+-screenfetch
+
+========================================
+
+#
+$
+*BOOT YOUR DEVICE WITH RUFUS OR ETCHER
+Rufus : Is for windows
+balenaEtcher : Is for linux
+
+========================================
+
+#
+$
+*HOW TO REMOVE GRUB OS WINDOW PAGES
+-open cmd Admin in windows
+-bcdedit /enum firmware
+(Then select identifier)
+-bcdedit /delete {44fed204fel34}
+[identifier]
+
+========================================
+
+#
+$
+*FILE INFO USING STAT
+-file lol.txt
+
+========================================
+
+#
+$
+*ALTERNATE OF MYSQL
+-sudo apt install default-mysql-server
+-sudo mysql
+#
+$
+*HOW TO BOOT USB WITH TERMINAL
+-fdisk -m
+(copy your usb name)
+-dd if=parrot.iso of=/dev/sdb
+[Iso file] [USB Name]
+
+========================================
+
+#
+$
+*SHOW ALL FILE IN YOUR SYSTEM
+-du
+if you can use -h then it will show Ans in GB
+-du -h
+
+========================================
+
+#
+$
+*CAT LIKE CMD
+-sort t.txt
+This cmd show you accurate result
+for ex
+cat t.txt | sort
+
+========================================
+
+#
+$
+*COMPRESS YOUR FILE WITH BZIP2
+-bzip2 v.txt
+-bunzip v.txt.bz2
+-bzcat v.txt.bz2
+
+========================================
+
+#
+$
+*HOW TO INSTALL DVWA IN LINUX
+-sudo apt install default-mysql-server
+-apt install php-gd
+-apt install php-mysql
+-apt install php-all-dev
+-cd /var/www/html
+-git clone DVWA
+(google it)
+-chmod -R 777 DVWA
+-cd DVWA/config
+-cp config.inc.php.dist config.inc.php
+-mano config.inc.php
+user = dvwa or pass = ?
+(Now go to google) => https://www.google.com/recaptcha/admin/create
+label = dvwa
+recaptcha key: recaptcha v2 >> "I am not robo"
+Domains: localhost
+(Now copy public and secret key)
+(Now paste it into config file)
+(public or secret key option are given downside the user pass in "config file")
+-cd /etc/php/7.4/apache2
+-sudo pluma php.ini
+(Now [comment] the line)
+allow_url_fopen = on
+allow_url_include = on
+[in php.ini]
+-service mysql start
+-sudo mysql
+-create database dvwa;
+-create user dvwa@localhost identified by '?';
+-grant all on dvwa.* to dvwa@localhost;
+-flush privileges;
+-service apache2 start
+(Now open browser and type)
+-localhost/DVWA
+(Now the real user pass is)
+USER = admin
+PASS = password
+
+========================================
+
+#
+$
+*COMPRESS MULTIPLE FILE USING TAR
+-tar -cvf test.tar v.txt m.txt
+extract
+-tar -xvf test.tar
+(If you dont want to extract but only see what inside the file)
+-tar -tf test.tar
+(If the file end with .tgz)
+-tar -zxvf test.tgz
+
+========================================
+
+#
+$
+*VARIABLE IN BASH
+num=(one two three four five)
+echo ${num[2]}
+Ans = three
+echo ${num[*]}
+Ans = one two three four five
+unset num[*]
+Ans = (empty)
+
+========================================
+
+#
+$
+*VIM EDITOR SHORTCUTS
+X = Delete the [character] at the current cursor position.
+dd = Delete the [line] at the current cursor
+dw = Delete the [word] at the current cursor
+R = Overwrite the data at the current cursor
+:s/old/New = Replace all old word in a [line]
+:#,#s/old/New = Replace all old word in [two line]
+:%s/old/New = Replace all old word in a [file]
+
+========================================
+
+#
+$
+*MATH CALCULATION IN TERMINAL NOT IN SCRIPT
+m=$[2+5]
+echo $m
+
+========================================
+
+#
+$
+*OPEN ANY WEBSITE IN TERMINAL
+-apt install lynx
+-lynx google.com
+(capture data with lynx)
+-lynx -dump www.lol.com
+
+========================================
+
+#
+$
+*TALK DIFFERENT SYSTEM WITH LINUX
+(first create a user if you test in your sys)
+(open two terminals)
+(su usr1) (su usr2)
+(start both user .ssh server)
+(user1 = ssh usr2@localhost)
+(usr2 = ssh usr1@localhost)
+-who
+[check who is online]
+-apt install talk
+-apt install talkd
+(usr1)
+-talk usr2@localhost
+(usr2)
+-talk usr1@localhost
+
+========================================
+
+#
+$
+*TALK DIFFERENT SYSTEM WITH MESG WRITE
+(same procedure) who talk same
+(usr1)
+-mesg
+-mesg y
+(usr2)
+-write usr1
+
+========================================
+
+#
+$
+*ONLINE STREAM MOVIE WEBSITE
+-primewire
+-soap2dayhd.co
+
+========================================
+
+#
+$
+*FIND EMAIL INFO USING MOSINT
+-git clone https://github.com/alpkeskin/mosint.git
+-apt install golang
+-go main.go
+(some good cmd)
+-go run main.go -e email -verify
+(it verify your email real or fake)
+-go run main.go -e email -social
+(it give info about social scan for target email)
+-go run main.go -e email -relateds
+(find related emails and domains with target email)
+
+========================================
+
+#
+$
+*START YOUR SSH SERVER USING NGROK
+(login your ngrok website)
+User = mfsiddiqui716@gmail.com
+Pass = System123##
+(Now install ngrok and unzip)
+-./ngrok config add-authtoken [TOKEN]
+-service ssh start
+-./ngrok tcp 22
+-ssh mrf@0.tcplink.in.ngrok.io -p 16204
+[Paste the link]
+(please dont paste tcp)
+
+========================================
+
+#
+$
+*IF YOU WANT TO OPEN MANY PORT IN ONE TIME
+nano .config/ngrok/ngrok.yml
+tunnels:
+  http_apache:
+    proto: http
+    addr: 80
+  tcp_ssh:
+    proto: tcp
+    addr: 22
+  tcp_ftp:
+    proto: tcp
+    addr: 21
+-service apache2 start
+-service ssh start
+-service vsftpd start
+-./ngrok --all
+
+========================================
+
+#
+$
+*INSTALL FTP SERVER
+-apt install vsftpd
+-vi /etc/vsftpd.conf
+(anonymous_enable=Yes)
+-service vsftpd start
+
+========================================
+
+#
+$
+*FAST OR SLOW VIDEO
+-ffmpeg -i v.mp4 -vf "setpts=2*PTS" o.mp4
+
+========================================
+
+#
+$
+*FAST OR SLOW AUDIO
+-ffmpeg -i v.wav -af "atempo=0.75" o.wav
+[OR]
+-ffmpeg -i v.wav -af "atempo=2.0,atempo=2.0" o.mp3
+
+========================================
+
+#
+$
+*MIX MULTIPLE VIDEO IN 1 VIDEO
+-ffmpeg -i v2.mp4 -vcodec copy -vbsf h264_mp4toannexb -acodec copy 01.ts
+(.ts is important)
+-ffmpeg -i v2.mp4 -vcodec copy -vbsf h264_mp4toannexb -acodec copy 02.ts
+-cat 01.ts 02.ts > 03.ts
+
+========================================
+
+#
+$
+*CPU INFO IN WINDOWS
+-wmic cpu get caption,deviceid,name,numberofcores,maxclockspeed,status
+
+========================================
+
+#
+$
+*STORAGE INFO IN WINDOWS
+-wmic diskdrive get model,serialnumber,size,mediatype
+
+========================================
+
+#
+$
+*RAM INFO IN WINDOWS
+-wmic memorychip get devicelocator,manufacturer,partnumber,serialnumber,capacity,speed,memorytype,formfactor
+[OR]
+-systeminfo | findstr /C:"Total Physical Memory"

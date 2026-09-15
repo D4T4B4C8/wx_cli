@@ -1,0 +1,5 @@
+[ FIND SHORT LINKS DETAILS ]
+> curl -sil lol
+or
+> curl -i lol
+[ ho gaya kaam ]

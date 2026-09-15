@@ -1,0 +1,1453 @@
+#forensics
+$data_acquisition01
+%FRAME_TITLE% WHITEX FORENSIC
+%FRAME_INDEX% Case File // 001
+%TITLE% DATA
+%TITLE% ACQUISITION
+%SUBTITLE% DATA ACQUISITION IS MAINTAINING THE INTEGRITY AND CHAIN OF CUSTODY OF DIGITAL EVIDENCE.
+
+%SUBTITLE% VARIOUS FORMATS ARE USED TO ENSURE THAT DATA IS PRESERVED ACCURATELY AND CAN BE ANALYZED EFFECTIVELY.
+
+*EO1 (ENCASE IMAGE FILE)
+WIDELY USED IN FORENSIC INVESTIGATIONS FOR CAPTURING AND STORING COMPLETE DISK IMAGES.
+[ADVANTAGES]
+SUPPORTS COMPRESSION, ENCRYPTION, AND PRESERVES METADATA.
+[DISADVANTAGES]
+PROPRIETARY FORMAT, REQUIRES COMPATIBLE SOFTWARE FOR ANALYSIS.
+[TOOLS]
+-sudo ewfacquire -t test /dev/sdb
+OR
+-sudo ftkimager --e01 --case-number 01 --evidence-number 01 --description xyz --examiner faizan --notes criminal /dev/sdb output
+
+*AFF (ADVANCE FORENSIC FORMAT)
+
+COMMONLY USED FOR STORING AND SHARING FORENSIC IMAGES.
+[ADVANTAGES]
+SUPPORTS COMPRESSION AND ENCRYPTION
+[DISADVANTAGES]
+LESS WIDELY ADOPTED
+[TOOLS]
+-affconvert input.raw output.aff
+CONVERT RAW TO AFF
+-affcat out.aff
+DISPLAY THE CONTENTS OF AN AFF FILE
+-affuse out.aff /mnt/aff
+MOUNTS AN AFF FILE
+-affinfo out.aff
+DISPLAY METADATA ABOUT FILE
+
+*DD (RAW DISK IMAGE)
+
+BASIC FORENSIC IMAGING FOR DISK CLONING AND ANALYSIS.
+[ADVANTAGES]
+SIMPLE, WIDELY SUPPORTED.
+[DISADVANTAGES]
+NO BUILT-IN SUPPORT FOR COMPRESSION, ENCRYPTION.
+[TOOLS]
+-dd if=/dev/sda of=out.dd
+OR
+-dc3dd if=/dev/sda of=out.dd
+
+*SMART (SELF-MONITORING ANALYSIS AND REPORTING TECHNOLOGY)
+
+USED FOR CREATING AND ANALYZING FORENSIC DISK IMAGES.
+[ADVANTAGES]
+OPEN FORMAT, SUPPORTS COMPRESSION AND ENCRYPTION.
+[DISADVANTAGES]
+LESS WIDELY ADOPTED, REQUIRES SPECIFIC TOOLS FOR FULL FUNCTIONALITY.
+[TOOLS]
+-sudo pacman -S smartmontools
+CHECK IF SMART IS ENABLED
+-sudo smartctl -i /dev/sda1
+IF NOT ENABLED
+-sudo smartctl -s on /dev/sda
+DISPLAY DETAILED SMART ATTRIBUTES
+-sudo smartctl -a /dev/sda1
+RUN SHORT SELF-TEST
+-sudo smartctl -t short /dev/sda
+CHECK SELF-TEST RESULT
+-sudo smartctl -l selftest /dev/sda
+%FOOTER% Link Status:Encrypted
+========================================
+
+#forensics
+$exploring_evidence02
+%FRAME_TITLE% WHITEX FORENSIC
+%FRAME_INDEX% Case File // 002
+%TITLE% EXPLORING
+%TITLE% EVIDENCE
+%SUBTITLE% USING E01 AFF DD
+
+*E01
+
+[MOUNT]
+-sudo apt install ewf-tools
+-ewfmount evidence.e01 /mnt/ewf
+
+[WITHOUT MOUNT]
+-mmls evidence.e01
+IDENTIFY PARTITIONS
+
+-fsstat -o 1032167 evidence.e01
+CHECK FILE SYSTEM TYPE - 1032167 IS THE START NUMBER
+
+-fls -f ext4 -o 1032167 evidence.e01
+LIST FILE IN THE PARTITION - EXT4 IS THE FILE SYS TYPE
+
+-fls -f ext4 -o 1032167 -r evidence.e01
+LIST DIRECTORY FILES
+
+-fls -f ext4 -o 1032167 -r -p / evid.e01
+DISPLAY FULL PATH
+
+-icat -o 1032167 evid.e01 261 > a.jpg
+EXTRACT FILE - 261 IS THE FILE NUMBER
+
+
+*AFF
+
+[MOUNT]
+-affuse evid.aff /mnt/aff
+-cd /mnt/aff ; ls
+
+[WITHOUT MOUNT]
+SAME AS E01
+
+*DD
+
+[MOUNT]
+-sudo fdisk -l evid.dd
+-sudo parted evid.dd unit s print
+2048 * 512 = 1048576  
+PARTED -> START=2048, FDISK -> UNITS=512
+-mount -o loop,offset=1048576 evid.dd /mnt/dd
+
+[WITHOUT MOUNT]
+SAME AS E01
+
+%FOOTER% Link Status:Encrypted
+========================================
+
+#forensics
+$validate_evidence03
+%FRAME_TITLE% WHITEX FORENSIC
+%FRAME_INDEX% Case File // 003
+%TITLE% VALIDATING
+%TITLE% THE EVIDENCE
+%SUBTITLE% GENERATE, VERIFY, CHAIN OF CUSTODY
+
+*GENERATE HASHES
+GENERATE CRYPTOGRAPHIC HASH VALUES (EG, MD5, SHA-1, SHA-256) FOR THE ORIGINAL EVIDENCE BEFORE AND AFTER ACQUISITION TO ENSURE DATA INTEGRITY.
+
+[TOOLS]
+-md5sum original.dd > o.txt
+-md5sum copy.dd > c.txt
+-diff o.txt c.txt
+YOU CAN ALSO USE SHA256SUM
+
+*VERIFY HASHES
+COMPARE THE HASH VALUES GENERATED DURING ACQUISITION WITH THOSE GENERATED FROM THE COPIED EVIDENCE TO CONFIRM THAT NO CHANGES HAVE OCCURRED.
+
+[TOOLS]
+-md5sum -c c.txt
+
+*CHAIN OF CUSTODY DOCUMENTATION
+MAINTAIN A DETAILED LOG OF WHO HANDLED THE EVIDENCE, WHEN, AND UNDER WHAT CONDITIONS TO ENSURE THAT THE EVIDENCE HAS NOT BEEN TAMPERED WITH.
+
+[EXAMPLE OF CHAIN OF CUSTODY LOG BOOK]
+DATE: 2024-05-25
+EVIDENCE ID: IMG001
+DESCRIPTION: DISK IMAGE OF SUSPECT'S LAPTOP
+ACQUIRED BY: FAIZAN
+HASH [MD5]: 9E10709372BB6826BD81
+CHAIN OF CUSTODY: TRANSFERRED TO JANE SMITH ON 2024-05-26
+%FOOTER% Link Status:Encrypted
+========================================
+
+#forensics
+$anti_forensic04
+%FRAME_TITLE% WHITEX FORENSIC
+%FRAME_INDEX% Case File // 004
+%TITLE% ANTI-FORENSIC
+%TITLE% TECHNIQUES
+%SUBTITLE% Understanding methods used to conceal, alter, or destroy digital evidence and the forensic techniques used to detect and investigate them
+
+*DATA ENCRYPTION
+THESE ARE TECHNIQUES ATTACKERS USE. ENCRYPTING DATA STORED ON DIGITAL DEVICES OR TRANSMITTED OVER NETWORKS TO PREVENT UNAUTHORIZED ACCESS AND ANALYSIS BY FORENSIC INVESTIGATORS.
+
+[TOOLS]
+-apt install gnupg
+-gpg --symmetric f.txt
+-gpg --decrypt flag.gpg
+
+*DATA DELETION AND WIPING
+PERMANENTLY ERASING OR OVERWRITING DATA ON STORAGE DEVICES TO MAKE IT UNRECOVERABLE.
+[TOOLS]
+-shred -n 3 o.txt
+OVERWRITES 3 TIMES WITH RANDOM DATA
+OR
+-dd if=/dev/urandom of=o.txt bs=1M count=5
+OVERWRITES 5 TIMES - 1M = SPEED 1 MBPS
+THE MORE YOU OVERWRITE A FILE WITH RANDOM DATA THE MORE SECURE THE DELETION BECOMES.
+
+*STEGANOGRAPHY
+HIDING SENSITIVE DATA WITHIN SEEMINGLY INNOCUOUS FILES OR MEDIA TO EVADE DETECTION.
+STEGANOGRAPHY HAS MANY TECHNIQUES, ALREADY COVERED SEPARATELY IN MY WEB PAGE NOTES.
+
+*FILE AND METADATA MANIPULATION
+ALTERING FILE TIMESTAMPS, METADATA, AND OTHER ATTRIBUTES TO MISLEAD INVESTIGATORS ABOUT THE ORIGIN OR TIMELINE OF DIGITAL EVIDENCE.
+[FILE AND METADATA MANIPULATION TOOLS]
+-touch -a -m -t YYYYMMDDHHMM.SS 0.jpg
+example: 202205061123.30
+THIS CMD CHANGE THE "MODIFICATION DATE/TIME" OF A FILE
+-chmod 644 0.jpg
+THIS CMD CHANGE THE "ACCESS DATE/TIME" AND "INODE CHANGE DATE/TIME" TO CURRENT TIME
+
+*FILE FRAGMENTATION AND DISPERSAL
+FRAGMENTING FILES INTO SMALLER PIECES AND DISPERSING THEM ACROSS MULTIPLE LOCATIONS TO MAKE RECONSTRUCTION AND ANALYSIS MORE DIFFICULT.
+-split my.jpg out --bytes=10m
+SPLITS INTO 10MB CHUNKS
+-cat 1.jpg 2.jpg 3.jpg > new.jpg
+THIS CMD MERGES ALL SPLIT FILES BACK TO THE ORIGINAL FILE
+
+%FOOTER% Link Status:Encrypted
+========================================
+
+#forensics
+$recover_deleted05
+%FRAME_TITLE% WHITEX FORENSIC
+%FRAME_INDEX% Case File // 005
+%TITLE% RECOVER
+%TITLE% DELETED DATA
+%SUBTITLE% WHEN DATA IS DELETED IT OFTEN ISN'T FULLY ERASED FROM THE SYSTEM BUT RATHER MARKED AS AVAILABLE SPACE.
+
+*FOREMOST
+-foremost -i /dev/sdb -o output
+
+*SCALPEL
+-sudo micro /etc/scalpel/scalpel.conf
+
+*UNCOMMENT THE "JPG" OR ANY FORMAT THAT YOU WANT TO RECOVER
+-sudo scalpel /dev/sdb
+
+*PHOTOREC
+-sudo pacman -S testdisk
+-sudo photorec
+SELECT THE DISK
+SELECT "FILE OPT" -> PRESS "S" -> SELECT JPG -> PRESS "B" FOR SAVING] [SELECT "OPTIONS" -> "BRUTE FORCE ENABLE"
+SELECT "SEARCH" -> "WHOLE DISK"
+OTHER
+SELECT DESTINATION DIRECTORY -> PRESS "C"
+
+%FOOTER% Link Status:Encrypted
+========================================
+
+#forensics
+$password_cracking06
+%FRAME_TITLE% WHITEX FORENSIC
+%FRAME_INDEX% Case File // 006
+%TITLE% PASSWORD
+%TITLE% CRACKING
+%SUBTITLE% Exploring Common Password Attacks
+
+*BRUTE FORCE ATTACK
+BRUTE FORCE ATTACK INVOLVES SYSTEMATICALLY TRYING ALL POSSIBLE COMBINATIONS OF CHARACTERS UNTIL THE CORRECT PASSWORD IS FOUND.
+THIS METHOD GUARANTEES SUCCESS BUT CAN BE TIME CONSUMING, ESPECIALLY FOR COMPLEX PASSWORDS.
+[TOOLS]
+-zip2john my.zip > hash.txt
+-john hash.txt
+OR
+-fcrackzip -b -c a -l 1-6 my.zip
+-hashcat -a3 -m0 hash.txt ?a?a?a?a?a?a
+RUN HASHCAT ON RDP - MD5 MASK EXAMPLE ABOVE
+
+*DICTIONARY ATTACK
+DICTIONARY ATTACKS USE A PREDEFINED LIST OF POSSIBLE PASSWORDS AND TEST EACH ONE.
+THIS METHOD IS FASTER THAN BRUTE FORCE BUT ONLY WORKS IF THE PASSWORD IS IN THE DICTIONARY.
+[TOOLS]
+-john --wordlist=pass hash.txt
+OR
+-hydra -l username -p pass.dst ip -t4 ssh
+OR
+-hashcat -a0 -m0 hash.txt pass.txt
+OR
+-fcrackzip -D -p word.txt my.zip
+OR
+-pdfcrack -f my.pdf
+
+*RAINBOW TABLES
+RAINBOW TABLES ARE PRECOMPUTED TABLES OF HASH VALUES FOR ALL POSSIBLE PASSWORD COMBINATIONS.
+THEY SIGNIFICANTLY SPEED UP THE PROCESS OF REVERSING CRYPTOGRAPHIC HASH FUNCTIONS.
+
+*HYBRID ATTACK
+HYBRID ATTACKS COMBINE DICTIONARY AND BRUTE FORCE ATTACKS.
+THEY START WITH A DICTIONARY ATTACK AND THEN APPEND OR PREPEND ADDITIONAL CHARACTERS TO EACH WORD IN THE DICTIONARY.
+[TOOLS]
+-hashcat -a6 -m0 hash.txt wordlist.txt ?d?d
+%FOOTER% Link Status:Encrypted
+========================================
+
+#forensics
+$finding_hidden07
+%FRAME_TITLE% WHITEX FORENSIC
+%FRAME_INDEX% Case File // 007
+%TITLE% FINDING HIDDEN
+%TITLE% DATA
+%SUBTITLE% Finding Hidden Data on Digital Devices
+
+*FILE CARVING
+EXTRACTING FILES AND FILE FRAGMENTS FROM UNALLOCATED SPACE WITHOUT RELYING ON FILE SYSTEM METADATA.
+[TOOL]
+SCALPEL, FOREMOST, PHOTOREC
+
+*DATA RECOVERY
+RECOVERING DELETED FILES OR CORRUPTED DATA
+[TOOLS]
+TESTDISK
+FIRST CORRUPT YOUR DRIVE OR USB FOR TESTING
+-sudo dd if=/dev/urandom of=/dev/sdc bs=100M count=1
+THEN MOUNT THAT DEVICE FOR CHECKING USB IS CORRUPTED OR NOT
+NOW WE START THE RECOVERY PROCESS
+-sudo testdisk
+CHOOSE YOUR USB
+NONE
+COPY THE TOP - SUPER BLOCK = 32768, BLOCK SIZE = 4096
+NOW QUIT THE TESTDISK
+THIS PROCESS RECOVERS THE CORRUPTED USB BUT NOT DATA
+-sudo fsck.ext4 -y -b 32768 -B 4096 /dev/sdc
+-sudo fsck.ext4 -p -b 32768 -B 4096 /dev/sdc
+FOR RECOVERING OR CARVING DATA USE PHOTOREC
+
+*STEGANOGRAPHY DETECTION
+FINDING HIDDEN MESSAGES WITHIN DIGITAL MEDIA (IMAGES, AUDIO, VIDEO).
+[TOOL]
+STEGDETECT
+-yay -S stegdetect
+SINGLE
+-stegdetect my.jpg
+MULTIPLE
+-stegdetect *.jpg
+-stegdetect -s 10 my.jpg
+ADJUST SENSITIVITY
+
+*ENCRYPTION ANALYSIS
+IDENTIFYING AND ATTEMPTING TO DECRYPT ENCRYPTED FILES.
+[TOOLS]
+HASHCAT, JOHN THE RIPPER
+
+*METADATA ANALYSIS
+ANALYZING METADATA TO UNCOVER HIDDEN OR MODIFIED INFORMATION.
+[TOOLS]
+EXIFTOOL
+-exiftool my.jpg
+
+*REGISTRY ANALYSIS
+EXAMINING THE WINDOWS REGISTRY FOR HIDDEN OR OBFUSCATED ENTRIES.
+[TOOLS]
+[1) REGISTRY EXPLORER]
+FIRST INSTALL REGISTRY EXPLORER
+-wine registryexplorer.exe
+-File -> Open Hive -> Now start exploring
+HOW TO FIND HIVES FILE
+-path = /windows/system32/config
+hives = SAM, SECURITY, SOFTWARE, SYSTEM
+
+[2) REGLOOKUP]
+-reglookup -h -t key -p "/sam/domains" sam
+THIS SHOWS HEADERS LIKE: PATH, TYPE, VALUES, MTIME]
+[-p "/sam/domains" IS USED TO GO INSIDE THE HIVE FILE TO A SPECIFIC LOCATION]
+[-t KEY IS USED TO SHOW RESULTS ONLY FOR A SPECIFIC DATA TYPE]
+[-t DATA TYPE OPTIONS]: NONE, SZ, EXPAND_SZ, BINARY, DWORD, DWORD_BE, LINK, MULTI-SZ, KEY, RSRC_LIST, RSRC_DESC, QWORD]
+
+IF YOU DON'T KNOW THE PATH
+-reglookup sam
+IF YOU WANT MORE INFO
+-reglookup -h -s -t key -p "/sam/domains" sam
+
+*MEMORY FORENSICS
+ANALYZING RAM DUMPS TO FIND HIDDEN PROCESSES, DATA, OR MALWARE.
+[TOOLS]
+VOLATILITY, REKALL
+
+*NETWORK TRAFFIC ANALYSIS
+MONITORING AND ANALYZING NETWORK TRAFFIC FOR HIDDEN COMMUNICATION OR DATA EXFILTRATION.
+[TOOLS]
+[1) WIRESHARK]
+-wireshark -i wlan0
+OPEN TEST LOGIN PAGE IN YOUR BROWSER AND TYPE ANY USERNAME AND PASSWORD
+SAVE FILE AS DATA.PCAP
+-sudo wireshark data.pcap
+[SEARCH] -> http.request.method == "post"
+
+[2) TSHARK]
+-tshark -r data.pcap -Y "http.request.method == POST" -T fields -e ip.src -e ip.dst -e http.request.uri
+THIS CMD SHOWS POST REQUESTS
+-tshark -r data.pcap -Y 'http.request.uri contains "userinfo.php"' -T fields -e tcp.stream
+THIS CMD SHOWS THE STREAM NUMBER OF USERINFO.PHP
+-tshark -r data.pcap -Y 'tcp.stream eq 89' -w new.pcap
+THIS CMD EXTRACTS THE USERINFO.PHP STREAM INTO NEW.PCAP
+-tshark -r new.pcap -Y "http.request.method == POST" -V
+
+*SLACK SPACE ANALYSIS
+INVESTIGATING SLACK SPACE, THE UNUSED SPACE WITHIN A DISK CLUSTER, FOR HIDDEN DATA.
+[TOOLS]
+
+[FOREMOST]
+-sudo dd if=/dev/sdb of=data.img bs=4M
+CREATE SDB TO IMG
+
+-mmls data.img
+USE FOR IDENTIFY PARTITIONS
+
+-fsstat -o 103216 data.img
+CHECK FILE SYSTEM TYPE - 103216 IS THE START NUM
+
+-fls -f fat32 -o 103216 -r data.img
+LIST ALL THE DATA INCLUDING DELETED FILES/DIRECTORY - FILE SYSTEM TYPE FAT32, START 103216
+
+-istat -f fat32 -o 103216 data.img 256
+IT GIVES FULL INFO ABOUT A SPECIFIC FILE - 256 IS THE INODE NUMBER
+
+-blkls -f fat32 -o 103216 data.img > new.img
+THIS CMD EXTRACTS SLACK SPACE IN DATA.IMG
+
+-foremost -i new.img
+
+*LOG ANALYSIS
+REVIEWING SYSTEM LOGS FOR SIGNS OF TAMPERING OR HIDDEN ACTIVITY.
+[TOOLS]
+[10.1)LOGWATCH]
+-sudo logwatch --detail high
+
+[10.2) GOACCESS]
+-goaccess /var/log/httpd/access_log
+CHOOSE COMMON LOG FORMAT WHEN PROMPTED
+
+[10.3) SQLITE3 - SPECIALLY FOR BROWSERS]
+-cd .mozilla/firefox
+-cd xxxx.default-release
+-sqlite3 places.sqlite
+-select url, title, visit_count, datetime(last_visit_date/1000000, 'unixepoch') as last from moz_places order by last desc;
+
+[COOKIES]
+-sqlite3 cookies.sqlite "select host, name, value from moz_cookies;"
+
+[HISTORY]
+-sqlite3 formhistory.sqlite "select fieldname, value, timesused from moz_formhistory;"
+
+[CHROME HISTORY]
+-cd .config/google-chrome/default
+-sqlite3 history "select url, title, visit_count, datetime((last_visit_time/1000000)-11644473600, 'unixepoch') as last from urls order by last desc;"
+
+[SHOW TABLES AND DESCRIBE TABLE]
+-sqlite3 places.sqlite
+-.tables
+-.schema table_name
+
+[10.4) JOURNALCTL]
+VIEW ALL LOGS
+-sudo journalctl
+
+VIEW LOGS FROM THE LAST BOOT
+-sudo journalctl -b
+
+VIEW LOG ON SPECIFIC SERVICE
+-sudo journalctl -u sshd.service
+
+VIEW LOGS OF A SPECIFIC PRIORITY
+-sudo journalctl -p err
+
+VIEW LOGS FROM THE LAST HOUR
+-sudo journalctl --since "1 hour ago"
+
+VIEW KERNEL LOGS
+-sudo journalctl -k
+
+FOLLOW LOGS IN REAL TIME
+-sudo journalctl -f
+
+%FOOTER% Link Status:Encrypted
+========================================
+
+#forensics
+$harddrive08
+%FRAME_TITLE% WHITEX FORENSIC
+%FRAME_INDEX% Case File // 008
+%TITLE% TYPE OF
+%TITLE% HARDDRIVES
+%SUBTITLE% How Different Storage Drives Work
+
+*TRADITIONAL HARD DISK DRIVES (HDD)
+[TECHNOLOGY]
+USES SPINNING MAGNETIC DISKS TO READ AND WRITE DATA.
+
+[SPEED]
+GENERALLY SLOWER, WITH TYPICAL ROTATIONAL SPEEDS OF 5400 RPM OR 7200 RPM.
+
+[USE CASE]
+SUITABLE FOR BULK STORAGE, BACKUP SOLUTIONS.
+
+*SOLID STATE DRIVES (SSD)
+[TECHNOLOGY]
+USES FLASH MEMORY TO STORE DATA, WITH NO MOVING PARTS.
+
+[SPEED]
+MUCH FASTER READ AND WRITE SPEEDS COMPARED TO HDD.
+
+[USE CASE]
+IDEAL FOR OPERATING SYSTEMS, APPLICATIONS.
+
+*HYBRID DRIVES (SSHD)
+[TECHNOLOGY]
+COMBINES A TRADITIONAL HDD WITH A SMALL AMOUNT OF SSD STORAGE TO IMPROVE PERFORMANCE.
+
+[SPEED]
+FASTER THAN HDD BUT SLOWER THAN SSD.
+
+[USE CASE]
+GOOD FOR USERS WHO NEED LARGE STORAGE CAPACITY WITH A PERFORMANCE BOOST.
+
+%FOOTER% Link Status:Encrypted
+========================================
+
+#forensics
+$structure_disk09
+%FRAME_TITLE% WHITEX FORENSIC
+%FRAME_INDEX% Case File // 009
+%TITLE% LOGICAL STRUCTURE
+%TITLE% OF DISK
+%SUBTITLE% Understanding how data is organized, stored, and accessed within a disk
+
+*SECTORS
+THE SMALLEST UNIT OF DATA STORAGE ON A HARD DISK. TYPICALLY, A SECTOR HOLDS 512 B OF DATA.
+
+*CLUSTERS
+A CLUSTER IS A GROUP OF SECTORS. FILE SYSTEM USES CLUSTERS TO MANAGE DATA MORE EFFICIENTLY. FOR EXAMPLE, IF EACH CLUSTER CONTAINS 8 SECTORS, AND EACH SECTOR IS 512 BYTES, THEN EACH CLUSTER HOLDS 4096 BYTES (4KB).
+
+*TRACKS
+A TRACK IS A CIRCULAR PATH ON THE SURFACE OF A DISK PLATTER, WHERE DATA IS MAGNETICALLY RECORDED AND READ. EACH TRACK IS DIVIDED INTO SECTORS.
+
+*CYLINDERS
+A CYLINDER IS A SET OF TRACKS LOCATED IN THE SAME POSITION ON MULTIPLE PLATTERS WITHIN A HARD DISK.
+
+*PARTITIONS
+A PARTITION IS A LOGICAL DIVISION OF A HARD DISK. EACH PARTITION CAN CONTAIN ITS OWN FILE SYSTEM AND OPERATE INDEPENDENTLY.
+FOR EXAMPLE: A 1TB HARD DRIVE CAN BE DIVIDED INTO TWO PARTITIONS OF 500 GB EACH.
+
+*FILE SYSTEM
+A FILE SYSTEM ORGANIZES AND MANAGES FILES ON A PARTITION. COMMON FILE SYSTEMS INCLUDE NTFS (WINDOWS), HFS+ (MAC) AND EXT4 (LINUX).
+
+*DIRECTORIES
+DIRECTORIES ARE ORGANIZATIONAL UNITS WITHIN A FILE SYSTEM THAT CONTAIN FILES AND OTHER DIRECTORIES.
+FOR EXAMPLE: IN A LINUX FILE SYSTEM YOU MIGHT HAVE A DIRECTORY STRUCTURE LIKE "/home/user/documents".
+
+*FILES
+THE ACTUAL DATA STORED ON THE HARD DISK. FILES CAN BE TEXT DOCUMENTS, IMAGES, EXECUTABLES ETC.
+SECTORS -> CLUSTERS -> TRACKS -> CYLINDERS -> PARTITIONS -> FILE SYSTEM -> DIRECTORIES -> FILES.
+
+%FOOTER% Link Status:Encrypted
+========================================
+
+#forensics
+$bootprocess10
+%FRAME_TITLE% WHITEX FORENSIC
+%FRAME_INDEX% Case File // 010
+%TITLE% BOOTING
+%TITLE% PROCESS
+%SUBTITLE% Understanding the step-by-step process that takes a computer from power-on to a fully loaded operating system
+
+*LINUX BOOT PROCESS
+[BIOS/UEFI INITIALIZATION]
+WHEN THE COMPUTER IS TURNED ON THE BIOS (BASIC INPUT/OUTPUT SYSTEM) OR UEFI (UNIFIED EXTENSIBLE FIRMWARE INTERFACE) INITIALIZES THE HARDWARE.
+EXAMPLE: THE BIOS PERFORMS POST (POWER ON SELF TEST) TO CHECK THE HARDWARE COMPONENTS.
+
+[BOOTLOADER STAGE]
+THE BIOS/UEFI LOOKS FOR A BOOTLOADER ON THE STORAGE DEVICE (LIKE GRUB - GRAND UNIFIED BOOTLOADER).
+EXAMPLE: GRUB IS LOADED FROM THE MASTER BOOT RECORD (MBR).
+
+[KERNEL LOADING]
+THE BOOTLOADER LOADS THE LINUX KERNEL INTO MEMORY.
+EXAMPLE: GRUB LOADS THE KERNEL FILE (EG "/boot/vmlinuz-linux").
+
+[INIT SYSTEM]
+THE KERNEL STARTS THE INITIAL PROCESS ("INIT" OR "SYSTEMD") WHICH MANAGES SYSTEM INITIALIZATION.
+EXAMPLE: SYSTEMD STARTS AND MANAGES THE SYSTEM SERVICES.
+
+[TARGETS]
+THE SYSTEM ENTERS A SPECIFIC TARGET WHICH DEFINES THE STATE OF THE MACHINE.
+EXAMPLE: THE SYSTEM ENTERS GRAPHICAL MODE FOR THE USER LOGIN SCREEN.
+
+*WINDOWS BOOT PROCESS (BIOS/UEFI INITIALIZATION)
+THE COMPUTER'S BIOS OR UEFI INITIALIZES THE HARDWARE AND PERFORMS A POST.
+EXAMPLE: THE BIOS CHECKS THE RAM AND OTHER COMPONENTS.
+
+[BOOT MANAGER]
+THE BIOS/UEFI LOADS THE WINDOWS BOOT MANAGER (BOOTMGR.EXE).
+EXAMPLE: BOOT MANAGER IS FOUND ON THE ACTIVE PARTITION.
+
+[BOOT LOADER]
+BOOT MANAGER LOADS THE WINDOWS OS LOADER (WINLOAD.EXE).
+EXAMPLE: WINLOAD.EXE LOADS ESSENTIAL DRIVERS AND THE KERNEL (NTOSKRNL.EXE).
+
+[KERNEL INITIALIZATION]
+THE KERNEL INITIALIZES THE HAL (HARDWARE ABSTRACTION LAYER) AND CORE SYSTEM PROCESSES.
+EXAMPLE: NTOSKRNL.EXE STARTS ESSENTIAL SERVICES AND DRIVERS.
+
+[SESSION MANAGER]
+THE SESSION MANAGER SUBSYSTEM (SMSS.EXE) INITIALIZES USER SESSIONS.
+EXAMPLE: SMSS.EXE SETS UP THE SYSTEM ENVIRONMENT AND LOADS THE WINLOGON PROCESS.
+
+[WINLOGON AND EXPLORER]
+THE WINLOGON PROCESS (WINLOGON.EXE) HANDLES USER LOGIN.
+EXAMPLE: AFTER LOGIN "EXPLORER.EXE" IS STARTED, LAUNCHING THE WINDOWS DESKTOP ENVIRONMENT.
+
+*MAC OS BOOT PROCESS - EFI INITIALIZATION
+THE MAC EFI (EXTENSIBLE FIRMWARE INTERFACE) INITIALIZES THE HARDWARE.
+EXAMPLE: EFI PERFORMS A HARDWARE CHECK SIMILAR TO POST.
+
+[BOOT.EFI]
+EFI LOADS THE "BOOT.EFI" FILE, WHICH IS THE MAC BOOT LOADER.
+EXAMPLE: BOOT.EFI IS LOCATED IN THE EFI SYSTEM PARTITION.
+
+[KERNEL LOADING]
+BOOT.EFI LOADS THE MACOS KERNEL (MACH-KERNEL).
+EXAMPLE: MACH-KERNEL IS LOADED INTO MEMORY.
+
+[LAUNCHD]
+THE KERNEL STARTS THE LAUNCHD PROCESS WHICH MANAGES SYSTEM INITIALIZATION AND SERVICES.
+EXAMPLE: LAUNCHD REPLACES THE OLDER "INIT" PROCESS.
+
+[SYSTEM INITIALIZATION]
+"LAUNCHD" INITIALIZES SYSTEM SERVICES AND STARTS THE LOGIN WINDOW.
+EXAMPLE: "LAUNCHD" STARTS SERVICES LIKE THE WINDOW SERVER AND USER ENVIRONMENT.
+
+*BOOTING PROCESS - EXAMPLE SCENARIO SUMMARY
+IMAGINE YOU PRESS THE POWER BUTTON ON THREE DIFFERENT COMPUTERS: ONE RUNNING LINUX, ONE WINDOWS, AND ONE MAC OS.
+
+[LINUX]
+THE BIOS INITIALIZES HARDWARE, GRUB LOADS, THE LINUX KERNEL STARTS, "SYSTEMD" INITIALIZES, AND YOU SEE THE LOGIN SCREEN.
+
+[WINDOWS]
+THE BIOS INITIALIZES HARDWARE, THE WINDOWS BOOT MANAGER LOADS, "WINLOAD.EXE" STARTS THE KERNEL, SMSS.EXE SETS UP THE SYSTEM, AND YOU SEE THE WINDOWS LOGIN SCREEN.
+
+[MAC]
+THE EFI INITIALIZES HARDWARE, BOOT.EFI LOADS, THE MAC KERNEL STARTS, "LAUNCHD" INITIALIZES, AND YOU SEE THE MAC LOGIN SCREEN.
+
+%FOOTER% Link Status:Encrypted
+========================================
+
+#forensics
+$file_system_analysis_linux11
+%FRAME_TITLE% WHITEX FORENSIC
+%FRAME_INDEX% Case File // 011
+%TITLE% FILE SYSTEM ANALYSIS
+%TITLE% USING LINUX
+%SUBTITLE% Exploring Linux tools and techniques for examining file systems, directories, metadata, and stored data
+
+*DF (DISK FREE)]
+REPORTS FILE SYSTEM DISK SPACE USAGE
+-df -h
+
+*DU (DISK USAGE)
+ESTIMATES FILE SPACE USAGE
+-du -sh directory
+OR
+-du -sh .
+
+*LSBLK (LIST BLOCK DEVICES)
+LIST INFORMATION ABOUT ALL AVAILABLE BLOCK DEVICES
+
+*FSCK (FILE SYSTEM CONSISTENCY CHECK)
+CHECKS AND REPAIRS LINUX FILE SYSTEMS
+-sudo fsck /dev/sda1
+NOTE: SHOULD BE RUN ON UNMOUNTED FILESYSTEM OR IN SINGLE USER MODE TO AVOID DATA CORRUPTION.
+
+*TUNE2FS
+DISPLAYS VARIOUS PARAMETERS AND STATICS ABOUT THE FILE SYSTEM (LINUX EXT4 FILE SYSTEM ONLY)
+-sudo tune2fs -l /dev/sda1
+
+*BLKID
+LOCATES AND PRINTS BLOCK DEVICE ATTRIBUTES.
+-sudo blkid
+
+*FILE
+DETERMINES THE TYPE OF A FILE.
+-file a.txt
+
+*LSOF (LIST OPEN FILES)
+LIST INFORMATION ABOUT FILES OPENED BY PROCESSES
+-sudo lsof /home/whitex
+
+*STAT
+DISPLAY DETAILED INFORMATION ABOUT A FILE OF A FILE SYSTEM.
+-stat file
+
+%FOOTER% Link Status:Encrypted
+========================================
+
+#forensics
+$file_structure_analysis_linux12
+%FRAME_TITLE% WHITEX FORENSIC
+%FRAME_INDEX% Case File // 012
+%TITLE% FILE SIGNATURE
+%TITLE% ANALYSIS USING LINUX
+%SUBTITLE% Identifying file types and uncovering hidden or misidentified data through file signatures and Linux forensic tools
+
+*FILE
+FILE COMMAND IS A STRAIGHTFORWARD WAY TO DETERMINE THE TYPE OF A FILE BASED ON ITS SIGNATURE.
+
+-file a.txt
+*HEX EDITORS
+HEX EDITOR ALLOWS YOU TO VIEW AND EDIT THE RAW BINARY DATA OF FILES.
+[TOOLS]
+XXD, HEXDUMP, HEXEDIT
+-xxd a.jpg
+-hexdump -c a.jpg
+-hexedit --color a.jpg
+
+%FOOTER% Link Status:Encrypted
+========================================
+
+#forensics
+$collecting_evidence_windows13
+%FRAME_TITLE% WHITEX FORENSIC
+%FRAME_INDEX% Case File // 013
+%TITLE% COLLECTING EVIDENCE
+%TITLE% IN WINDOWS USING LINUX
+%SUBTITLE% A practical guide to safely acquiring, preserving, and analyzing Windows digital evidence from a Linux forensic environment
+
+*PREPARATION
+HAVE A CLEAR INCIDENT RESPONSE PLAN.
+
+*BOOTING THE TARGET MACHINE
+USE LIVE BOOTABLE USB (LIKE: KALI LINUX, ARCH)
+
+*DATA ACQUISITION
+[DISK IMAGING]
+CREATE A BIT-BY-BIT COPY OF THE WINDOWS HARD DRIVE.
+[TOOLS]
+-dd if=/dev/sda of=win.dd bs=4M
+USE DC3DD FOR FASTLY CREATE DISK IMAGE
+-dc3dd if=/dev/sda of=win.dd
+USE DCFLDD - IT IS AN ENHANCED VERSION OF DD
+-dcfldd if=/dev/sda of=win.dd hash=md5,sha256 hashlog=hash.txt
+[NETWORK DATA CAPTURE]
+IF THE SYSTEM IS LIVE, CAPTURE NETWORK TRAFFIC USING TCPDUMP OR WIRESHARK.
+-tcpdump -i wlan0 -w net.pcap
+
+*EVIDENCE PRESERVATION
+USE HARDWARE OR SOFTWARE WRITE BLOCKERS TO ENSURE NO DATA MODIFICATION ON THE TARGET DRIVE.
+COMPUTE AND STORE HASH VALUES OF THE ORIGINAL DATA AND THE IMAGE FOR INTEGRITY.
+[TOOLS]
+-sha256sum drive.dd > out.dd.sha256
+
+*DATA ANALYSIS
+[MOUNTING THE IMAGE]
+MOUNT THE DISK IMAGE FOR ANALYSIS
+EXAMPLE (offset=1228):
+-mount -o loop,offset=1228 drive.dd /mnt
+
+[FILE SYSTEM ANALYSIS]
+USE TOOL LIKE 'SLEUTHKIT' TO ANALYZE THE FILE SYSTEM
+-fls -r -f ntfs -o1228 win.dd
+IT SHOWS ALL THE DIRECTORY AND ITS FOLDERS INSIDE WIN.DD
+
+[LOG ANALYSIS]
+LOGS FILE LOCATION -> windows/system32/winevt/logs/
+USEFUL LOG FILES -> system.evtx, application.evtx, security.evtx
+NOW CONVERT EVTX TO XML
+-pip install --break-system-packages python-evtx
+-evtx_dump system.evtx > system.xml
+OR
+[IF IT GIVES ERROR EVTX_DUMP CMD NOT FOUND]
+-/home/whitex/.local/bin/evtx_dump.py sys.evtx > sys.xml
+-lnav sys.xml
+-pacman -S lnav
+
+[BROWSER ARTIFACTS]
+ANALYZE BROWSER HISTORY, COOKIES AND CACHE
+[LOCATION OF CHROME]
+\Users\Username\AppData\Local\Google\Chrome\UserData\Default\History
+[LOCATION OF FIREFOX]
+\Users\Username\AppData\Roaming\Mozilla\Firefox\Profiles\<profile folder>\places.sqlite
+[LOCATION OF MICROSOFT EDGE HISTORY]
+\Users\Username\AppData\Local\Microsoft\Edge\User Data\Default\History
+-sqlite3 History
+-.tables
+-SELECT url, title, visit_count, last_visit_time FROM urls ORDER BY last_visit_time DESC;
+
+*SPECIALIZED ANALYSIS
+[MEMORY DUMP ANALYSIS]
+Use tools like Volatility to analyze memory dumps.
+
+[MALWARE ANALYSIS]
+Use tools like radare2, strings and binwalk to analyze potential malware.
+-strings suspicious.exe > out.txt
+
+*REPORTING
+[DOCUMENT FINDINGS]
+Compile a detailed report with findings, methodologies and conclusions.
+
+[PRESENT EVIDENCE]
+Ensure the report is clear and understandable for non-technical stakeholders.
+
+%FOOTER% Link Status:Encrypted
+========================================
+
+#forensics
+$windows_registry14
+%FRAME_TITLE% WHITEX FORENSIC
+%FRAME_INDEX% Case File // 014
+%TITLE% WINDOWS REGISTRY
+%TITLE% FORENSICS
+%SUBTITLE% The Windows registry is a hierarchical database that stores low-level settings for the OS and for applications.
+*HIVES
+[1) SYSTEM]
+Stores system configurations and services.
+[2) SOFTWARE]
+Stores installed software and configurations.
+[3) SECURITY]
+Stores security settings and policies.
+[4) SAM]
+Stores user account information.
+[5) NTUSER.DAT]
+Stores user-specific configuration for each user.
+All hives are stored in Windows/System32/config.
+
+Hives are stored in two separate locations:
+
+*HKEY_LOCAL_MACHINE (HKLM) 
+system wide settings are stored. Files: SAM, SYSTEM, SOFTWARE, SECURITY.
+
+[HKLM HIVE LOCATION EXAMPLE - SERVICES]
+SYSTEM/ControlSet001/Services/
+This location shows a list of all installed services and drivers.
+
+REGLOOKUP SYSTEM - IF YOU DON'T KNOW THE PATH
+
+[TOOLS]
+-reglookup -H -T key -p "/ControlSet001/Services/" Windows/System32/config/SYSTEM
+OR
+-chntpw -e SYSTEM
+Then inside chntpw:
+-ls
+-cd /ControlSet001/Services
+-ls
+You can also see data inside the file using cat.
+
+*HKEY_CURRENT_USER (HKCU) - settings of the current logged-in user. File: NTUSER.DAT.
+
+[HKCU HIVE LOCATION EXAMPLE]
+SOFTWARE/Microsoft/Windows/CurrentVersion/Internet Explorer/TypedURLs
+THIS LOCATION SHOW TYPED URLS INTO INTERNET EXPLORER
+-reglookup -p "SOFTWARE/Microsoft/Internet Explorer/TypedURLs" users/arshan/NTUSER.DAT
+OR
+-chntpw -e users/arshan/NTUSER.DAT
+Then inside chntpw:
+-cd SOFTWARE
+-cd Microsoft
+-cd Internet Explorer
+-cd TypedURLs
+-ls
+-cat url1
+
+*EXAMINE BROWSER COOKIES AND HISTORY FILES USING CLI
+You can use sqlite3 to open browser history and cookies databases directly.
+I already covered how to use sqlite3 and all possible locations of history and cookies.
+[USING GUI TOOLS]
+-pacman -S sqlitebrowser
+Open the History database in sqlitebrowser, then go to Execute SQL and run:
+-SELECT url, title, visit_count, last_visit_time FROM urls ORDER BY last_visit_time DESC;
+OR
+-yay -S sqliteman
+Open sqliteman, load the History database, then run the same SQL query under Execute.
+
+*EXTRACT LIVE RUNNING OS BROWSER HISTORY
+-pip install browser-history
+-browser-history -b all
+
+*EXAMINE WINDOWS FILES AND METADATA ANALYSIS
+In this section we use basic tools for file and metadata analysis.
+[EXAMPLE TOOLS]
+-exiftool img.jpg
+-stat file.txt
+-file file.txt
+-strings file.txt
+Requires: pacman -S binutils
+-pdfinfo file.pdf
+Requires: pacman -S poppler
+-7z l file.zip
+Requires: pacman -S p7zip
+-foremost -i file.txt
+[NOTE ON STEGANOGRAPHY]
+In file and metadata analysis there are countless ways a criminal might hide their data within a file using steganography. Your task is to uncover this hidden data using your techniques.
+
+*INVESTIGATING WINDOWS LOGS
+I already covered how to install evtx tools and convert Windows logs (.evtx) to .xml, along with all Windows log locations.
+Here are alternative methods for reading logs.
+
+[METHOD 1: EVTX_DUMP.PY]
+-.local/bin/evtx_dump.py log.evtx
+Useful when you don't want to convert the evtx file to xml.
+
+[METHOD 2: XMLLINT]
+-pacman -S libxml2
+-xmllint --format log.xml
+
+[METHOD 3: XMLSTARLET]
+-pacman -S xmlstarlet
+-xmlstarlet fo log.xml
+Both xmllint and xmlstarlet are used to pretty-print and open XML files.
+
+[METHOD 4: CONVERT XML TO JSON]
+-pip install yq
+-xq . log.xml > log.json
+-jq . log.json
+
+%FOOTER% Link Status:Encrypted
+========================================
+
+#forensics
+$linux_forensics15
+%FRAME_TITLE% WHITEX FORENSIC
+%FRAME_INDEX% Case File // 015
+%TITLE% LINUX
+%TITLE% FORENSICS
+%SUBTITLE% Understanding Linux forensic investigation techniques for analyzing system activity, files, logs, user behavior, and digital evidence
+
+*VOLATILE DATA
+Volatile data is information that resides in RAM and is lost when the system is powered down or restarted.
+
+[1.1) RUNNING PROCESSES]
+[RUNNING PROCESSES - WINDOWS]
+-Get-Process | Format-Table -AutoSize
+[RUNNING PROCESSES - LINUX]
+-ps aux > out.txt
+
+[1.2) LIST NETWORK CONNECTIONS]
+[LIST NETWORK CONNECTIONS - WINDOWS]
+-Get-NetTCPConnection | Format-Table -AutoSize
+[LIST NETWORK CONNECTIONS - LINUX]
+-netstat -tuln > out.txt
+OR
+-ss -tuln
+
+[1.3) LIST LOADED DRIVERS / KERNEL MODULES]
+[LIST LOADED DRIVERS / KERNEL MODULES - WINDOWS]
+-Get-WmiObject Win32_SystemDriver | Format-Table -AutoSize
+[LIST LOADED DRIVERS / KERNEL MODULES - LINUX]
+-lsmod > out.txt
+
+[1.4) SAVE OPEN FILES - LINUX]
+-lsof > out.txt
+
+[1.5) SAVE SYSTEM LOGS - LINUX]
+-journalctl > out.txt
+
+
+*NON-VOLATILE DATA
+Non-volatile data is information that is stored on disk and persists across reboots.
+
+[2.1) Configuration files:]
+-cp -R /etc etc_backup
+[2.2) User data:]
+-tar -cvzf home_bkup.tar.gz /home/wx
+[2.3) System logs:]
+-cp -R /var/log log_bkup
+
+*LINUX FILE SYSTEM AND ANALYSIS
+The Linux file system is hierarchical, with the root directory ('/') at the top and various subdirectories.
+3.1. / - Root directory, the starting point of the file system.
+3.2. /bin - Essential user command binaries (executables).
+3.3. /sbin - Essential system binaries.
+3.4. /etc - Configuration files.
+3.5. /home - User home directories.
+3.6. /lib - Essential shared libraries and kernel modules.
+3.7. /usr - Secondary hierarchy for user utilities and applications.
+3.8. /var - Variable files, like logs and databases.
+3.9. /tmp - Temporary files.
+
+*COMMON FILE SYSTEMS IN LINUX
+4.1) EXT4 - Fourth extended file system, widely used.
+4.2) XFS - High performance journaling file system.
+4.3) BTRFS - B-Tree file system, with advanced features like snapshots.
+4.4) REISER-FS - A journaling file system known for efficient small file handling.
+
+*FILE SYSTEM ANALYSIS TOOLS
+-df -h
+File system disk space usage.
+-du -sh /home/user
+Estimate file space usage.
+-lsblk
+List information about block devices.
+-md5sum a.txt
+-sha256sum a.txt
+Compute and check MD5/SHA256 hashes.
+-stat a.txt
+Display file status.
+-file a.txt
+Determine file type.
+-sudo fsck /dev/sda1
+File system consistency check and repair.
+-ncdu /
+Disk usage analyzer with an ncurses interface.
+
+
+*PRACTICAL EXAMPLE 
+[ANALYZING A DISK IMAGE]
+-dc3dd if=/dev/sda of=linux.img
+Create a disk image.
+-sudo mount -o loop,ro linux.img /mnt
+Mount the disk image.
+-mmls win.dd
+Identify partitions.
+-fsstat -o 239616 win.dd
+Check file system type. 239616 is the partition start sector number.
+-fls -f ntfs -o 239616 -r win.dd
+List all files in the partition, including deleted files.
+ntfs=file system type
+-icat -o 239616 win.dd 261 > out.jpg
+Extract a file into your system. 261 is the file inode/entry number.
+
+%FOOTER% Link Status:Encrypted
+========================================
+
+#forensics
+$memory_forensics16
+%FRAME_TITLE% WHITEX FORENSIC
+%FRAME_INDEX% Case File // 016
+%TITLE% MEMORY FORENSICS
+%TITLE% INTRODUCTION TO VOLATILITY
+%SUBTITLE% Memory acquisition is the process of capturing the contents of a computer's RAM to analyze it later.
+
+*INTRODUCTION TO VOLATILITY
+Volatility is an open-source memory forensics framework for incident response and malware analysis.
+It allows investigators to extract digital artifacts from volatile memory (RAM) dumps.
+Volatility supports memory dumps from a wide variety of operating systems, including Windows, Linux, Mac, and Android.
+There are two types of Volatility tools:
+1) Volatility 2 -> Download using GitHub
+2) Volatility 3 -> pacman -S volatility
+
+* WINDOWS MEMORY ACQUISITION - WINPMEM AND DUMPIT
+[METHOD 1: WINPMEM]
+First download WinPMEM.
++https://github.com/velocidex/winpmem/releases|WinPMEM Releases
+Download only "winpmem_mini_x64_rc2.exe"
+Open your Command Prompt as Administrator, then go to the winpmem.exe location.
+-winpmem_mini_x64_rc2.exe arshwin.mem
+After acquisition, transfer arshwin.mem to your Linux system for investigation.
+
+[METHOD 2: DUMPIT]
+Open your MEGA account and download DumpIt (x64).
+Open your Command Prompt and go to the DumpIt.exe location.
+-DumpIt.exe
+
+*MEMORY ANALYSIS USING VOLATILITY - USAGE
+[I AM USING VOLATILITY 3]
+-pacman -S volatility
+Usage:
+-sudo vol -f win.mem windows.<plugin>
+[PLUGIN]
+-windows.info
+Display basic info about memory image and OS.
+-windows.verinfo
+Display version info for the OS.
+
+*PROCESS AND MODULE ANALYSIS
+-windows.cmdline
+Displays the command line arguments for each process.
+
+-windows.dlllist
+Lists loaded DLLs for each process.
+
+-windows.ldrmodules
+Lists the loaded modules for each process using the PEB.
+
+-windows.modscan
+Scans for kernel modules in memory.
+
+-windows.modules
+Lists loaded kernel modules.
+
+-windows.pslist
+Lists active processes.
+
+-windows.pstree
+Displays the process list as a tree.
+
+-windows.psscan
+Scans for process structures in memory.
+
+*CREDENTIAL AND SECURITY ANALYSIS
+-windows.cachedump
+Dumps cached domain credentials from memory.
+
+-windows.hashdump
+Extracts password hashes from the SAM database.
+
+-windows.lsadump
+Dumps LSA secrets from the registry.
+
+-windows.skeleton_key_check
+Checks for the presence of skeleton key malware in memory.
+
+-windows.getservicesids
+Retrieves service SIDs from memory.
+
+-windows.getsids
+Retrieves SIDs from process tokens.
+
+-windows.privileges
+Lists privileges associated with each process.
+
+-windows.malfind
+IDENTIFIES POTENTIAL MALICIOUS CODE AND INJECTION IN MEMORY.
+
+*MEMORY MANAGEMENT AND POOL ANALYSIS
+
+-windows.bigpools
+LISTS LARGE MEMORY POOLS ALLOCATED BY THE WINDOWS KERNEL.
+
+-windows.poolscanner
+SCANS FOR POOL ALLOCATIONS WITHIN THE MEMORY IMAGE.
+
+*REGISTRY ANALYSIS
+
+-windows.registry.certificates
+EXTRACT CERTIFICATES FROM THE WINDOWS REGISTRY.
+
+-windows.registry.hivelist
+LISTS REGISTRY HIVES IN MEMORY.
+
+-windows.registry.hivescan
+SCANS FOR REGISTRY HIVES IN MEMORY.
+
+-windows.registry.printkey
+DISPLAY THE CONTENTS OF A REGISTRY KEY.
+
+-windows.registry.userassist
+EXTRACTS USER ASSIST INFORMATION FROM THE REGISTRY.
+
+*FILE AND DRIVER ANALYSIS
+-windows.devicetree
+DISPLAY THE DEVICE TREE.
+
+-windows.driverirp
+LISTS THE IRP [I/O REQUEST PACKET] HANDLERS FOR DRIVERS.
+
+-windows.drivermodule
+LISTS KERNEL MODULES RELATED TO EACH DRIVER.
+
+-windows.dumpfiles
+EXTRACTS FILES FROM MEMORY.
+
+-windows.filescan
+SCANS FOR FILE OBJECTS IN MEMORY.
+
+-windows.mftscan.ADS
+SCAN FOR ALTERNATE DATA STREAMS IN THE MFT.
+
+-windows.mftscan.MFTScan
+SCAN FOR MFT ENTRIES.
+
+-windows.symlinkscan
+SCANS FOR SYMBOLIC LINK OBJECTS IN MEMORY.
+
+*NETWORK AND CONNECTION ANALYSIS
+
+-windows.netscan
+SCANS FOR NETWORK CONNECTION AND SOCKETS.
+
+-windows.netstat
+DISPLAY NETWORK CONNECTIONS AND LISTENING SOCKETS.
+
+*HANDLE AND MUTEX ANALYSIS
+
+-windows.handles
+LISTS OPEN HANDLES IN EACH PROCESS.
+
+-windows.sessions
+LISTS ACTIVE SESSIONS ON THE SYSTEM.
+
+-windows.joblinks
+LISTS JOB OBJECTS AND THE PROCESSES ASSOCIATED WITH THEM.
+
+*CALLBACK AND SSDT ANALYSIS
+
+-windows.callbacks
+LISTS REGISTERED CALLBACK FUNCTIONS.
+
+-windows.ssdt
+LISTS THE SYSTEM SERVICE DESCRIPTOR TABLE ENTRIES.
+
+*MEMORY AND VAD ANALYSIS
+
+-windows.memmap
+DISPLAY MEMORY MAPS FOR EACH PROCESS.
+
+-windows.vadinfo
+LISTS THE VIRTUAL ADDRESS DESCRIPTOR [VAD] INFORMATION FOR EACH PROCESS.
+
+-windows.vadwalk
+WALKS THE VAD TREE FOR EACH PROCESS.
+
+-windows.vadyarascan
+SCANS THE VAD USING YARA RULES.
+
+*MISCELLANEOUS
+
+-windows.crashinfo
+DISPLAY INFORMATION ABOUT THE SYSTEM CRASH.
+
+-windows.statistics
+DISPLAYS VARIOUS STATISTICS ABOUT THE MEMORY IMAGE.
+
+-windows.strings
+EXTRACTS STRINGS FROM THE MEMORY IMAGE.
+
+-windows.svcscan
+LISTS WINDOWS SERVICES AND THEIR CONFIGURATION.
+
+-windows.virtmap
+DISPLAYS THE VIRTUAL ADDRESS SPACE MAPPINGS.
+
+%FOOTER% Link Status:Encrypted
+========================================
+
+#forensics
+$malware_analysis_windows17
+%FRAME_TITLE% WHITEX FORENSIC
+%FRAME_INDEX% Case File // 017
+%TITLE% MALWARE ANALYSIS
+%TITLE% ON WINDOWS
+%SUBTITLE% Examining suspicious Windows programs to understand their behavior, identify indicators of compromise, and uncover potential security threats
+
+*MALWARE ANALYSIS ON WINDOWS
+[YOU CAN USE ALL PLUGINS FOR ANALYSIS BUT I HIGHLIGHT SOME SPECIFIC PLUGINS FOR ANALYSIS]
+[WINDOWS.PSLIST]
+YOU CAN FIND A SUSPICIOUS EXE FILE ON THE LIST.
+[WINDOWS.MALFIND]
+THIS FIND MALICIOUS EXE FILES.
+-windows.dllList | grep 421
+VIRUS FILE PID -- THIS SHOW INFO ABOUT SPECIFIC PID
+-windows.handles | grep 421
+-windows.filescan | grep 421
+THIS GIVE LOCATION OF FILE
+-windows.cmdline | grep 421
+THIS GIVE COMMAND THAT USE TO EXECUTE THAT VIRUS FILE
+-windows.dumpfiles --filter virus.exe
+THIS EXTRACT THAT VIRUS FILE INTO YOUR DIRECTORY.
+[UPLOAD THAT VIRUS.EXE TO VIRUSTOTAL WEBSITE]
+[YOU CAN ALSO PRINT HELP OF PLUGINS]
+-sudo vol -f file.mem windows.dumpfiles -h
+
+%FOOTER% Link Status:Encrypted
+========================================
+
+#forensics
+$linux_memory_acquisition18
+%FRAME_TITLE% WHITEX FORENSIC
+%FRAME_INDEX% Case File // 018
+%TITLE% LINUX 
+%TITLE% MEMORY ACQUISITION
+%SUBTITLE% Capturing volatile memory from Linux systems while preserving critical evidence for forensic analysis and investigation
+
+*LINUX MEMORY ACQUISITION
+-curl -LO https://github.com/microsoft/avml/releases/latest/download/avml
+-sudo ./avml linux.mem
+OR
+-sudo dc3dd if=/proc/kcore of=linx.mem
+OR
+-sudo dc3dd if=/dev/mem of=l.mem
+
+%FOOTER% Link Status:Encrypted
+========================================
+
+#forensics
+$dark_web19
+%FRAME_TITLE% WHITEX FORENSIC
+%FRAME_INDEX% Case File // 019
+%TITLE% DARK WEB
+%TITLE% FORENSICS
+%SUBTITLE% Investigating hidden online environments to identify digital evidence, trace activities, and support secure and lawful forensic investigations
+
+*UNDERSTANDING DARK WEB
+[1.1) STRUCTURE AND ACCESSIBILITY]
+DARK WEB IS A SMALL PART OF THE DEEP WEB, WHICH INCLUDES ALL ONLINE CONTENT NOT INDEXED BY TRADITIONAL SEARCH ENGINES.
+THE DARK WEB REQUIRES SPECIFIC SOFTWARE LIKE TOR (THE ONION ROUTER) TO ACCESS.
+[1.2) COMMON USES]
+IT IS KNOWN FOR ILLEGAL ACTIVITIES SUCH AS DRUG TRAFFICKING, ILLEGAL ARMS SALES AND HUMAN TRAFFICKING.
+IT IS ALSO USED BY INDIVIDUALS SEEKING PRIVACY AND FREEDOM FROM CENSORSHIP, INCLUDING JOURNALISTS AND ACTIVISTS.
+[1.3) FORENSIC CHALLENGES]
+[ANONYMITY AND ENCRYPTION]
+TRACKING INDIVIDUALS OR ACTIVITIES IS CHALLENGING DUE TO THE USE OF ENCRYPTION AND ANONYMITY TOOLS.
+
+
+*IDENTIFY TRACES OF TOR BROWSER IN LINUX
+
+[CHECK FOR TOR BROWSER DIRECTORY]
+-ls ~/tor-browser_en-US
+[LIST CONTENTS OF THE TOR DATA DIRECTORY]
+-ls ~/tor-browser_en-US/Browser/TorBrowser/Data
+[CHECK FOR RUNNING TOR PROCESSES]
+-ps aux | grep tor
+[CHECK FOR ACTIVE NETWORK CONNECTIONS ON TYPICAL TOR PORTS]
+-netstat -tulwn | grep 9050
+[SEARCH FOR TOR-RELATED LOGS IN SYSTEM LOGS]
+-journalctl | grep tor
+OR
+-dmesg | grep tor
+
+*IDENTIFY TRACES OF TOR BROWSER IN WINDOWS
+[MOUNT WIN.DD]
+[SEARCH FOR TOR BROWSER DIRECTORIES]
+-find /mnt/win.dd -type d -iname "*tor*"
+[CHECK COMMON USER PROFILE DIRECTORIES]
+-ls /mnt/win.dd/Users/<name>/AppData/Local
+OR
+-ls /mnt/win.dd/Users/<name>/AppData/Roaming
+[CHECK WINDOWS PREFETCH FILES]
+-ls /mnt/windd/Windows/Prefetch | grep -i tor
+
+*PERFORMING TOR BROWSER FORENSICS
+[MOUNT WIN.DD]
+
+[4.1) IDENTIFY INSTALLATION DIRECTORIES]
+TOR BROWSER CAN BE INSTALLED IN VARIOUS LOCATIONS. COMMON DIRECTORIES INCLUDE:
+-ls /mnt/win.dd/Program Files
+OR
+-ls /mnt/win.dd/Program Files (x86)
+OR
+-ls /mnt/win.dd/Users/<name>/AppData/Local
+OR
+-ls /mnt/win.dd/Users/<name>/AppData/Roaming
+OR
+-ls /mnt/win.dd/Users/<name>/Downloads
+
+[4.2) SEARCH FOR TOR BROWSER FILES AND DIRECTORIES]
+USE THE FIND COMMAND TO SEARCH FOR TOR-RELATED FILES AND DIRECTORIES.
+-find /mnt/win.dd -type d -iname "*tor*"
+OR
+-find /mnt/win.dd -type f -iname "*tor*"
+
+[4.3) ANALYZE BROWSER ARTIFACTS]
+CHECK FOR BROWSER ARTIFACTS SUCH AS HISTORY, CACHE, AND CONFIGURATION FILES.
+-ls /mnt/win.dd/Users/<name>/AppData/Local/Tor Browser
+OR
+-ls /mnt/win.dd/Users/<name>/AppData/Roaming/Tor Browser
+
+[4.4) INSPECT WINDOWS PREFETCH FILES]
+WINDOWS PREFETCH FILES CAN INDICATE IF AND WHEN TOR BROWSER WAS EXECUTED.
+-ls /mnt/win.dd/Windows/Prefetch | grep -i tor
+
+[4.5) EXAMINE WINDOWS EVENT LOGS]
+LOOK AT THE WINDOWS EVENT LOGS FOR ANY ENTRIES RELATED TO TOR.
+-ls /mnt/win.dd/Windows/System32/winevt/Logs
+
+%FOOTER% Link Status:Encrypted
+========================================
+
+#forensics
+$linux_network_forensics20
+%FRAME_TITLE% WHITEX FORENSIC
+%FRAME_INDEX% Case File // 020
+%TITLE% LINUX NETWORK
+%TITLE% FORENSICS
+%SUBTITLE% IF YOU HAVE DISCOVERED A LINUX LAPTOP AT A CRIME LOCATION AND NEED TO PERFORM NETWORK FORENSICS, YOUR MAIN FOCUS WILL LIKELY BE TO ANALYZE EVIDENCE OF NETWORK ACTIVITY, INCLUDING CONNECTIONS MADE BY THE DEVICE, ANY NETWORK CONFIGURATION, AND LOGS OF PREVIOUS SESSIONS.
+
+*IDENTIFY AND CAPTURE NETWORK CONFIGURATION
+TO UNDERSTAND THE LAPTOP'S NETWORK BEHAVIOR, FIRST CAPTURE INFORMATION ABOUT NETWORK CONFIGURATIONS AND RECENT ACTIVITY.
+[CHECK ACTIVE NETWORK INTERFACE]
+-ip addr show
+[LIST SAVED NETWORK CONFIGURATIONS]
+-cat /etc/NetworkManager/system-connections/*
+[VIEW RECENT ARP TABLE ENTRIES]
+-arp -a
+[VIEW ROUTING TABLE]
+THE ROUTING TABLE CAN PROVIDE INFORMATION ON THE NETWORK STRUCTURE AND GATEWAYS PREVIOUSLY USED.
+-ip route show
+
+*EXAMINE LOGS FOR NETWORK ACTIVITY
+[SYSTEM LOGS]
+-cd /var/log
+-grep -r "network"
+[APPLICATION LOGS]
+LOOKS FOR BROWSING HISTORY FILES, WHICH CAN PROVIDE INSIGHT INTO VISITED WEBSITES.
+-sqlite3 ~/.mozilla/firefox/*.default-release/places.sqlite "SELECT url FROM moz_places;"
+[VPN/PROXY LOGS]
+IF THE LAPTOP WAS CONNECTED TO A VPN OR USED A PROXY, LOOK FOR CONFIGURATION FILES AND LOGS IN /etc OR ~/.config
+
+*CHECK RECENT CONNECTIONS
+[NETWORK SERVICES]
+LIST OPEN PORTS AND ACTIVE NETWORK SERVICES.
+-ss -tuln
+[CHECK RECENT SSH OR REMOTE ACCESS CONNECTIONS]
+-cat ~/.bash_history | grep ssh
+-cat ~/.zsh_history | grep ssh
+[INSPECT LAST ACCESSED IP]
+-netstat -anp | grep 'ESTABLISHED'
+
+*ANALYZE TRAFFIC DUMPS
+IF YOU FIND ANY .PCAP FILES OR SIMILAR ON THE LAPTOP, THEY MAY CONTAIN RECORDED NETWORK TRAFFIC.
+[SEARCH FOR .PCAP FILES]
+-find / -name "*.pcap"
+
+[ANALYZE PCAP FILE WITH TSHARK]
+
+-tshark -r a.pcap
+LOOK FOR SUSPICIOUS TRAFFIC. USE FILTERS FOR SPECIFIC TRAFFIC PATTERNS, SUCH AS DNS REQUESTS, HTTP TRAFFIC, OR SUSPICIOUS IPS.
+-tshark -r a.pcap -Y "http.request or dns"
+[AFTER RUN THIS CMD I FOUND "LOGIN.PHP"]
+[GAIN MORE INFO ABOUT LOGIN.PHP]
+TO SEE FULL HTTP REQUESTS:
+-tshark -r a.pcap -Y "http.request and http contains \"login.php\"" -T fields -e http.request.method -e http.host -e http.request.uri
+TO SEE FULL HTTP RESPONSES:
+-tshark -r a.pcap -Y "http.response and http contains \"login.php\"" -T fields -e http.response.code -e http.file_data
+EXTRACT POST REQUEST:
+-tshark -r a.pcap -Y "http.request.method == \"POST\"" -T fields -e http.file_data
+IF LOGIN.PHP LOOKS SUSPICIOUS (EG, LINKED TO PHISHING OR MALICIOUS BEHAVIOR), DETERMINE WHAT PAGE OR RESOURCE LED TO LOGIN.PHP:
+-tshark -r a.pcap -Y "http.referer and http contains \"login.php\"" -T fields -e http.referer
+CHECK IP ADDRESSES:
+-tshark -r a.pcap -Y "http contains \"login.php\"" -T fields -e ip.src -e ip.dst
+-whois [ip]
+IF LOGIN.PHP INCLUDES DOWNLOADABLE CONTENT OR THE RESPONSE CONTAINS SENSITIVE DATA, EXPORT HTTP OBJECTS USING:
+-tshark -r a.pcap --export-objects "http,/home/whitex"
+DECODE AND ANALYZE PARAMETERS. IF USER.PHP INCLUDES QUERY PARAMETERS (EG, USER.PHP?ID=123) EXTRACT AND ANALYZE THEM:
+-tshark -r a.pcap -Y "http.request and http contains \"user.php\"" -T fields -e http.request.full_uri | sort | uniq
+
+*EXAMINE DNS CACHE FOR RECENTLY RESOLVED HOSTS
+IT PROVIDES VALUABLE INFORMATION ABOUT RECENTLY RESOLVED DOMAIN NAMES. IT IS HELPFUL FOR TRACKING THE WEBSITE, SERVERS OR SERVICES A DEVICE HAS RECENTLY INTERACTED WITH.
+-sudo cat /etc/resolv.conf
+-whois [ip]
+
+*USER AND COMMAND HISTORY
+LOOK IN .bash_history, .zsh_history OR SIMILAR FILES IN THE USER'S HOME DIRECTORY TO SEE IF ANY COMMANDS RELATED TO NETWORKING.
+-cat ~/.bash_history | grep -E 'wget|curl|ssh|ftp'
+OR
+-cat ~/.zsh_history | grep -E 'wget|curl|ssh|ftp'
+CHECK FOR SSH KEYS. IF THE USER CONNECTED TO OTHER SYSTEMS, THERE MAY BE SSH KEYS.
+-ls ~/.ssh/
+
+*EXTRACT AND ANALYZE BROWSER ARTIFACTS
+IF THE USER ACCESSED REMOTE RESOURCES VIA A WEB BROWSER, BROWSER ARTIFACTS MAY REVEAL LOGIN CREDENTIALS, BROWSING HISTORY AND SESSION COOKIES.
+BROWSER COOKIES AND CACHE MAY SHOW DETAILS OF VISITED SITES AND SAVED CREDENTIALS.
+-sqlite3 ~/.mozilla/firefox/*.default-release/cookies.sqlite "SELECT host, name, value FROM moz_cookies;"
+LOOK IN THE BROWSER DOWNLOAD HISTORY FOR EVIDENCE OF FILES DOWNLOADED DURING SUSPICIOUS ACTIVITY.
+-sqlite3 ~/.mozilla/firefox/*.default-release/places.sqlite "SELECT url, datetime(last_visit_date/1000000, 'unixepoch') FROM moz_places WHERE url LIKE '%download%';"
+
+*LIVE NETWORK CAPTURE
+IF THE DEVICE IS ACTIVE AND CONNECTED TO A NETWORK, YOU COULD PERFORM A LIVE CAPTURE TO MONITOR ONGOING ACTIVITY.
+-tcpdump -i wlan0 -w a.pcap
+OR
+-tshark -i wlan0 -w a.pcap
+OR
+-ngrep -d wlan0
+LOOK FOR UNUSUAL TRAFFIC PATTERNS SUCH AS HIGH FREQUENCY DNS QUERIES, CONNECTIONS TO SUSPICIOUS IP ADDRESSES, OR FILE TRANSFERS.
+-tcpdump -r a.pcap
+OR
+-tshark -r a.pcap
+OR
+-zeek -r a.pcap
+
+%FOOTER% Link Status:Encrypted
+========================================

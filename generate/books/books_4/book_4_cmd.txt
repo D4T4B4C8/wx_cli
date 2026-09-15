@@ -1,0 +1,2631 @@
+#theory
+$passport57
+* HOW TO CREATE PASSPORT SIZE PHOTO
+-WEBSITE NAME 
++https://www.cutout.pro/ |cutout.pro
+========================================
+
+#theory
+$object58
+* HOW TO REMOVE ANY OBJECT IN YOUR PIC
+-WEBSITE NAME
++https://cleanup.pictures/ |CLEANUP.PICTURES
+
+========================================
+
+#steg
+$outguess59
+* HOW TO HIDE TXT FILE IN IMAGE USING OUTGUESS
+-yay -Sy outguess
+-outguess -k 'KEY' -d secret.txt s.jpg new.jpg
+[EXTRACT]
+-outguess -k 'KEY' -r new.jpg new.txt
+
+========================================
+
+#info
+$exiftool60
+* ALTERNATE OF EXIFTOOL
+-yay -Sy exiv2
+-exiv2 lol.jpg
+
+========================================
+
+#cli_tool
+$compair61
+* COMPAIR TWO FILE WITH CMP
+for ex:
+a.txt -> HE IS LOL
+b.txt -> SHE IS LOL
+-cmp a.txt b.txt -b -l
+[YOU CAN ALSO COMPAIR AUDIO, VIDEO, IMAGE WITH CMP]
+
+========================================
+
+#info
+$pngcheck62
+* FIND PNG INFO USING PNGCHECK
+-yay -Sy pngcheck
+-pngcheck lol.png
+
+========================================
+
+#alternative
+$xargs63
+* CAT ALTERNATIVE
+-xargs -a lol.txt
+[THIS CMD WORK SAME LIKE CAT]
+========================================
+
+#cli_tool
+$oneliner64
+*LONG ONELINER BREAKER
+-echo "1 2 3 4 5 6" | xargs -n 3
+output
+1 2 3
+4 5 6
+
+========================================
+
+#cli_tool
+$spre65
+*SPACES REMOVER
+-echo " l    o    l " |xargs
+output => lol
+[THIS CMD REMOVE SPACES]
+
+========================================
+
+#steg
+$zwfp66
+* HOW TO HIDE TEXT INTO TEXT
+-git clone https://github.com/vedhavyas/zwfp.git
+-cd zwfp
+-go get -u github.com/vedhavyas/zwfp/cmd/zwfp
+-cd cmd/zwfp
+-go build
+-./zwfp
+-./zwfp "HELO LOL" "HI BALL" > s.txt
+			|         |
+       NORMAL TXT / SECRET TXT
+[EXTRACT]
+-cat s.txt | xargs -0 ./zwfp
+
+========================================
+
+#steg
+$xorgimp67
+* HOW TO XOR IMAGE WITH GIMP
+[FIRST WE CREATE TWO IMAGES]
+@my.png
+1. MY MESSAGE -> lol.png
+@noice.png
+2. (noise pattern image) -> key.png
+
+TEXT = BLACK
+BG = WHITE
+
+[NOW FIRST WE CREATE KEY.PNG WITH PYTHON]
+%black_and_white.py
+
+OR
+
+1. MY MESSAGE -> BALL.PNG
+2. (noise pattern image) -> KEY.PNG
+
+TXT = LIGHT ORANGE
+BG = WHITE
+
+%orange_and_white.py
+
+[OPEN GIMP]
+[FILE]
+[OPEN -> LOL.PNG]
+[OPEN AS LAYERS -> KEY.PNG]
+[MODE = DIFFERENCE]
+
+========================================
+
+#steg
+$xor68
+* XOR IMAGE USING CLI
+ENCRYPT
+-gmic BALL.PNG KEY.PNG -blend xor -o R.PNG
+DECRYPT
+-gmic KEY.PNG R.PNG -blend xor -o R2.PNG
+
+========================================
+
+#math
+$factor69
+* FACTOR TOOL IN LINUX
+-factor 91
+
+========================================
+
+#web
+$assetfinder70
+* HOW TO FIND SUBDOMAINS OF ANY WEBSITE
+-yay -Sy assetfinder
+-assetfinder google.com
+
+========================================
+
+#web
+$gau71
+* HOW TO FIND URLS OF ANY WEBSITE
+-gau google.com
+
+========================================
+
+#steg
+$zsteg72
+* HOW TO FIND HIDDEN DATA IN PNG FILE
+-gem install zsteg
+-zsteg -a lol.png
+
+========================================
+
+#os
+$conky73
+* GIVE STYLISH LOOK TO YOUR LINUX
+conky
+[FOR SIMPLE LOOK]
+[YOU CAN ALSO DOWNLOAD CONKEY FILES ONLINE]
+-conky -c .config/conky/archlabs.conkyrc
+
+========================================
+
+#termux
+$repo74
+* HOW TO CHANGE TERMUX REPO
+-termux-change-repo
+
+========================================
+
+#cli_tool
+$glow75
+* HOW TO SHOW README.md FILE BEAUTIFULLY
+-yay -S glow
+-glow
+
+========================================
+
+#convert
+$pti76
+* PDF TO IMAGE IN LINUX
+-pacman -S ghostscript
+-gs -dSAFER -dNOPAUSE -sDEVICE=png16m -r500 -sOutputFile=new.png lol.pdf
+
+[500 = YOU CAN CHANGE TO ANY NUMBER FOR QUALITY INCREASING]
+
+[CONVERT ALL PDF PAGES TO IMAGE]
+-gs -dSAFER -dNOPAUSE -sDEVICE=pgmraw -r500 -dTextAlphaBits=4 -sOutputFile='paper-%d.pgm' a.pdf
+
+[CONCATENATE 3 PDF INTO 1]
+-gs -dSAFER -dNOPAUSE -sDEVICE=pdfwrite -r150 -sOutputFile=new.pdf a.pdf b.pdf c.pdf
+
+========================================
+
+#alternative
+$ccat77
+* BEAUTIFUL ALTERNATE OF CAT
+-yay -Sy ccat
+-ccat lol.txt
+
+========================================
+
+#hardware
+$pstree78
+* HOW TO SHOW RUNNING PROCESSES IN TREE FORM
+-pstree
+
+========================================
+
+#hardware
+$du79
+* HOW TO SEE FILE SPACE USAGE
+-du
+
+========================================
+
+#hardware
+$ncdu80
+* HOW TO SEE FILE SPACE USAGE BEAUTIFULLY PART-1
+-ncdu
+
+========================================
+
+#hardware
+$uptime81
+* HOW TO SEE COMPUTER USAGE TIMEING
+-uptime
+
+========================================
+
+#hardware
+$process82
+* HOW TO SEE PROCESSES INFO BEAUTIFULLY
+top1 -> 
+-btop
+-sudo btop --utf-force
+top2 -> 
+-htop
+top3 -> 
+-atop
+top4 -> 
+-top
+top5 -> 
+-pidstat
+top6 -> 
+-dstat
+top7 -> 
+-vmstat
+
+========================================
+
+#net
+$mtr83
+* BEAUTIFUL ALTERNATE OF PING
+-mtr google.com
+
+========================================
+
+#net
+$netstat84
+* HOW TO SHOW LINUX NETWORK SYSTEM INFO
+-netstat
+OR
+-ss
+
+========================================
+
+#net
+$iftop85
+* HOW TO MONITOR YOUR NETWORK WITH IFTOP
+-iftop -i wlan0
+
+========================================
+
+#net
+$nethogs86
+* MONITOR YOUR NETWORK WITH NETHOGS
+-nethogs -f wlan0
+
+========================================
+
+#hardware
+$dmesg87
+* HOW TO DISPLAY KERNAL MESSAGE INFO
+-sudo dmesg -H
+
+========================================
+
+#arch
+$i3lock88
+* SCREEN LOCK IN LINUX
+[TYPE IN TERMINAL]
+-i3lock -fancy
+OR
+-i3lock -i lol.jpg
+
+========================================
+
+#arch
+$bright89
+* HOW TO INCREASE OR DECREASE BRIGHTNESS IN CLI
+-brightnessctl set 50
+OR
+-brightnessctl -d "DEVICE_NAME" set 255
+
+========================================
+
+#screen
+$import90
+* TAKE SCREENSHOT IN CLI
+-import lol.png
+[NORMAL QUALITY]
+-import -window root -resize 5000x5000 -delay 200 lol.png
+[HIGH QUALITY]
+
+========================================
+
+#editors
+$helix91
+* BEST EDITOR FOR PROGRAMMING IN CLI
+-brew install helix
+-hx lol.txt
+[CONFIGURE HELIX]
+-nano .config/helix/config.toml
+theme = "base16_transparent"
+
+========================================
+
+#os
+$yay92
+* INSTALL YAY IN ARCH
+-sudo pacman -S --needed base-devel git
+-git clone https://aur.archlinux.org/yay.git
+-cd yay
+-makepkg -si
+
+========================================
+
+#convert
+$otp93
+* ODT TO PDF IN LINUX
+
+-libreoffice --headless --convert-to pdf lol.odt
+OR
+-apt install unoconv
+-unoconv -f pdf lol.odt
+OR
+-apt install abiword
+-abiword --to=pdf lol.odt
+
+========================================
+
+#youtube
+$youtubedr94
+* DOWNLOAD YOUTUBE VIDEO IN TERMINAL
+-apt install youtubedr
+-youtubedr download -q hd720 link
+
+========================================
+
+#hardware
+$ssd95
+* HOW TO FIND SSD INFO USING LSBLK
+-lsblk -d -o +MODEL
+
+========================================
+
+#arch
+$iso96
+* HOW TO CREATE .ISO FILE IN LINUX
+-mkisofs -o lol.iso /home/lol.txt
+
+========================================
+
+#windows
+$shutd97
+* SLIDE TO SHUT DOWN WINDOWS
+[CLICK RIGHT KEY OF MOUSE]
+[THEN CLICK CREATE SHORTCUT]
+[TYPE] slidetoshutdown.exe
+
+========================================
+
+#theory
+$bili98
+* WATCH ANY MOVIE ONLINE
++https://www.bilibili.tv/ |bilibili.tv
+
+========================================
+
+#error
+$pgp99
+* ARCH PGP KEYS ERROR [FIX]
+-sudo pacman -Sy archlinux-keyring
+
+========================================
+
+#wifi
+$iwctl100
+* HOW TO CONNECT WIFI WITH IWCTL
+
+[INSTALL IWCTL IN DEBIAN]
+-apt install iwd
+
+[ARCH]
+-pacman -S iwd
+-sudo systemctl start iwd
+-iwctl
+-device list
+-station wlan0 scan
+-station wlan0 get-networks
+-station wlan0 connect whitecross
+
+========================================
+
+#windows
+$hide101
+* HOW TO HIDE FOLDER IN WINDOWS
+[FIRST CREATE FOLDER]
+[GO TO PROPERTIES]
+[GO TO CUSTOMISE]
+[CHANGE ICON TO INVISIBLE]
+[NOW HIDE THE TEXT]
+[GO TO RENAME]
+[PRESS ALT + 255] <= DELL KEYBOARD
+
+========================================
+
+#theory
+$mod102
+* HOW TO DOWNLOAD ANY HINDI DOUBBED MOVIE
+-moviesmod
+
+========================================
+
+#fetch
+$viu103
+* BEAUTIFUL FETCH COMMAND FOR ARCH
+-yay -S uwufetch
+-yay -S viu
+-uwufetch -i -d arch
+
+========================================
+
+#hardware	
+$byhex104
+* HOW TO FIND SIZE OF FILE IN BYTES AND HEX
+BYTES
+-stat -c%s lol.txt
+HEX
+-stat -c%s lol.txt | xargs printf "0x%x\n"
+
+========================================
+
+#info
+$ffprobe105
+* FIND AUDIO FILE INFO IN LINUX
+-ffprobe lol.mp3
+OR
+-mediainfo lol.mp3
+
+========================================
+
+#hardware
+$duc106
+* HOW TO SEE FILE SPACE USAGE BEAUTIFULLY PART-2
+-duc index Downloads 
+-duc ls -Fg Downloads
+OR
+-duc ls -R Downloads
+OR
+-duc gui Downloads
+OR
+-duc ui Downloads
+[AND]
+-gdu Download
+[AND]
+[BEST]
+-duf
+
+========================================
+
+#convert
+$odpjpg107
+* HOW TO CREATE ODP FILE TO JPG
+-libreoffice --headless --convert-to jpg lol.odp
+
+========================================
+
+#os
+$resp108
+* HOW TO INSTALL RASPBIAN IN RASPBERRY PI
+-snap install rpi-imager
+-CHOOSE IMAGE => RASPBERRY PI OS LITE (32-bit)
+[GO TO SETTING ICON]
+set host name [whitex]
+ENABLE SSH
+set user name [wx]  PASSWORD [?]
+WIFI NAME = whitecross  PASS = 12345678
+[TICK LOCAL SETTING]
+[AFTER BOOT YOUR MEMORY CARD]
+-nmap -sn 192.168.1.1/24
+
+========================================
+
+#windows
+$bypass109
+* HOW TO BYPASS WINDOWS 10 LOGIN PAGE
+[INSERT BOOTABLE WINDOWS USB IN YOUR LAPTOP]
+PRESS => SHIFT + F10
+-wmic logicaldisk get name
+-c:
+-cd windows/system32
+-ren Utilman.exe Utilman2.exe
+-copy cmd.exe Utilman.exe
+[NOW REMOVE THE PENDRIVE AND OPEN THE LAPTOP]
+[PRESS => RESTART BUTTON ]
+[WHEN COMMAND PROMPT IS OPEN]
+-net user ARO 12345678
+USERNAME = ARO / NEW PASSWORD = 12345678
+
+========================================
+
+#hacking
+$radar110
+* REVERSE ENGINEERING USING RADARE2
+-sudo pacman -Sy radare2
+-r2 -AAA lol.apk
+[THIS CMD ANALYZE ALL DATA IN THE APK FILE]
+-afl 
+[THIS CMD PRINT ALL FUNCTION IN THE PROGRAM]
+-s main 
+[FUNCTION NAME] [YOU CAN GO TO ANY FUNCTION USING S]
+-pdf 
+[THIS CMD SHOW DISASSEMBLY CODE OF THE FUNCTION]
+-db 
+[TO SET BREAK POINT]
+-pdc 
+[THIS CMD SHOW THE SOURCE CODE]
+-izz 
+[THIS CMD SHOW ALL THE STRINGS IN THE PROGRAM]
+-pd 
+[THIS CMD SHOW DISASSEMBLY CODE WITHOUT FUNCTION]
+-vv 
+[THIS CMD SHOW EVERYTHING BEAUTIFULLY]
+-aflt
+[THIS CMD IS THE ADVANCE OF AFL CMD]
+-CC 
+[THIS CMD IS USED FOR COMMENTS]
+Ex: CC lol @0x08048bc -> hex address
+-?0x08048bc 
+[THIS CMD SHOW YOU ABOUT THE HEX]
+
+========================================
+
+#transferfiles
+$simple111
+* HOW TO TRANSFER FILE PHONE TO LAPTOP USING USB
+-yay -Sy simple-mtpfs
+-mkdir poco
+-cd poco
+[NOW CONNECT BOTH LAPTOP AND PHONE USING USB WIRE]
+-simple-mtpfs -l
+-simple-mtpfs -o nonempty --device 1 ~/poco
+[NOW OPEN FILE MANAGER AND OPEN POCO FOLDER]
+[NOW, LET'S SEE HOW TO DISCONNECT THE DEVICE]
+-fusermount -u ~/poco
+
+========================================
+
+#windows
+$w10112
+* HOW TO DOWNLOAD WINDOWS 10 AND BOOT INTO USB
++https://www.microsoft.com/en-in/software-download/windows10ISO |microsoft.com/en-in/software-download/windows10
+[OPEN THIS LINK ON WINDOWS SYSTEM]
+[DOWNLOAD THE TOOL]
+
+========================================
+
+#arch
+$lockscreen113
+* HOW TO CHANGE LOCK SCREEN BACKGROUND USING TERMINAL
+-sudo helix /etc/lightdm/lightdm-gtk-greeter.conf
+[INSIDE THE FILE ADD THIS LINE]
+-background=/home/DOWNLOAD/lol.jpg
+
+========================================
+
+#java
+$javadecom114
+* JAVA DECOMPILER USING IN REVERSE ENGINEERING
+-pacman -Sy jadx
+-jadx -ds output lol.apk
+
+========================================
+
+#hacking
+$apk115
+* NORMAL DECOMPILER AND DECODE RESOURCES IN REVERSE ENGINEERING
+-yay -Sy android-apktool
+-apktool d lol.apk
+
+========================================
+
+#find
+$dir116
+* FIND DIRECTORY IN ADVANCED WAY
+-find / -type d -name "lol"
+
+========================================
+
+#wifi
+$hotspot117
+* HOW TO CREATE HOTSPOT IN CLI
+-nmcli con add type wifi ifname wlan0 con-name Hotspot autoconnect yes ssid lol
+-nmcli con modify Hotspot 802-11-wireless.mode ap 802-11-wireless.band bg ipv4.method shared
+-nmcli con modify Hotspot wifi-sec.key-mgmt wpa-psk
+-nmcli con modify Hotspot wifi-sec.psk "12345678"
+-nmcli con up Hotspot
+[IF YOU WANT TO SHOW THE PASSWD]
+-nmcli dev wifi show-password
+[IF YOU WANT TO DISCONNECT]
+-nmcli connection show
+-nmcli connection down uuid 1f23bla
+
+========================================
+
+#os
+$prompt118
+* CREATE YOUR PROMPT WITH XTERM-256-COLOR
+
+\033[1;30m\] => NORMAL PROMPT
+\033[38;5;256m\] => 256 COLOR PROMPT
+NORMAL PROMPT = USE ONLY 8 COLOR
+XTERM = USE 256 COLORS
+[ FOR EXAMPLE ]
+-export PS1='\[\033[38;5;247m\]<<<\[\033[38;5;214m\]W\[\033[38;5;214m\]_\[\033[38;5;214m\]X\[\033[38;5;247m\]>>>\[\033[0m\]'
+\[\033[0m\] => THIS IS USED FOR DEFAULT COLOR
+FOR EX: YOU SET YOUR TERMINAL COLOR USING terminal.sexy WEBSITE SO IT IS YOUR DEFAULT COLOR.
+\[\033[38;5;214m\] -> 214 color number, this is orange
+[XTERM 256 COLORS LIST]
++https://www.ditig.com/256-colors-cheat-sheet |256-colors-cheat-sheet
+
+BACKGROUND COLOR
+\[\033[48;5;247m\]
+48 for background / 247 text color
+
+[ EXAMPLE OF BACKGROUND COLOR PROMPT ]
+-export PS1='\[\033[48;5;203m\]\[\033[38;5;16m\]<<<\[\033[48;5;250m\]\[\033[38;5;16m\]W\[\033[48;5;45m\]\[\033[38;5;16m\]_X\[\033[48;5;16m\]>>>\[\033[0m\]'
+
+========================================
+
+#os
+$randomprompt119
+* RANDOM COLORFUL PROMPT
+[Every time you open your terminal it change its color.]
+[Mainly TPUT is installed in system but if it is not installed then]
+-apt install ncurses-utils
+EXAMPLE OF COLOR PROMPT
+
+[IF YOU WANT PROMPT IS COLORFUL AND THE TEXT IS DEFAULT]
+
+-export PS1="\[\$(tput setaf \$((RANDOM % 256+1)))\]<<< W_X >>>\[\$(tput sgr0)\]"
+
+[IF YOU WANT PROMPT IS COLORFUL AND THE TEXT IS ALSO COLORFUL]
+
+-export PS1="\[\$(tput setaf \$((RANDOM % 256+1)))\]<<< W_X >>>\[\$(tput setaf \$((RANDOM % 256+1)))\]"
+
+========================================
+
+#steg
+$openssl120
+* HOW TO HIDE ENCRYPTED TEXT IN JPEG
+
+[FIRST WE WILL ENCRYPT OUR TEXT TO AES-256-CBC]
+-openssl enc -e -aes-256-cbc -iv SOF0 -K SOS -base64 <<< "lol man"
+[IN JPEG FILE]
+SOF0 = (START OF FRAME) KEY = 16 bit
+SOS = (START OF SCAN) KEY = 32 bit IN AES-256
+
+[IF THE AES IS 192 THEN THE KEY IS 24 bit]
+[IF THE AES IS 128 THEN THE KEY IS 16 bit]
+
+[HOW TO FIND SOF0 AND 16 BIT KEY IN JPEG]
+-hexedit --color a.jpeg
+[CTL + S]
+[SEARCH FFC00011]
+SOF0 HEX CODE IS = FF C0 00 11
+
+RESULT IS:
+SKIP THIS: FF C0 00 11
+08 01 46 00 DC 03 01 12 00 02 12 00 03 12 00 FF
+[COPY ALL 16 BIT CODE]
+
+SOF0 KEY = 0801 4600 DC03 0112 0002 1200 0312 00FF
+
+[NOW WE FIND SOS AND ITS 32 BIT KEY]
+[SEARCH FFDA]
+SOS HEX CODE IS = FF DA
+RESULT IS:
+SKIP THIS: FF DA
+00 0C 03 01 00 02 11 03 11 00 3F 00 C8 56 D9 60 BF ED A8 D0 62 1B EF AD 24 65 62 04 AA 89 BF 24
+[COPY ALL 32 BIT]
+SOS KEY = 000C 0301 0002 1103 1100 3F00 C856 D960 BFED A8D0 621B EFAD 2465 6204 AA89 BF24
+
+[NOW ITS TIME TO DECRYPT OUR MESSAGE]
+-openssl enc -d -aes-256-cbc -iv 08014600DC030112000212000312 00FF -K 000C030112000211031100... -base64 >>> "ENC MESSAGE"
+
+
+[IF YOU WANT TO MORE SECURE YOUR ENC MESSAGE]
+-cat > mess
+lol man
+
+-openssl enc -e -aes-256-cbc -iv SOF0 -K SOS -in mess > mess.enc
+
+[COPY THE ENC MESSAGE]
+-echo "enc mess" | base64
+[NOW PASTE THIS ENC MESSAGE TO JPEG]
+
+[IF YOU WANT TO DECRYPT THIS MORE SECURE ENC THEN REVERSE ALL THE STEPS]
+-echo "enc mess" | base64 -d > mess.enc
+-openssl enc -d -aes-256-cbc -iv SOF0 -K SOS -in mess.enc
+
+========================================
+
+#os
+$installarch121
+* HOW TO INSTALL BASIC ARCH
+[FIRST INSTALL LATEST BASIC ARCH ISO]
++https://archlinux.org/download | archlinux.org
+[GO DOWN SIDE] => choose UNITED STATES
+=> arizona.edu => choose latest iso
+[AFTER INSTALLING BOOT YOUR USB AND INSTALL BASIC ARCH IN YOUR SYSTEM]
+[WHEN THE TERMINAL IS OPEN]
+-iwctl
+-station wlan0 show
+-station wlan0 scan
+-station wlan0 connect wx
+-quit
+[ABOVE STEPS ARE FOR WIFI CONNECTION]
+-pacman-key --init
+-pacman-key --populate archlinux
+[ABOVE 2 STEPS ARE FOR PGP KEYS UPDATE]
+-archinstall
+[MAXIMUM SETTINGS ARE SET AS DEFAULT, ONLY TOUCH IMPORTANT SETTINGS]
+1- MIRROR REGION => INDIA
+2- DRIVE => FOR YOUR SSD/USB
+3- DISK LAYOUT => wipe all => ext4 => no
+   DISK ENCRYPTION => ? => BACK
+4- BOOTLOADER => YES [FOR GRUB]
+5- USER ACCOUNT => [YOU KNOW THAT] => conform and exit
+6- PROFILE => minimal
+7- AUDIO => pipewire
+8- ADDITIONAL PKG => git
+9- NETWORK CONFIGURATION => USE NETWORK MANAGER
+10- TIME ZONE => India
+INSTALL => ENTER
+[AFTER INSTALL ITS ASK YES/NO, SAY NO AND TYPE Reboot]
+[AFTER THE SYSTEM BOOT login]
+-nmcli device wifi connect wx password 12345678
+
+========================================
+
+#cli_tool
+$concat122
+* HOW TO WRITE, OVERWRITE AND CONCATENATE 2 FILES USING CAT
+[ WRITE ]
+-cat > lol.txt
+Hello
+[OUTPUT: HELLO]
+
+[ OVERWRITE ]
+-cat >> lol.txt
+BALL
+[OUTPUT: 
+HELLO
+BALL]
+
+[ CONCATENATE 2 FILES ]
+-cat lol.txt ball.txt > new.txt
+
+========================================
+
+#screen
+$xclip123
+* HOW TO TAKE SCREENSHOT USING CROP MODE IN CLI
+-scrot -s 1.png -e 'xclip -selection clipboard -t image/png -i $f'
+
+========================================
+
+#prog
+$elf64124
+* HOW TO RUN ASSEMBLY PROGRAM IN LINUX
+[FIRST WRITE HELLO WORLD IN ASSEMBLY LANGUAGE]
+-nasm -f elf64 hello.asm
+-ld hello.o -o hello
+-./hello
+
+========================================
+
+#cli_tool
+$intrest125
+*INTRESTING COMMANDS IN LINUX
+-TELNET TOWEL.BLINKENLIGHTS.NL 
+[cmd 1]
+-rev 
+[cmd 2]
+-ASCIIQUARIUM
+[cmd 3]
+-YAY -SY COWSAY
+-X COWSAY HELLO 
+[cmd 4]
+-YAY -SY ONEKO
+-ONEKO
+[cmd 5]
+
+========================================
+
+#web
+$wikit126
+*A CLI TOOL TO SEARCH WIKIPEDIA ON LINUX
+-pacman -Sy nodejs
+-pacman -Sy npm
+-sudo npm install wikit -g
+-wikit linux
+
+========================================
+
+#arch
+$grub127
+*HOW TO CHANGE GRUB THEME
+[First clone github link]
+-https://github.com/Jacksaux/Gorgeous-GRUB
+[THEN SEE ALL THE images]
+[WHEN YOU SELECT YOUR theme Download from this upper  link]
+[If you want to install manually]
+[for ex I want to install CYBEREXS theme then go to Jacksaur github link and download CYBEREXS.tar.gz file]
+-tar -xvzf CYBEREXS.tar.gz
+-mv CYBEREXS /boot/grub/themes
+-HELIX /etc/default/grub
+[ADD THIS LINE IN LAST]
+-GRUB_THEME=/boot/grub/themes/CYBEREXS/theme.txt
+-GRUB_GFXMODE=1280x800
+[MAINLY GFXMODE Set as AUTO REMOVE AUTO word and type 1280x800]
+[SAVE the file]
+-sudo grub-mkconfig -o /boot/grub/grub.cfg
+
+========================================
+
+#info
+$mime128
+*HOW TO FIND MIME TYPE OF A FILE
+[IF YOU HAVE f.png FILE AND SOMEONE CHANGE THE EXTENSION OF THE FILE f.jpg SO HOW WILL YOU FIND THE EXTENSION]
+-xdg-mime query filetype f.jpg
+        OR
+-file --mime-type f.jpg
+
+========================================
+
+#hardware
+$xdg129
+*HOW TO CHECK WHAT DISPLAY SERVER IS USED
+-echo $XDG_SESSION_TYPE
+
+========================================
+
+#cli_tool
+$spacesfile130
+*HOW TO REMOVE SPACES IN FILE NAME
+[FOR EX file name is 'lol is.txt']
+-for f in *; do mv "$f" `echo $f | tr ' ' '_'`; done
+
+========================================
+
+#windows
+$wifi131
+*HOW TO CONNECT WIFI USING CMD PROMPT
+[OPEN CMD PROMPT AS ADMIN]
+-netsh wlan show networks
+-netsh wlan connect name="lol"
+
+========================================
+
+#error
+$gpgme132
+*IF YOU ARE FACEING GPGME ERROR WHILE UPGRADING ARCH
+[ERROR: GPGME ERROR: NO DATA]
+-sudo rm -rf /var/lib/pacman/sync
+-sudo -E pacman -Syu
+
+========================================
+
+#cli_tool
+$backup133
+*HOW TO MAKE BACKUP OF YOUR LNX SYS
+-pacman -Sy cdrtools
+-sudo mkisofs -o my.iso /home/wx/
+[NOW YOUR ISO IS CREATED NOW IF YOU WANT TO CHECK WHAT INSIDE THE ISO]
+-mkdir iso
+-sudo mount -o loop ~/my.iso ~/iso
+[NOW OPEN YOUR FILE MANAGER AND CHECKOUT THE ISO FOLDER]
+[IF YOU WANT TO UNMOUNT]
+-sudo umount ~/iso
+
+========================================
+
+#convert
+$bhod134
+*B,H,O TO D    D TO B,H,O
+[DECIMAL TO BINARY]
+-echo "ibase=10; obase=2; 246" | bc
+10=decimal
+2=binary
+246=any number
+
+[BINARY TO DECIMAL]
+-echo $((2#100110))
+
+[DECIMAL TO HEX]
+-echo "ibase=10; obase=16; 246" | bc
+
+[HEX TO DECIMAL]
+-echo $((16#F8))
+
+[DECIMAL TO OCTAL]
+-echo "ibase=10; obase=8; 246" | bc
+
+[OCTAL TO DECIMAL]
+-echo $((8#77))
+
+========================================
+
+#cli_tool
+$tac135
+*HOW TO SEE INSIDE THE FILE IN REVERSE ORDER
+-tac lol.txt
+
+========================================
+
+#cli_tool
+$directory136
+*HOW TO CREATE DIRECTORY INSIDE A DIRECTORY
+-mkdir -p f1/f2/f3
+
+========================================
+
+#editors
+$usehelix137
+*HOW TO USE HELIX
+-gg -> Go to the top of the file
+-ge -> Go to the last of the file
+-kx -> select one from line
+-kxx -> select 2 line
+[COPY]
+(FIRST select the line)
+-yp -> [y] is for copy [p] for paste
+[IF YOU WANT TO PASTE DOWNSIDE THEN GO DOWN SIDE AND PRESS [P]]
+-d -> [DELETE] [select the line and press [d]]
+-u -> [undo]
+-U -> [REDO]
+-s -> [SEARCH]
+-SPACE -> f -> [NOW YOU OPEN ANY FILE]
+-miw -> ms" -> [I only select the word AND ADD "" in the word]
+-miw -> md" -> [THIS WILL DELETE THE ""]
+-SPACE -> b -> [IF YOU OPEN 2 FILES IN HX THEN IT SHOW THE OPTION WHICH ONE IS SELECT]
+-SPACE -> w -> s -> [IT SPLITS WINDOW HORIZONTALY]
+-SPACE -> w -> v -> [IT SPLIT VERTICALY]
+-J -> [CONVERT MANY LINES TO ONE LINE]
+EXAMPLE: a / b / c / d -> abcd
+
+[IF YOU OPEN C PROGRAM FILE AND YOU WANT TO SELECT WHOLE MAIN FUNCTION]
+-mif -> [YOUR CURSOR WILL BE INSIDE THE MAIN FUNCTION]
+-gc -> [GO TO CENTER OF THE FILE]
+-b -> [IS USED TO SELECT THE WORD]
+[IF YOU WRITE MANY LINES FOR EX:]
+Hello
+Hello
+Hello
+[IF YOU WANT TO REMOVE HELLO IN ALL LINES]
+-%->s->HELLO->c->New word
+["%" select all -> "s" select word -> "HELLO" your word -> "c" clear text -> new txt]
+
+========================================
+
+#hardware
+$cpu138
+*BEAUTYFULLY SHOW CPU INFO WITH LOGO
+-cpufetch
+
+========================================
+
+#info
+$git139
+*BEAUTYFULLY SHOW GITHUB REPO INFO
+-git clone url [for ex calculator]
+-onefetch calculator
+
+========================================
+
+#fetch
+$rxfetch140
+*ALTERNATE OF NEOFETCH
+-rxfetch
+        OR
+-fastfetch
+        OR
+-macchina
+[macchina -t beryllium]
+[macchina -t hydrogen]
+[macchina -t lithium]
+
+========================================
+
+#error
+$sudoers141
+*NO SUDOERS ERROR
+[WHEN YOU CREATE NEW USER IT GIVES NO SUDOERS FILE]
+-sudo visudo
+[THIS LINE IS WRITTEN ALREADY]
+-root ALL=(ALL:ALL) ALL 
+[ADD THIS LINE DOWNSIDE THE ROOT LINE]
+-username ALL=(ALL:ALL) ALL 
+(username = new user name)
+
+========================================
+
+#alternative
+$zoxide142
+*ADVANCED ALTERNATE OF CD
+-pacman -Sy zoxide
+-nano .zshrc 
+[ADD THIS LINE]
+-eval "$(zoxide init zsh)" 
+-z /etc/xdg/termite
+[FIRST GIVE FULL LOCATION TO Z THEN ENTER]
+-z termite
+[then it find automaticly the directory]
+
+========================================
+
+#mesg
+$notify143
+*HOW TO SEND NOTIFICATION INTO YOUR DESKTOP
+-yay -Sy notify-send
+-notify-send "HEEEE..."
+[MAINLY THE USE OF NOTIFY IS:]
+for ex:
+-sudo pacman -Syu && notify-send "DONE" || notify-send "cancel"
+
+========================================
+
+#find
+$ripgrep144
+*HOW TO FIND ANY TEXT INSIDE THE FILE
+-sudo pacman -Sy ripgrep
+-rg lol
+
+========================================
+
+#prog
+$automatically145
+*HOW TO SEE THE OUTPUT AUTOMATICLY WHEN YOU SAVE YOUR FILE
+[FOR EXAMPLE IF YOU WANT TO RUN THE PYTHON FILE]
+-hx lol.py
+-print("lol")
+-esc + :w
+[NOW OPEN SECOND TERMINAL]
+-echo *.py | entr python lol.py
+[NOW ADD A NEW LINE IN YOUR PYTHON FILE PRINT("BALL") AND THEN ESC+:W]
+
+[IF YOU WANT TO RUN THE C FILE]
+[FIRST TERMINAL CREATE THE HELLO WORLD FILE IN C]
+[SECOND TERMINAL]
+-echo *.c | entr gcc lol.c
+[THIRD TERMINAL]
+-echo *.c | entr ./a.out
+[NOW UPGRADE YOUR C FILE AND THEN SAVE]
+
+========================================
+
+#os
+$icon145
+*ICONS FOR YOUR TERMINAL PROMPT
+-git clone https://github.com/DevBlackOps/terminal-icons.git
+-hx Terminal-icons/Terminal-icons/Data/glyphs.ps1
+
+========================================
+
+#find
+$dup147
+*HOW TO FIND DUPLICATE FILES
+-sudo pacman -Sy rmlint
+-rmlint 
+IT SHOW ALL DUPLI. FILES
+-rmlint -R 
+ IT SHOW ALL HIDDEN DUPLI. FILES
+-rmlint * // DOWNLOAD 
+ IT FIND SPECIFIC DUP FILE IN DIRECTORY
+
+========================================
+
+#transferfiles
+$ssh148
+*HOW TO SEND AND RECEIVE FILES LAPTOP TO MOBILE USING SSH
+[FIRST START SSH SERVER IN YOUR LAPTOP]
+-sudo systemctl start sshd
+[NOW OPEN YOUR TERMUX]
+[FOR RECEIVING LAPTOP TO PHONE]
+-rsync -avz --progress -e "ssh" whitex@192.168.1.28:/home/whitex/lol.mp4 /$HOME
+whitex@192.168.1.28 => LAPTOP ADDRESS
+/home/whitex/lol.mp4 => LAPTOP FILE PATH (SEND)
+/$HOME => PHONE DESTINATION PATH (RECEIVING)
+[FOR SENDING PHONE TO LAPTOP]
+-rsync -avz --progress -e "ssh" phone-file.mp4 whitex@192.168.1.28:/home/whitex
+
+========================================
+
+#youtube
+$ytfzf149
+*HOW TO SEARCH YOUTUBE VIDEOS IN TERMINAL
+-sudo pacman -Sy ytfzf
+-ytfzf
+
+========================================
+
+#video
+$termplay150
+*HOW TO OPEN IMAGE AND VIDEO IN YOUR TERMINAL
+-yay -Sy termplay
+-termplay lol.jpg
+-termplay lol.mp4
+
+========================================
+
+#cloud
+$rclone151
+*HOW TO CONNECT YOUR GOOGLE DRIVE AND MEGA CLOUD TO YOUR TERMINAL
+-pacman -Sy rclone
+[FOR GOOGLE DRIVE]
+-sudo rclone config 
+n
+whitex
+18 => for google drive
+enter => leave blank client id
+enter => leave blank client secret
+1 => full access
+enter => leave blank service_account_file
+n => no
+y => yes
+[NOW COPY THE LINK AND PASTE INTO YOUR BROWSER AND CHOOSE YOUR GMAIL A/C] => allow
+n => no
+y => yes
+q => quit
+
+[FOR MEGA]
+-sudo rclone config
+n
+wx_mega
+29 => mega
+[ENTER USER] => your gmail address
+y => yes
+[ENTER PASSWD] => your mega password
+n => no
+y => yes
+q => quit
+
+[SHOW WHAT FILES IN YOUR CLOUD]
+-sudo rclone ls wx_mega:
+
+[SEND FILE TO YOUR CLOUD]
+-sudo rclone copy lol.png wx_mega:
+        OR
+-sudo rclone sync -p android wx_mega: android
+(android1 = directory name in your terminal)
+(android2 = new directory name that shows in cloud)
+
+[RECEIVE FILE FROM YOUR CLOUD]
+-sudo rclone copy wx_mega:lol.png ~/terminal
+(lol.png = cloud file / ~/terminal = terminal destination)
+
+[MOUNT YOUR CLOUD INTO YOUR LAPTOP]
+-sudo rclone mount --allow-other --allow-non-empty -v wx_mega:~/doll
+
+
+
+========================================
+
+#transferfiles
+$dark152
+*IF YOU WANT TO SHARE FILE QUICKLY WITHOUT USING INTERNET
+[FIRST CONNECT PHONE HOTSPOT TO LAPTOP]
+-sudo pacman -Sy darkhttpd
+-darkhttpd /home/whitex
+
+========================================
+
+#cli_tool
+$bgprocess153
+*HOW TO WATCH RUNNING BACKGROUND PROCESSES
+[FIRST RUN A COMMAND FOR EX:]
+-darkhttpd /home/whitex &
+(& => this is used for running a program in background)
+-jobs 
+=> this cmd shows all running processes
+-fg %1 
+=> this cmd converts background process to running in terminal
+-bg %1 
+=> if you stop some process using ctl+z, you can restart that process using bg
+
+========================================
+
+#termux
+$tmux153
+*HOW TO DIVIDE TERMUX SCREEN HORIZONTALY AND VERTICALY
+[THIS CMD IS USEFUL WHEN YOU CONNECT YOUR PHONE TO LAPTOP USING SSH]
+-apt install tmux
+-tmux
+-ctl+b+% 
+=> for vertical
+-ctl+b+" 
+=> for horizontal
+
+========================================
+
+#cloud
+$mega154
+*MEGA TOOLS IN LINUX
+[MEGADF] => show your cloud storage
+-megadf -h -u your_email@gmail.com -p pass
+[MEGALS] => list all cloud file
+-megals -u s@gmail.com -p pass
+[MEGAMKDIR] => create remote directory
+-mega mkdir lol -u s@gmail.com -p pass
+[MEGARM] => remove cloud file
+-megarm lol -u s@gmail.com -p pass
+[MEGAPUT] => upload file to mega
+-megaput u.txt -u s@gmail.com -p pass
+[MEGAGET] => download mega file
+-megaget A.txt -u s@gmail.com -p pass
+[MEGADL] => download any mega file using link
+-megadl mega_file-url
+[IF YOU WANT TO USE ALL THESE TOOLS]
+-pacman -Sy megatools
+
+
+========================================
+
+#cloud
+$newmega155
+*HOW TO CREATE NEW MEGA A/C USING CLI
+-pacman -Sy megatools
+-sudo megareg --register -e new-email -n whitex -p pass
+[THEN THIS GIVE YOU A VERIFY KEY AND SEND A LINK TO YOUR GMAIL]
+-megatools reg --verify key link
+(key = paste the key /link =  paste the gmail link)
+[NOW AFTER THE A/C CREATED CHECK THE STORAGE OF CLOUD USING MEGADF]
+
+========================================
+
+#mesg
+$twilio156
+*ALTERNATE WAY TO SEND SMS WITH TWILIO
+-sudo pingme twillio --token '<token>' --account '<sid>' --sender '<twilio_number>' --receiver '<receiver_number>' --msg 'lol'
+ACCOUNT = SID
+SENDER = TWILIO PHONE NO.
+[IF YOU DONT KNOW YOUR TOKEN, SID, TWILIO NO. THEN GO TO TWILIO SITE]
+[LOGIN WITH EMAIL AND YOUR PASSWORD]
+
+========================================
+
+#mesg
+$pingme157
+*SEND EMAIL WITH PINGME
+[FIRST CREATE YOUR APP PASSWD]
+[GO TO GMAIL -> SECURITY -> SEARCH -> APP PASSWD]
+-pingme email --pass '<app_password>' --sender '<your_email>' --rec '<receiver_email>' --msg 'lol' --sub 'lol subject'
+[APP PASSWD = the generated app password]
+
+========================================
+
+#cli_tool
+$snake158
+*SNAKE GAME IN LINUX
+-yay -Sy snake
+-snake
+
+========================================
+
+#video
+$cmus159
+*PLAY MUSIC IN LINUX
+-pacman -Sy cmus
+-cmus
+-:a ~/music 
+=> [THIS CMD ADD MUSIC DIRECTORY]
+-press TAB 
+=> [TO UP DOWN MUSIC]
+-= 
+=> [FOR VOLUME UP]
+-- 
+=> [FOR VOLUME DOWN]
+
+========================================
+
+#video
+$anime160
+*SEE ANY ANIME IN LINUX
+-pacman -Sy ani-cli
+-ani-cli
+[NOW ENTER ANY ANIME NAME LIKE DORAEMON]
+[IF YOU WANT DUBBED VERSION]
+-ani-cli --dub
+
+========================================
+
+#web
+$bomba161
+*HOW TO READ ANY BLOG/ARTICAL IN CLI
+-yay -Sy bombadillo
+-pacman -Sy lynx
+-hx .config/bombadillo.ini
+[CHANGE => WEBMODE = LYNX]
+[NOW RUN BOMBADILLO AND READ ALL ITS FUNCTION AND YOU CAN ALSO CHECK ITS MAN PAGE]
+[AFTER READING]
+-bombadillo https://blog.com
+-j 
+=> [SCROLL UP]
+-k 
+=> [SCROLL DOWN]
+[IF YOU WANT TO GO TO PAGE NO 15 FOR EX]
+-:15 => enter
+
+========================================
+
+#youtube
+$lux162
+*HOW TO DOWNLOAD YOUTUBE VIDEO IN CLI
+-yay -Sy lux
+-lux -i [YT-LINK] 
+=> show all quality
+-lux -f 137 [YT-LINK] 
+=> download video (137 = quality no.)
+[SPECIAL FEATURE]
+-lux -p [PLAYLIST-LINK] 
+=> download whole playlist
+
+========================================
+
+#info
+$abook163
+*HOW TO STORE SOMEONE INFORMATION LIKE - PHONE NO, EMAIL, NAME, ADDRESS ETC
+-yay -Sy abook
+-abook
+-a 
+=> [FOR ADD]
+[NOW ADD THE INFO]
+[IF YOU WANT TO GO TO ROW 2 PRESS 2, IF ROW 3 PRESS 3]
+
+========================================
+
+#mesg
+$neomutt164
+*HOW TO USE NEOMUTT [EMAIL CLIENT]
+[IF YOU DONT CONFIGURE NEOMUTT CHECK OUT WHITE COPY]
+[FIRST OPEN NEOMUTT]
+-m => [FOR COMPOSING MAIL]
+(to: your email)
+(subject: lol)
+[WRITE ANY MESSAGE IF YOU WANT TO SEND]
+[AFTER SAVE]
+-a => [FOR ATTACH FILE] [IF YOU WANT TO ATTACH FILE USE THIS]
+-y => [SEND]
+
+========================================
+
+#mesg
+$aerc165
+*BEAUTIFUL EMAIL CLIENT
+-pacman -Sy aerc
+[WHEN YOU START AERC IT WILL ASK INFORMATION LIKE: NAME, EMAIL, PASS]
+[IN PASSWORD YOU GIVE APP PASSWD, IF YOU DONT KNOW WHAT IS APP PASSWD CHECK WHITE COPY]
+-k = [FOR UP] (email)
+-j = [FOR DOWN] (email)
+-K = [FOR UP] (folders)
+-J = [FOR DOWN] (folders)
+[TRY IT YOUR SELF THEN UNDERSTAND]
+-C = [FOR COMPOSE]
+[NOW SAME PROCESS AS FOLLOW NEOMUTT]
+
+========================================
+
+#clifilemanager
+$clifm166
+*BEUTIFUL FILE MANAGER IN CLI
+-yay -Sy clifm
+-clifm
+-b => (back)
+-q => (quit)
+
+========================================
+
+#alternative
+$cloneit167
+*DOWNLOAD GITHUB REPO USING CLONEIT
+-yay -Sy cloneit
+[COPY THE REPO URL ONLY REMOVE .git IN LAST]
+-cloneit https://github.com/repo-owner/repo-name
+
+========================================
+
+#alternative
+$pipx167
+*PYTHON PKG MANAGER PIPX
+-pacman -Sy python-pipx
+-pipx install lolcat
+
+========================================
+
+#cli_tool
+$dict168
+*DICTIONARY IN CLI
+-pacman -Sy dictd
+-dict lol
+
+========================================
+
+#mesg
+$discordo169
+*BEAUTIFUL DISCORD CLIENT
+-yay -Sy discordo
+-discordo
+[NOW LOGIN YOUR DISCORD A/C]
+
+========================================
+
+#java
+$jdk170
+*HOW TO RUN JAVA IN LINUX
+-pacman -Sy jdk17-openjdk
+
+========================================
+
+#mesg
+$catgirl171
+*CATGIRL THE IRC CLIENT
+-yay -Sy catgirl
+-catgirl -m wx -h irc.sdf.org -j '#hacker'
+-m = for name
+-h = for host
+-j = for channel
+
+========================================
+
+#transferfiles
+$ffsend172
+*HOW TO SEND FILE USING FFSEND
+-yay -Sy ffsend
+-ffsend upload file_name
+-ffsend download <url>
+
+========================================
+
+#error
+$pip173
+*IF PIP GIVE YOU ERROR EXTERNALLY-MANAGED-ENVIRONMENT
+-pip install --break-system-packages pytube
+(pytube = pkg name)
+
+========================================
+
+#transferfiles
+$pb174
+*HOW TO UPLOAD ANY FILE, PHOTO, VIDEO IN WEB
+[THIS IS ESPECIALLY USE FOR FILE TRANSFER]
+[FOR ARCH]
+-yay -Sy 0x0uploader
+-0x0uploader -i 0x0.st
+        OR
+-0x0uploader -i ttm.sh
+-0x0uploader lol.txt
+[FOR TERMUX]
+-pb lol.txt
+
+========================================
+
+#mesg
+$matrix175
+*HOW TO CHAT USING MATRIX
+[FIRST INSTALL FLUFFYCHAT APP IN ANDROID]
+[THEN CREATE YOUR ACCOUNT]
+[USER NAME = @your-username:matrix.org]
+[PASS = your password]
+-pacman -Sy gomuks
+-gomuks
+[LOGIN AND START CHAT]
+
+========================================
+
+#convert
+$ptt176
+*PDF TO TEXT
+-pacman -Sy poppler
+-pdftotext lol.pdf out.txt
+
+========================================
+
+#convert
+$ptpdf177
+*PPT TO PDF
+-unoconv -f pdf lol.ppt
+
+========================================
+
+#cli_tool
+$backslashn178
+*ADD '\n' AT THE END OF EACH LINE
+-sed 's/$/\n/' lol.txt > out.txt
+
+========================================
+
+#lib
+$fresh179
+*HOW TO INSTALL LIBREOFFICE IN ARCH
+-pacman -Sy libreoffice-fresh
+-libreoffice
+
+========================================
+
+#find
+$cmd180
+*IF YOU INSTALLED THE TOOL BUT DON'T KNOW THE CMD
+[FOR EXAMPLE YOU INSTALLED DICTD TOOL]
+TOOL NAME = DICTD
+RUNNING CMD = DICT
+-pacman -Ql dictd | grep /bin
+[NOW YOU SEE ALL THE RUNNING CMDS]
+
+========================================
+
+#user
+$rwx181
+*LINUX FILE PERMISSIONS
+U = USER
+G = GROUP
+O = OTHERS
+	 U G O
+	 R W E
+0 -> - - -
+1 -> - - x
+2 -> - w -
+3 -> - w x
+4 -> r - -
+5 -> r - x
+6 -> r w -
+7 -> r w x
+
+IF WE WANT TO GIVE FULL PERMISSION TO A FILE
+-chmod 777 lol.txt
+        OR
+-chmod u+rwx,g+rwx,o+rwx lol.txt
+
+========================================
+
+#user
+$useradd182
+*CREATE NEW USER WITH HOME DIRECTORY USING USERADD
+-useradd -m mrf
+
+========================================
+
+#shell
+$assign183
+*HOW TO ASSIGN ANY SHELL TO NEW USER
+-useradd -m -s /bin/zsh mrf
+        OR
+        /bin/bash
+
+========================================
+
+#user
+$lock184
+*HOW TO LOCK AND UNLOCK PERMISSION USER
+-sudo usermod -L mrf
+-sudo usermod -U mrf
+
+========================================
+
+#user
+$passwd185
+*HOW TO CHECK PASSWD STATUS OF A USER
+-sudo chage -l mrf
+
+========================================
+
+#hardware
+$aux186
+*CHECK FULL DETAILED STATUS OF ALL RUNNING PROCESSES
+-ps -aux
+        OR
+-ps -auxf
+
+========================================
+
+#hardware
+$kill187
+*TERMINATE A PROCESS
+-kill -9 323
+(323 = pid)
+
+========================================
+
+#convert
+$seprate188
+*HOW TO CONVERT A LINE TO SEPARATE LINES
+-echo "lol ball call" > f.txt
+-cat f.txt | tr ' ' '\n'
+
+========================================
+
+#find
+$conf189
+*HOW TO FIND .CONF FILE IN LINUX
+-find -type f -name "*.conf"
+
+========================================
+
+#hardware
+$environments190
+*PRINT ALL ENVIRONMENTS
+[ENVIRONMENTS LIKE $HOME, $SHELL]
+-env
+
+========================================
+
+#hardware
+$pid191
+*HOW TO SHOW THE PROCESS STATUS OF PARTICULAR PID
+-ps -p <PID>
+
+========================================
+
+#hardware
+$pgrep192
+*HOW TO SHOW THE PID OF PARTICULAR PROCESS
+-pgrep <process_name>
+
+========================================
+
+#hardware
+$df193
+*HOW TO SHOW THE FREE DISK SPACE
+-df -h --total
+
+========================================
+
+#hardware
+$ram194
+*HOW TO SHOW THE FREE RAM SPACE
+-free -h -t
+
+========================================
+
+#math
+$tables195
+*HOW TO PRINT 1 TO 10 IN LINUX
+-seq 1 10
+
+[print 2 table]
+-seq 2 2 20
+
+[print 4 table]
+-seq 4 4 40
+
+========================================
+
+#cli_tool
+$arrange196
+*HOW TO ARRANGE ANY FILE ASCENDING TO DESCENDING
+[FILE EXAMPLE: 3)lol 1)ball 2)call]
+-sort lol.txt
+[OUTPUT: 1)ball 2)call 3)lol]
+
+========================================
+
+#find
+$grepr197
+*HOW TO FIND A PARTICULAR WORD IN A CURRENT WORKING DIRECTORY USING GREP
+-grep -r "error" .
+
+========================================
+
+#cli_tool
+$count198
+*HOW TO COUNT A PARTICULAR WORD IN A FILE
+-grep -c "lol" lol.txt
+
+========================================
+
+#error
+$pgpsig199
+*PGP SIGNATURE ERROR
+ERROR: FAILED TO COMMIT TRANSACTION (INVALID OR CORRUPTED PACKAGE (PGP SIGNATURE))
+ERROR OCCURRED, NO PACKAGE WERE UPGRADED
+ERROR INSTALLING REPO PACKAGES
+-sudo pacman-key --recv-key D6C9442437365605 --keyserver keyserver.ubuntu.com
+-sudo pacman-key --lsign-key D6C9442437365605
+
+========================================
+
+#arch
+$banner200
+*PRINT BANNER IN YOUR TERMINAL
++https://manytools.org/hacker-tools/ascii-banner/
+[open .bashrc or .zshrc files]
+
+cat << 'EOF'
+[paste your banner]
+EOF
+
+========================================
+
+#math
+$calculate201
+*CALCULATE NUMBERS IN CLI
+-cat | paste -sd+ | bc
+1
+(2*3)
+-8
+ctl+d
+
+========================================
+
+#convert
+$lower202
+*CONVERT LOWER CASE TO UPPER CASE
+-echo "lol" | tr '[:lower:]' '[:upper:]'
+        OR
+-echo "lol" | sed 's/.*/\U&/'
+
+========================================
+
+#net
+$bluetooth203
+*HOW TO CONNECT BLUETOOTH IN CLI
+-sudo systemctl restart bluetooth.service
+-sudo pacman -Sy bluez
+-bluetoothctl
+-scan on
+[copy the bluetooth mac address]
+-scan off
+-pair XX:XX:XX:XX:XX:XX
+(XX:XX:XX:XX:XX:XX = mac)
+-connect XX:XX:XX:XX:XX:XX
+-exit
+
+========================================
+
+#steg
+$dtmf204
+*HOW TO CREATE DTMF TONES
+1 = 697 Hz and 1209 Hz
+2 = 697 Hz and 1336 Hz
+3 = 697 Hz and 1477 Hz
+4 = 770 Hz and 1209 Hz
+5 = 770 Hz and 1336 Hz
+6 = 770 Hz and 1477 Hz
+7 = 852 Hz and 1209 Hz
+8 = 852 Hz and 1336 Hz
+9 = 852 Hz and 1477 Hz
+* = 941 Hz and 1209 Hz
+0 = 941 Hz and 1336 Hz
+# = 941 Hz and 1477 Hz
+
+[ HIDE YOUR SECRET MSG USING DTMF ]
+PLAIN TXT = WX IS A HACKER
+
+@t9.png
+
+[* is used as a next-word separator, 0 is space]
+
+example encoding: W=9 NEXT_WORD=* X=99 SPACE=0  I=444 NEXT_WORD=* S=7777 SPACE=0 A=2 SPACE=0 H=44 NEXT_WORD=* C=222 NEXT_WORD=* K=55 NEXT_WORD=* E=33 NEXT_WORD=* R=777
+(each letter is repeated presses on its number key, separated by * for next letter, 0 for space)
+
+sox -n -r 8000 -c 1 01.wav synth 0.5 sine 852 sine 1477 gain -6
+sox -n -r 8000 -c 1 02.wav synth 0.5 sine 941 sine 1209 gain -6
+sox -n -r 8000 -c 1 03.wav synth 0.5 sine 852 sine 1477 gain -6
+sox -n -r 8000 -c 1 04.wav synth 0.5 sine 852 sine 1477 gain -6
+sox -n -r 8000 -c 1 05.wav synth 0.5 sine 941 sine 1336 gain -6
+sox -n -r 8000 -c 1 06.wav synth 0.5 sine 770 sine 1209 gain -6
+sox -n -r 8000 -c 1 07.wav synth 0.5 sine 770 sine 1209 gain -6
+sox -n -r 8000 -c 1 08.wav synth 0.5 sine 770 sine 1209 gain -6
+sox -n -r 8000 -c 1 09.wav synth 0.5 sine 941 sine 1209 gain -6
+sox -n -r 8000 -c 1 10.wav synth 0.5 sine 852 sine 1209 gain -6
+sox -n -r 8000 -c 1 11.wav synth 0.5 sine 852 sine 1209 gain -6
+sox -n -r 8000 -c 1 12.wav synth 0.5 sine 852 sine 1209 gain -6
+sox -n -r 8000 -c 1 13.wav synth 0.5 sine 852 sine 1209 gain -6
+sox -n -r 8000 -c 1 14.wav synth 0.5 sine 941 sine 1336 gain -6
+sox -n -r 8000 -c 1 15.wav synth 0.5 sine 697 sine 1336 gain -6
+sox -n -r 8000 -c 1 16.wav synth 0.5 sine 941 sine 1336 gain -6
+sox -n -r 8000 -c 1 17.wav synth 0.5 sine 770 sine 1209 gain -6
+sox -n -r 8000 -c 1 18.wav synth 0.5 sine 770 sine 1209 gain -6
+sox -n -r 8000 -c 1 19.wav synth 0.5 sine 941 sine 1209 gain -6
+sox -n -r 8000 -c 1 20.wav synth 0.5 sine 697 sine 1336 gain -6
+sox -n -r 8000 -c 1 21.wav synth 0.5 sine 941 sine 1209 gain -6
+sox -n -r 8000 -c 1 22.wav synth 0.5 sine 697 sine 1336 gain -6
+sox -n -r 8000 -c 1 23.wav synth 0.5 sine 697 sine 1336 gain -6
+sox -n -r 8000 -c 1 24.wav synth 0.5 sine 697 sine 1336 gain -6
+sox -n -r 8000 -c 1 25.wav synth 0.5 sine 941 sine 1209 gain -6
+sox -n -r 8000 -c 1 26.wav synth 0.5 sine 770 sine 1336 gain -6
+sox -n -r 8000 -c 1 27.wav synth 0.5 sine 770 sine 1336 gain -6
+sox -n -r 8000 -c 1 28.wav synth 0.5 sine 941 sine 1209 gain -6
+sox -n -r 8000 -c 1 29.wav synth 0.5 sine 697 sine 1477 gain -6
+sox -n -r 8000 -c 1 30.wav synth 0.5 sine 697 sine 1477 gain -6
+sox -n -r 8000 -c 1 31.wav synth 0.5 sine 941 sine 1209 gain -6
+sox -n -r 8000 -c 1 32.wav synth 0.5 sine 852 sine 1209 gain -6
+sox -n -r 8000 -c 1 33.wav synth 0.5 sine 852 sine 1209 gain -6
+sox -n -r 8000 -c 1 34.wav synth 0.5 sine 852 sine 1209 gain -6
+
+[output look like this 9*990444*777702044*2*222*55*33*777 then combine]
+-sox 01.wav 02.wav ... final.wav
+-play final.wav
+
+[ DECODE USING THIS ]
+
+- multimon-ng -a DTMF -t wav "final.wav"
+========================================
+
+#video
+$sox205
+*SOX THE AUDIO EDITOR
+
+-sox a.wav b.mp3
+[this cmd convert wav to mp3]
+
+-sox a.wav -r 44100 o.wav
+[this cmd improve audio quality]
+
+-sox a.wav out.wav trim 0 10
+[this cmd trim audio 0 to 10 sec]
+
+-sox a.wav out.wav gain 3
+[for increase volume]
+
+-sox a.wav out.wav gain -3
+[for reduces volume]
+
+-soxi a.wav
+[this cmd give you audio info]
+
+-sox a1.wav a2.wav out.wav
+[this cmd will concatenate a1 a2 to out]
+
+-sox a.wav out.wav tempo 0.5
+[for slow down audio file 0.5 sec]
+
+========================================
+
+#steg
+$frequency206
+*HOW TO HIDE YOUR MSG IN FREQUENCY
+
+A=500 E=900 I=1300 M=1700 Q=2100 U=2500 Y=2900
+B=600 F=1000 J=1400 N=1800 R=2200 V=2600 Z=3000
+C=700 G=1100 K=1500 O=1900 S=2300 W=2700
+D=800 H=1200 L=1600 P=2000 T=2400 X=2800
+1=3100 2=3200 3=3300 4=3400 5=3500 6=3600 7=3700 8=3800 9=3900 0=4000
+SPACE=440
+[each letter/number is assigned its own tone frequency; encode a message by generating a sine wave at each letter's frequency in sequence, e.g. with sox synth]
+
+msg = lol
+l=1600
+o=1900
+l=1600
+
+-> sox -n -r 8000 o1.wav synth 0.5 sine 1600
+
+[ DECODE USING THIS PROGRAM ]
+%decode_frequency.py
+
+========================================
+
+#pil
+$pillow207
+*PILLOW (PIL)
+from PIL import Image
+image = Image.open('t9.png')
+# opening image
+image.show()
+# for showing image
+%basic1.py
+
+
+[CREATING NEW IMAGE]
+from PIL import Image
+image_blank = Image.new('RGBA', (1000,600))
+image_blank.show()
+#[R=RED G=GREEN B=BLUE A=TRANSPARENT]
+#[WIDTH = 1000, HEIGHT = 600]
+%create_new_image.py
+
+
+[IMAGE SAVING]
+from PIL import Image
+image = Image.open('t9.png')
+image.save('new.png')
+#[SAVES A COPY OF THE OPENED IMAGE AS new.png]
+%image_saving.py
+
+
+[IMAGE INFO GATHER]
+from PIL import Image
+image = Image.open('t9.png')
+print(image.size)
+print(image.filename)
+print(image.format)
+print(image.format_description)
+%image_info_gather.py
+
+
+[ROTATE]
+from PIL import Image
+image = Image.open('t9.png')
+image_rotate = image.rotate(60)
+image_rotate.show()
+%rotate.py
+
+
+[ROTATE IN EXPAND FORM]
+from PIL import Image
+image = Image.open('t9.png')
+i_r = image.rotate(60, expand=True)
+i_r.show()
+%rotate_expand.py
+
+
+[ROTATE BACKGROUND CHANGE]
+from PIL import Image
+image = Image.open('t9.png')
+ir = image.rotate(60, expand=True, fillcolor=(255,255,255))
+ir.show()
+%rotate_background.py
+
+
+[ROTATE BACKGROUND CHANGE USING NAMED COLOR]
+from PIL import Image, ImageColor
+image = Image.open('t9.png')
+ir = image.rotate(60, expand=True, fillcolor=ImageColor.getcolor('red','RGB'))
+ir.show()
+%rotate_background_named_color.py
+
+
+[CROP IMAGE]
+from PIL import Image
+image = Image.open('t9.png')
+ic = image.crop((500,600,1500,1150))
+ic.show()
+%crop.py
+
+
+[IMAGE FLIP HORIZONTAL]
+from PIL import Image
+image = Image.open('t9.png')
+ifh = image.transpose(Image.Transpose.FLIP_LEFT_RIGHT)
+ifh.show()
+%flip_hor.py
+
+
+[IMAGE FLIP VERTICAL]
+from PIL import Image
+image = Image.open('t9.png')
+ifv = image.transpose(Image.Transpose.FLIP_TOP_BOTTOM)
+ifv.show()
+%flip_ver.py
+
+
+[ENHANCE RESOLUTION OF IMAGE]
+from PIL import Image
+image = Image.open('t9.png')
+scale_factor = 2
+i = (image.size[0] * scale_factor, image.size[1] * scale_factor)
+better = image.resize(i)
+better.save('new.png')
+%enhance_image.py
+
+
+[COLOR ENHANCER]
+from PIL import Image, ImageEnhance
+image = Image.open('t9.png')
+c_e = ImageEnhance.Color(image)
+enhanced_image = c_e.enhance(2)
+enhanced_image.show()
+#[THIS CREATES A COLOR-ENHANCED VERSION OF THE IMAGE]
+%color_enhance.py
+
+
+[CONTRAST ENHANCER]
+from PIL import Image, ImageEnhance
+image = Image.open('t9.png')
+c_e = ImageEnhance.Contrast(image)
+e_i = c_e.enhance(2)
+e_i.show()
+%contrass_enhancer.py
+
+
+[BRIGHTNESS ENHANCER]
+from PIL import Image, ImageEnhance
+image = Image.open('t9.png')
+b_e = ImageEnhance.Brightness(image)
+e_i = b_e.enhance(2)
+e_i.show()
+%brightness_enhancer.py
+
+
+[SHARPNESS ENHANCER]
+from PIL import Image, ImageEnhance
+image = Image.open('t9.png')
+s_e = ImageEnhance.Sharpness(image)
+e_i = s_e.enhance(2)
+e_i.show()
+%sharpness_enhancer.py
+
+
+[IMAGE FILTERS - MIN FILTER]
+from PIL import Image, ImageFilter
+image = Image.open('t9.png')
+min_img = image.filter(ImageFilter.MinFilter(size=5))
+min_img.show()
+%min_filter.py
+
+
+[IMAGE FILTERS - MEDIAN FILTER]
+from PIL import Image, ImageFilter
+image = Image.open('t9.png')
+median = image.filter(ImageFilter.MedianFilter(size=5))
+median.show()
+%median_filter.py
+
+
+[IMAGE FILTERS - MAX FILTER]
+from PIL import Image, ImageFilter
+image = Image.open('t9.png')
+max_img = image.filter(ImageFilter.MaxFilter(size=5))
+max_img.show()
+%max_filter.py
+
+
+[BLUR FILTER - BOX BLUR]
+from PIL import Image, ImageFilter
+image = Image.open('t9.png')
+image_boxblur = image.filter(ImageFilter.BoxBlur(radius=4))
+image_boxblur.show()
+%box_blur.py
+
+
+[BLUR FILTER - GAUSSIAN BLUR]
+from PIL import Image, ImageFilter
+image = Image.open('t9.png')
+image_gaussblur = image.filter(ImageFilter.GaussianBlur(radius=4))
+image_gaussblur.show()
+%gaussian_blur.py
+
+
+[BLUR FILTER - UNSHARP MASK]
+from PIL import Image, ImageFilter
+image = Image.open('t9.png')
+i_unsharp = image.filter(ImageFilter.UnsharpMask(radius=4))
+i_unsharp.show()
+%unsharp_blur.py
+
+
+[GET INFO ABOUT A SPECIFIC PIXEL]
+from PIL import Image
+image = Image.open('t9.png')
+print(image.getpixel((0,0)))
+#[the pixel at (0,0) is the starting/top-left pixel of the image]
+#[IF YOU WANT TO CHECK THE STARTING PIXEL INFO USING GIMP, USE THE COLOR PICKER TOOL, SELECT THE STARTING COLOR OF THE PICTURE, THEN CHECK THAT COLOR'S RGB SECTION]
+%spesifix_pixel.py
+
+
+[EXTRACT ALL COLOR INFO]
+from PIL import Image
+image = Image.open('t9.png')
+print(image.getcolors(maxcolors=image.size[0]*image.size[1]))
+#[image.size[0] = WIDTH]
+#[image.size[1] = HEIGHT]
+%extract_color.py
+
+
+[GETTING PICTURE INFORMATION - PIXELS]
+from PIL import Image
+image = Image.open('t9.png')
+print(image.mode)
+print(image.getbands())
+#[THIS BOTH TELL YOU WHETHER THE IMAGE IS 'RGB' OR NOT]
+print(image.info)
+#[THIS GIVES INSIDE PIXEL INFO]
+%pixels_info.py
+
+
+[CHECK IMAGE HEIGHT WIDTH USING NUMPY]
+from PIL import Image
+from numpy import array
+image = Image.open('t9.png')
+print(array(image).shape)
+%image_hw.py
+
+
+[1 BIT GRAYSCALE]
+from PIL import Image
+image = Image.open('t9.png')
+g1 = image.convert('1')
+g1.show()
+%1bit.py
+
+
+[8 BIT GRAYSCALE]
+from PIL import Image
+image = Image.open('t9.png')
+g8 = image.convert('L')
+g8.show()
+%8bit.py
+
+
+[ADD COLOR PALETTE - 256 COLOR]
+from PIL import Image
+image = Image.open('t9.png')
+p = image.convert('P')
+p.show()
+#[TO SEE THE PALETTE, ZOOM INTO THE IMAGE]
+%256color.py
+
+
+[ADD COLOR PALETTE - 16 COLOR FOR OLD-STYLE LOOK]
+from PIL import Image
+image = Image.open('t9.png')
+p16 = image.convert('P', palette=Image.Palette.ADAPTIVE, colors=16)
+p16.show()
+%16color.py
+
+
+[REPLACE COLOR]
+from PIL import Image
+image = Image.open('t9.png')
+for x in range(image.size[0]):
+    for y in range(image.size[1]):
+        if image.getpixel((x,y))[0] > 200:
+            image.putpixel((x,y), (0,0,0))
+#[(0,0,0) = black]
+image.show()
+%replace_color.py
+
+
+[AUTO CONTRAST]
+from PIL import Image, ImageOps
+image = Image.open('t9.png')
+c = ImageOps.autocontrast(image=image, cutoff=20)
+c.show()
+%auto_contras.py
+
+
+[IMAGE INVERTED]
+from PIL import Image, ImageOps
+image = Image.open('t9.png').convert('RGB')
+iv = ImageOps.invert(image)
+iv.show()
+#[invert REQUIRES AN 'L' OR 'RGB' IMAGE, IT WON'T WORK ON 'RGBA']
+%inverted.py
+
+
+[IMAGE SOLARIZE]
+from PIL import Image, ImageOps
+image = Image.open('t9.png')
+is_ = ImageOps.solarize(image=image, threshold=100)
+is_.show()
+%solarize.py
+
+
+[IMAGE POSTERIZE]
+from PIL import Image, ImageOps
+image = Image.open('t9.png')
+ip = ImageOps.posterize(image=image, bits=1)
+ip.show()
+%posterize.py
+
+
+[IMAGE EQUALIZED]
+from PIL import Image, ImageOps
+image = Image.open('t9.png')
+ie = ImageOps.equalize(image=image)
+ie.show()
+%equalrize.py
+
+
+[IMAGE COLORIZE]
+from PIL import Image, ImageOps
+image = Image.open('t9.png')
+ic = ImageOps.colorize(image=image.convert('L'), black='pink', white='red')
+ic.show()
+#[YOU CAN CHANGE THIS TO ANY COLOR, BUT KEEP THE black= AND white= ARGUMENT NAMES]
+%colorize.py
+
+
+[GRAYSCALE USING IMAGEOPS]
+from PIL import Image, ImageOps
+image = Image.open('t9.png')
+ig = ImageOps.grayscale(image=image)
+ig.show()
+%grayscale.py
+
+
+[DIMENSION CHANGES - MIRROR]
+from PIL import Image, ImageOps
+image = Image.open('t9.png')
+im = ImageOps.mirror(image)
+im.show()
+%mirror.py
+
+
+[DIMENSION CHANGES - FLIP]
+from PIL import Image, ImageOps
+image = Image.open('t9.png')
+if_ = ImageOps.flip(image)
+if_.show()
+%flip.py
+
+
+[DIMENSION CHANGES - SCALE]
+from PIL import Image, ImageOps
+image = Image.open('t9.png')
+is_ = ImageOps.scale(image=image, factor=0.4)
+is_.show()
+%scale.py
+
+
+[DIMENSION CHANGES - CONTAIN]
+from PIL import Image, ImageOps
+image = Image.open('t9.png')
+ic = ImageOps.contain(image=image, size=(500,200))
+ic.show()
+%contain.py
+
+
+[ADDING BORDER - SIMPLE BLACK BORDER]
+from PIL import Image, ImageOps
+image = Image.open('t9.png')
+ib = ImageOps.expand(image=image, border=100)
+ib.show()
+%black_border.py
+
+
+[ADDING BORDER - COLORFUL BORDER]
+from PIL import Image, ImageOps
+image = Image.open('t9.png')
+ib = ImageOps.expand(image=image, border=100, fill=(255,255,0))
+ib.show()
+%colorful_border.py
+
+
+[IMAGE PADDING]
+from PIL import Image, ImageOps
+image = Image.open('t9.png')
+ip = ImageOps.pad(image=image, size=(2500,1600))
+ip.show()
+%padding.py
+
+
+[IMAGE FIT]
+from PIL import Image, ImageOps
+image = Image.open('t9.png')
+if_ = ImageOps.fit(image=image, size=(300,300))
+if_.show()
+%fit.py
+
+
+[IMAGE CROP USING IMAGEOPS]
+from PIL import Image, ImageOps
+image = Image.open('t9.png')
+image_crop = ImageOps.crop(image=image, border=400)
+image_crop.show()
+%crop_imageops.py
+
+
+[DEFORMER - CUSTOM WARP EFFECT]
+@i.png
+from PIL import Image, ImageOps
+class Deformer():
+    def getmesh(self, img):
+        w, h = img.size
+        left = ((0,0,w//2,h),(0,0,0,h,w//2,h,w//2,0))
+        right = ((w//2,0,w,h),(w//2,0,w//2,h,0,h,0,0))
+        flip = ((w//2,0,w,h),(w//2,h,w//2,0,w,0,w,h))
+        return [left, right]
+image = Image.open('t9.png')
+d = ImageOps.deform(image, Deformer())
+d.show()
+@i2.png
+#[RETURNING [LEFT, RIGHT] GIVES A MIRRORED-SPLIT STYLE OUTPUT IMAGE]
+@i3.png
+#[RETURNING [LEFT, FLIP] GIVES A DIFFERENT WARPED/FLIPPED STYLE OUTPUT IMAGE]
+%deformer.py
+
+
+[DRAW TEXT ON IMAGE]
+from PIL import Image, ImageDraw, ImageFont
+i = Image.open('t9.png')
+draw = ImageDraw.Draw(i)
+font = ImageFont.truetype('b.ttf', size=80)
+draw.text((100,640), 'Hello lol', font=font, fill=(0,255,255))
+i.show()
+#['b.ttf' = font file, download from fontspace.com/category/ttf]
+#[WIDTH = 100, HEIGHT = 640, YOU CAN CHANGE THESE COORDINATES]
+#[(0,255,255) = light blue color]
+%text.py
+
+
+[COMBINING IMAGES - SETUP]
+from PIL import Image, ImageChops
+a = Image.open('t9.png')
+b = Image.open('t9.png')
+#[b MUST BE THE SAME SIZE AS a]
+logo = Image.open('t9.png')
+#[logo IS A SMALL LOGO IMAGE USED IN THE PASTING EXAMPLE BELOW]
+%combining.py
+
+
+[MERGING IMAGES - COMPOSITE]
+from PIL import Image
+a = Image.open('t9.png')
+b = Image.open('t9.png')
+m = Image.composite(a, b, Image.new('L', a.size, 100))
+m.show()
+%composite.py
+
+
+[MERGING IMAGES - BLEND]
+from PIL import Image
+a = Image.open('t9.png')
+b = Image.open('t9.png')
+m = Image.blend(a, b, 0.5)
+m.show()
+%blend.py
+
+
+[LOGO PASTING]
+from PIL import Image
+a = Image.open('t9.png')
+logo = Image.open('t9.png')
+a.paste(logo, (0,0), mask=logo)
+a.show()
+%logo.py
+
+
+[IMAGE OVERLAY]
+from PIL import Image, ImageChops
+a = Image.open('t9.png')
+b = Image.open('t9.png')
+io_ = ImageChops.overlay(a, b)
+io_.show()
+%overlay.py
+
+
+[IMAGE DARKER - ONLY SHOWS DARKER PIXELS]
+from PIL import Image, ImageChops
+a = Image.open('t9.png')
+b = Image.open('t9.png')
+id_ = ImageChops.darker(a, b)
+id_.show()
+%darker.py
+
+
+[IMAGE LIGHTER - ONLY SHOWS LIGHTER PIXELS]
+from PIL import Image, ImageChops
+a = Image.open('t9.png')
+b = Image.open('t9.png')
+il_ = ImageChops.lighter(a, b)
+il_.show()
+%lighter.py
+
+
+[IMAGE SOFT LIGHT]
+from PIL import Image, ImageChops
+a = Image.open('t9.png')
+b = Image.open('t9.png')
+isl = ImageChops.soft_light(a, b)
+isl.show()
+%soft.py
+
+
+[IMAGE HARD LIGHT]
+from PIL import Image, ImageChops
+a = Image.open('t9.png')
+b = Image.open('t9.png')
+ihl = ImageChops.hard_light(a, b)
+ihl.show()
+%hard.py
+
+
+[IMAGE DIFFERENCE]
+from PIL import Image, ImageChops
+a = Image.open('t9.png')
+b = Image.open('t9.png')
+id_ = ImageChops.difference(a, b)
+id_.show()
+%difference.py
+
+
+[IMAGE MODULO]
+from PIL import Image, ImageChops
+a = Image.open('t9.png')
+b = Image.open('t9.png')
+im_ = ImageChops.add_modulo(a, b)
+im_.show()
+%modulo.py
+
+
+[IMAGE SCREEN]
+from PIL import Image, ImageChops
+a = Image.open('t9.png')
+b = Image.open('t9.png')
+is_ = ImageChops.screen(a, b)
+is_.show()
+%screen.py
+
+
+[IMAGE LOGICAL AND]
+from PIL import Image, ImageChops
+a = Image.open('t9.png')
+b = Image.open('t9.png')
+add = ImageChops.logical_and(a.convert('1'), b.convert('1'))
+add.show()
+%and.py
+
+
+[IMAGE LOGICAL OR]
+from PIL import Image, ImageChops
+a = Image.open('t9.png')
+b = Image.open('t9.png')
+or_ = ImageChops.logical_or(a.convert('1'), b.convert('1'))
+or_.show()
+%or.py
+
+========================================
+
+#pil
+$rgb208
+*RGB COLOR PIXEL SHIFTING USING PIL
+[FOR EXAMPLE, SHIFT RED BY +10, GREEN BY -15, BLUE BY +20]
+from PIL import Image
+i = Image.open('t9.png')
+w, h = i.size
+[w,h ARE CALCULATED AUTOMATICALLY FROM THE IMAGE]
+red = 10
+green = -15
+blue = 20
+[SHIFT AMOUNTS - CHANGE THE SIGN AS NEEDED, e.g. red = -10]
+[[0]=RED [1]=GREEN [2]=BLUE WHEN YOU READ A PIXEL AS A LIST]
+for x in range(w):
+    for y in range(h):
+        pixelget = list(i.getpixel((x,y)))
+        pixelget[0] = max(0, min(255, pixelget[0] + red))
+        pixelget[1] = max(0, min(255, pixelget[1] + green))
+        pixelget[2] = max(0, min(255, pixelget[2] + blue))
+        i.putpixel((x,y), tuple(pixelget))
+i.save('out.png')
+[SAVES THE SHIFTED IMAGE AS out.png]
+%shift.py
+========================================
+
+#pil
+$one209
+*HOW TO ADD ONE PIXEL IN AN IMAGE LOCATION
+[FOR EX I WANT TO ADD A RED PIXEL]
+[AND THEN ADD A GREEN AND BLUE PIXEL BELOW THE RED ONE]
+@table.png
+from PIL import Image
+i = Image.open('t9.png')
+w, h = i.size
+red = 255,0,0
+green = 0,255,0
+blue = 0,0,255
+x = 0
+y = 0
+[x,y = LOCATION OF THE RED PIXEL]
+f = 0
+a = 1
+[f,a = LOCATION OF THE GREEN PIXEL]
+z = 0
+n = 2
+[z,n = LOCATION OF THE BLUE PIXEL]
+i.putpixel((x,y), red)
+i.putpixel((f,a), green)
+i.putpixel((z,n), blue)
+i.save('o2.png')
+%add_one_pixel.py
+
+[IF YOU WANT TO ADD ONE MORE SET OF R,G,B PIXELS ALONG THE WIDTH SIDE INSTEAD, USE THESE COORDINATES]
+from PIL import Image
+i = Image.open('t9.png')
+red = 255,0,0
+green = 0,255,0
+blue = 0,0,255
+x = 0
+y = 0
+f = 1
+a = 0
+z = 2
+n = 0
+i.putpixel((x,y), red)
+i.putpixel((f,a), green)
+i.putpixel((z,n), blue)
+i.save('o2.png')
+%rgb.py
+========================================
+
+#pil
+$pixels210
+*ADDING PIXELS USING FOR LOOP
+from PIL import Image
+i = Image.open('t9.png')
+w, h = i.size
+size = min(w, h)
+black = 0,0,0
+red = 255,0,0
+green = 0,255,0
+blue = 0,0,255
+for x in range(size):
+    for y in range(0, size, 2):
+        i.putpixel((y,x), black)
+for x in range(size):
+    for y in range(1, size, 2):
+        i.putpixel((y,x), red)
+i.save('o2.png')
+@box.png
+[EVEN COLUMNS (0,2,4,...) ARE PAINTED BLACK]
+[ODD COLUMNS (1,3,5,...) ARE PAINTED RED]
+[size = min(w,h) KEEPS EVERY LOOP INSIDE THE IMAGE BOUNDS, NO MATTER THE IMAGE'S SHAPE]
+%loop.py
+========================================
+
+#steg
+$pixtxt211
+*HIDE YOUR IMAGE INTO PIXELS.TXT
+
+[ FIRST WE EXTRACT ALL PIXELS (RGB) OF YOUR IMPORTANT IMAGE INTO PIXELS.TXT ] 
+
+%pix_to_text.py
+
+[python pix.py > pixels.txt]
+
+
+[ NOW TIME TO CONVERT PIXELS.TXT TO IMAGE ] 
+
+%pixel_to_image.py
+
+========================================
+
+#steg
+$rgb212
+*HIDE A MESSAGE IN THE PIXELS [PART 2]
+
+[EXAMPLE: HIDING THE WORD "HELLO" INSIDE THE RED CHANNEL OF 5 PIXELS]
+
+[FOR EX: (255, 72, 0, 1) 
+RED=255 
+ASCII VALUE OF "H"=72 
+GREEN=0 
+TRANSPARENT=1 
+
+[YOU CAN PLACE THE ASCII VALUE IN ANY PIXEL LOCATION, JUST DON'T TOUCH THE TRANSPARENT AREA]
+
+[ASCII TABLE - MAIN PRINTABLE CHARACTERS RUN FROM 33 TO 126]
+
+33=! 34=" 35=# 36=$ 37=% 38=& 39=' 40=( 41=) 42=* 43=+ 44=, 45=- 46=. 47=/ 48=0 49=1 50=2 51=3 52=4 53=5 54=6
+55=7 56=8 57=9 58=: 59=; 60=< 61== 62=> 63=? 64=@ 65=A 66=B 67=C 68=D 69=E 70=F 71=G 72=H 73=I 74=J 75=K
+76=L 77=M 78=N 79=O 80=P 81=Q 82=R 83=S 84=T 85=U 86=V 87=W 88=X 89=Y 90=Z 91=[ 92=\ 93=] 94=^ 95=_ 96=`
+97=a 98=b 99=c 100=d 101=e 102=f 103=g 104=h 105=i 106=j 107=k 108=l 109=m 110=n 111=o 112=p 113=q 114=r
+115=s 116=t 117=u 118=v 119=w 120=x 121=y 122=z 123={ 124=| 125=} 126=~
+
+%hide_msg_in_pixel_ascii.py
+
+[ EXTRACT MSG FROM PIXELS ]
+
+%extract_msg_from_pixel_ascii.py
+
+========================================
+
+#steg
+$shifting213
+*HIDE YOUR MSG USING SHIFTING PIXELS
+[FIRST RESIZE YOUR IMAGE TO W=200 H=325]
+%resize.py
+
+[NOW FLATTEN THAT IMAGE INTO A SINGLE ROW: WIDTH=65000, HEIGHT=1]
+@bar.png
+
+%hide_msg_in_pixel_shifting.py
+
+
+[NOW UNHIDE wh.jpg BACK INTO THE ORIGINAL SHAPE]
+
+%extract_msg_from_pixel_shifting.py
+
+========================================
+
+#steg
+$shuffling214
+*HIDE YOUR MSG USING SHUFFLING METHOD
+[!! ONLY USE PNG FILES]
+@my.png
+@noice.png
+%hide_msg_in_pixel_shuffling.py
+
+[NOW IT'S TIME TO RECOVER / UNHIDE THE IMAGE]
+[RANDOM SHUFFLING - out.png]
+
+%extract_msg_from_pixel_shuffling.py

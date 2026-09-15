@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Knowledge Vault</title>
+
+<style>
+:root{
+  /* CHANGE ONLY THIS */
+  --accent:#de85ff;
+
+  --bg:#050505;
+  --panel:#090909;
+
+  --border:var(--accent);
+  --text:#FFFFFF;
+  --glow:var(--accent);
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Consolas, monospace;
+}
+
+body{
+  background:#060713;
+  overflow:hidden;
+  color:var(--text);
+  height:100vh;
+  position: relative;
+  touch-action: none;
+}
+.sidebar{
+  overflow-y:auto;
+  scrollbar-width:thin;
+}
+/* Background Canvas Layer */
+#magneticCanvas {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1;
+}
+
+/* Sidebar */
+.sidebar{
+  position:fixed;
+  left:10px;
+  top:10px;
+  bottom:10px;
+  width:220px;
+  background:rgba(0,0,0,.85);
+  border:1px solid var(--border);
+  padding:15px;
+  z-index:5;
+}
+
+.logo{
+  font-size:20px;
+  margin-bottom:20px;
+  font-weight:bold;
+}
+
+.menu button{
+  width:100%;
+  margin-bottom:8px;
+  padding:10px;
+  background:black;
+  border:1px solid var(--border);
+  color:var(--text);
+  cursor:pointer;
+}
+
+.menu button:hover{
+  box-shadow:0 0 15px var(--glow);
+}
+
+/* Top Bar */
+.topbar{
+  position:fixed;
+  left:250px;
+  right:20px;
+  top:10px;
+  height:60px;
+  background:rgba(0,0,0,.8);
+  border:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  padding:0 20px;
+  z-index:5;
+}
+
+/* Windows */
+.window{
+  position:absolute;
+  background:rgba(0,0,0,.95);
+  border:1px solid var(--border);
+  box-shadow:0 0 15px rgba(245, 73, 39, 0.2);
+  width:500px;
+  height:350px;
+  z-index:10;
+}
+
+.titlebar{
+  height:35px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:0 10px;
+  border-bottom:1px solid var(--border);
+  cursor:move;
+}
+
+.close{
+  cursor:pointer;
+}
+
+.content{
+  padding:15px;
+  height:calc(100% - 35px);
+  overflow:auto;
+}
+
+.note{
+  margin-bottom:15px;
+  padding:10px;
+  border:1px solid rgba(245, 73, 39, 0.2);
+}
+
+.note h3{
+  margin-bottom:10px;
+}
+
+pre{
+  white-space:pre-wrap;
+  color:#ffd38a;
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="magneticCanvas"></canvas>
+
+<div class="sidebar">
+  <div class="logo">KNOWLEDGE VAULT</div>
+  <div class="menu">
+    <button onclick="openWindow('CLI Tools', cliData)">CLI TOOLS</button>
+    <button onclick="openWindow('Networking', netData)">NETWORKING</button>
+    <button onclick="openWindow('Linux', linuxData)">LINUX</button>
+    <button onclick="openWindow('Web Dev', webData)">WEB DEV</button>
+  </div>
+</div>
+
+<div class="topbar">
+  <h2>WHITEX DATABASE</h2>
+</div>
+
+<script>
+/* Data Vault */
+const cliData = [
+  { title:"Miller", content:"mlr --csv cat file.csv" },
+  { title:"jq", content:"jq '.name' file.json" },
+  { title:"grep", content:"grep -R 'password' ." }
+];
+
+const netData = [
+  { title:"Nmap", content:"nmap -sV 192.168.1.1" },
+  { title:"Ping", content:"ping google.com" }
+];
+
+const linuxData = [
+  { title:"Find", content:"find / -name test.txt" },
+  { title:"lsblk", content:"lsblk -f" }
+];
+
+const webData = [
+  { title:"Flexbox", content:"display:flex;" },
+  { title:"Grid", content:"display:grid;" }
+];
+
+/* Window System Management */
+let z = 100;
+
+function openWindow(title, data){
+  let win = document.createElement("div");
+  win.className = "window";
+  win.style.left = 260 + Math.random() * 200 + "px";
+  win.style.top = 100 + Math.random() * 100 + "px";
+
+  win.innerHTML = `
+    <div class="titlebar">
+      <span>${title}</span>
+      <span class="close">✕</span>
+    </div>
+    <div class="content">
+      ${data.map(item => `
+        <div class="note">
+          <h3>${item.title}</h3>
+          <pre>${item.content}</pre>
+        </div>
+      `).join("")}
+    </div>
+  `;
+
+  document.body.appendChild(win);
+
+  // Focus on instantiation
+  win.style.zIndex = ++z;
+  win.addEventListener('mousedown', () => {
+    win.style.zIndex = ++z;
+  });
+
+  win.querySelector(".close").onclick = () => {
+    win.remove();
+  };
+
+  drag(win);
+}
+
+/* Dragging Windows Mechanics */
+function drag(el){
+  const title = el.querySelector(".titlebar");
+  let x = 0, y = 0, px = 0, py = 0;
+
+  title.onmousedown = (e) => {
+    el.style.zIndex = ++z;
+    px = e.clientX;
+    py = e.clientY;
+
+    document.onmousemove = (e) => {
+      x = px - e.clientX;
+      y = py - e.clientY;
+      px = e.clientX;
+      py = e.clientY;
+
+      el.style.top = (el.offsetTop - y) + "px";
+      el.style.left = (el.offsetLeft - x) + "px";
+    };
+
+    document.onmouseup = () => {
+      document.onmousemove = null;
+    };
+  };
+}
+
+/* Magnetic Mesh Backdrop Mechanics */
+const canvas = document.getElementById('magneticCanvas');
+const ctx = canvas.getContext('2d');
+
+let width, height;
+let particles = [];
+
+const config = {
+  spacing: 24,            
+  repelRadius: 180,       
+  springForce: 0.04,      
+  friction: 0.86,         
+  maxLineDist: 38         
+};
+
+let mouse = { x: -1000, y: -1000, targetX: -1000, targetY: -1000, vx: 0, vy: 0 };
+let lastMouse = { x: -1000, y: -1000 };
+
+function resize() {
+  width = canvas.width = window.innerWidth;
+  height = canvas.height = window.innerHeight;
+  init();
+}
+
+class Particle {
+  constructor(x, y) {
+    this.ox = x; 
+    this.oy = y; 
+    this.x = x + (Math.random() - 0.5) * 10;
+    this.y = y + (Math.random() - 0.5) * 10;
+    this.vx = 0;
+    this.vy = 0;
+    this.baseSize = Math.random() * 1.5 + 1.5;
+    this.size = this.baseSize;
+    this.stress = 0; 
+  }
+
+  update() {
+    const dx = mouse.x - this.x;
+    const dy = mouse.y - this.y;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+
+    if (dist < config.repelRadius) {
+      const force = Math.pow((config.repelRadius - dist) / config.repelRadius, 1.8);
+      const angle = Math.atan2(dy, dx);
+
+      this.vx -= Math.cos(angle) * force * 6.5 + mouse.vx * force * 0.25;
+      this.vy -= Math.sin(angle) * force * 6.5 + mouse.vy * force * 0.25;
+      
+      this.stress += (force - this.stress) * 0.2;
+    } else {
+      this.stress *= 0.9; 
+    }
+
+    this.vx += (this.ox - this.x) * config.springForce;
+    this.vy += (this.oy - this.y) * config.springForce;
+
+    this.vx *= config.friction;
+    this.vy *= config.friction;
+
+    this.x += this.vx;
+    this.y += this.vy;
+
+    this.size = this.baseSize + (this.stress * 4);
+  }
+
+  draw() {
+    const currentHue = 190 + (this.stress * 130);
+    const luminosity = 55 + (this.stress * 15);
+    const alpha = 0.4 + (this.stress * 0.6);
+
+    ctx.fillStyle = `hsla(${currentHue}, 95%, ${luminosity}%, ${alpha})`;
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    ctx.fill();
+
+    if (this.stress > 0.4) {
+      ctx.fillStyle = `#ffffff`;
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size * 0.4, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+}
+
+function init() {
+  particles = [];
+  const cols = Math.floor(width / config.spacing);
+  const rows = Math.floor(height / config.spacing);
+
+  const offsetX = (width - cols * config.spacing) / 2 + config.spacing / 2;
+  const offsetY = (height - rows * config.spacing) / 2 + config.spacing / 2;
+
+  for (let i = 0; i <= cols; i++) {
+    for (let j = 0; j <= rows; j++) {
+      if (Math.random() > 0.12) {
+        particles.push(new Particle(offsetX + i * config.spacing, offsetY + j * config.spacing));
+      }
+    }
+  }
+}
+
+function animate() {
+  ctx.fillStyle = 'rgba(6, 7, 19, 0.22)';
+  ctx.fillRect(0, 0, width, height);
+
+  mouse.x += (mouse.targetX - mouse.x) * 0.15;
+  mouse.y += (mouse.targetY - mouse.y) * 0.15;
+
+  mouse.vx = mouse.x - lastMouse.x;
+  mouse.vy = mouse.y - lastMouse.y;
+  lastMouse.x = mouse.x;
+  lastMouse.y = mouse.y;
+
+  particles.forEach(p => p.update());
+
+  ctx.lineWidth = 0.6;
+  for (let i = 0; i < particles.length; i++) {
+    const p1 = particles[i];
+    if (p1.stress < 0.05) continue; 
+
+    for (let j = i + 1; j < particles.length; j++) {
+      const p2 = particles[j];
+      const ldx = p1.x - p2.x;
+      const ldy = p1.y - p2.y;
+      const lDist = Math.sqrt(ldx * ldx + ldy * ldy);
+
+      if (lDist < config.maxLineDist) {
+        const lineAlpha = (1 - (lDist / config.maxLineDist)) * p1.stress * 0.5;
+        const lineHue = 190 + (p1.stress * 130);
+
+        ctx.strokeStyle = `hsla(${lineHue}, 90%, 60%, ${lineAlpha})`;
+        ctx.beginPath();
+        ctx.moveTo(p1.x, p1.y);
+        ctx.lineTo(p2.x, p2.y);
+        ctx.stroke();
+      }
+    }
+  }
+
+  particles.forEach(p => p.draw());
+
+  requestAnimationFrame(animate);
+}
+
+function handleMove(e) {
+  const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+  const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+  mouse.targetX = clientX;
+  mouse.targetY = clientY;
+}
+
+function handleLeave() {
+  mouse.targetX = -1000;
+  mouse.targetY = -1000;
+}
+
+window.addEventListener('mousemove', handleMove);
+window.addEventListener('touchmove', handleMove, { passive: true });
+window.addEventListener('mouseleave', handleLeave);
+window.addEventListener('touchend', handleLeave);
+window.addEventListener('resize', resize);
+
+resize();
+animate();
+</script>
+
+</body>
+</html>

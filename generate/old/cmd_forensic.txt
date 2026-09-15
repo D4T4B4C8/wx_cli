@@ -1,0 +1,25 @@
+%FRAME_TITLE% WHITEX FORENSIC
+%FRAME_INDEX% Case File // 002
+%TITLE% YT-DLP
+%TITLE% Youtube-DL
+%SUBTITLE% Media Extraction Protocol — Command Reference
+
+%BLOCK% YT-DLP
+%STEP% Install
+%CMD% sudo pacman -S yt-dlp
+%CMD% pip install 'yt-dlp>=2022.1.21'
+%STEP% Show video quality list
+%CMD% yt-dlp -F link
+%STEP% Download
+%CMD% yt-dlp -f 102 link
+%NOTE% **102** = quality number from the list above
+
+%BLOCK% Youtube-DL
+%STEP% Show video quality list
+%CMD% youtube-dl -F link
+%STEP% Download
+%CMD% youtube-dl -f best link
+%NOTE% **best** = used for best available quality
+
+%FOOTER% Link Status:Encrypted
+%FOOTER% Protocol:Stable

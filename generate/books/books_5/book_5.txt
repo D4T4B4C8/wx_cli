@@ -1,0 +1,919 @@
+========================================
+PAGE 1
+========================================
+
+* REMOVE UNUSED PKGS IN ARCH
+- sudo pacman -Rns $(pacman -Qtdq)
+
+* CLEAN PKG CACHE
+- sudo paccache -r
+- sudo pacman -Scc
+
+* FORGET DRIVE OR USB FASTLY
+- sudo mkfs.ext4 /dev/sda
+
+* DOWNLOAD TORRENT FILES IN CLI
+- apt install aria2
+- aria2c file.torrent
+
+* HOW TO INSTALL YT-DLP
+- pip install 'yt-dlp>=2022.1.21'
+
+* ENCRYPT FILE USING VIM
+- vim f.txt
+[TYPE ANY THING]
+- :x
+
+========================================
+PAGE 2
+========================================
+
+[TYPE NEW PASSWD AND THEN SAVE THE FILE]
+[DON'T USE VI ONLY USE VIM]
+
+* FIND SHORT LINKS DETAILS
+- curl -sIL https://short.link
+        OR
+- curl -I https://short.link | grep ^location
+
+* FIND WORD MEANING AND TRANSLATE TO ANY LANGUAGE
+- sudo pacman -Sy translate-shell
+[FIND WORD MEANING]
+- trans hello
+[TRANSLATE ENGLISH TO FRENCH]
+- echo "hello" | trans :fr
+
+========================================
+PAGE 3
+========================================
+[ARCH]
+
+* HOW TO INSTALL DK MANUALLY
+
+[FIRST INSTALL AND BOOT BASIC ARCH ISO]
+[NOW AFTER BOOT INSTALL TOOLS]
+
+-> yay                      -> chafa
+-> lightdm / ly             -> jgmenu
+-> lightdm-gtk-greeter      -> nitrogen
+-> xorg-server              -> termite
+-> dk                       -> thunar
+-> xorg-xrandr              -> xorg-xauth
+-> lemonbar (crossed out) -> polybar
+-> sxhkd
+-> rofi
+-> touchegg
+-> picom
+-> pavucontrol
+-> linux-headers
+
+========================================
+PAGE 4
+========================================
+
+[AFTER INSTALLING TOOLS NOW COPY FILES]
+[DOWNLOAD FILE'S USING MEGA]
+
+[FILE NAME]              TO   [LOCATION]
+-> .zshrc                     /home/wx/.zshrc
+-> .ohmyzsh                   /home/wx/.ohmyzsh
+-> bar        } polybar       /bin/bar ; /etc/polybar/config
+-> lemonbar                   /bin/lemonbar
+-> dkrc                       .config/dk/dkrc
+-> picom.conf                 .config/picom.conf
+-> sxhkdrc                    .config/dk/sxhkdrc
+-> adwaita-dark               /usr/share/themes/adwaita-dark
+-> lightdm-gtk-greeter        /etc/lightdm/lightdm-gtk-greeter.conf
+-> .xprofile                  /.xprofile
+-> 30-touchpad.conf           /etc/x11/xorg.conf.d/30-touchpad.conf
+-> sekiroshadow               /boot/grub/themes/sekiroshadow
+-> config                     /etc/xdg/termite/config
+
+========================================
+PAGE 5
+========================================
+
+- chmod +x .config/dk/*
+- systemctl enable lightdm
+
+[ADD 2 LINES IN PACMAN.CONF]
+[FIND # MISC OPTIONS INSIDE PACMAN.CONF]
+-> micro /etc/pacman.conf
+-> Color
+-> ILoveCandy
+
+* GPU DRIVERS FOR NVIDIA GEFORCE GT 610
+-> yay -S lib32-opencl-nvidia-390xx
+-> yay -S lib32-nvidia-390xx-utils
+-> yay -S opencl-nvidia-390xx
+-> yay -S nvidia-390xx-settings
+-> yay -S nvidia-390xx-utils
+-> yay -S nvidia-390xx-dkms
+
+[IF THIS INSTALLATION GIVES ERROR]
+-> micro /etc/pacman.conf
+-> [REMOVE # FROM ->]
+
+========================================
+PAGE 6
+========================================
+
+-> [multilib]
+-> Include = /etc/pacman.d/mirrorlist
+-> sudo pacman -Sy lib32-zlib
+
+* INSTALL DK MANUALLY IN [DEBIAN]
+
+[FIRST INSTALL AND BOOT UBUNTU SERVER ISO]
+[INSTALL TOOLS]
+
+-> lightdm                  -> nitrogen
+-> lightdm-gtk-greeter      -> thunar
+-> xorg                     -> gcc
+-> xorg-server-source
+-> sxhkd                    -> alacritty   }
+-> rofi                     -> cool-retro-term }  TERMINALS
+-> touchegg                 -> make
+-> picom                    -> build-essential
+-> chafa                    -> polybar
+
+========================================
+PAGE 7
+========================================
+
+[INSTALLING DK]
+- git clone https://bitbucket.org/natemaia/dk.git
+- & cd dk
+
+[INSTALL]
+- libxcb-randr0-dev
+- libxcb-util-dev
+- libxcb-icccm4-dev
+- libxcb-cursor-dev
+- libxcb-keysyms1-dev
+- libxcb-res0-dev
+
+-> make
+-> sudo make install
+-> mkdir -p .config/dk
+-> sudo service lightdm start
+
+========================================
+PAGE 8
+========================================
+
+* LY AND LEMURS DISPLAY MANAGER
+-> systemctl disable lightdm
+-> systemctl enable ly@tty2
+-> micro /etc/ly/config.ini
+->   animation = matrix
+     bigclock = true
+     fg = 6
+--x--x--x--x--x--
+[LEMURS] THIS IS FOR TTY
+-> systemctl enable lemurs
+
+* HOW TO CORRECT YOUR SYSTEM TIME
+-> sudo timedatectl set-timezone Asia/Kolkata
+
+* HOW TO INSTALL OLLAMA AI
+-> curl -fsSL https://ollama.com/install.sh | sh
+
+========================================
+PAGE 9
+========================================
+
+-> ollama pull llama2
+        OR
+-> ollama pull dolphin-llama3
+-> ollama run dolphin-llama3
+
+* BEAUTIFULL SHELL
+-> sudo pacman -Sy nushell
+-> nu
+-> chsh -s /usr/bin/nu
+
+* COOL HACKER TERMINAL
+-> yay -S edex-ui-bin
+-> edex-ui
+-> micro .config/edex-ui/settings.json
+     shell = zsh
+     cwd = /home/whitex/
+
+========================================
+PAGE 10
+========================================
+
+theme = chalkboard-notype
+nointro = true
+
+* HOW TO CLONE LARGE DRIVE INTO SMALL DRIVE
+
+[FOR EXAMPLE I WANT TO CLONE 64GB USB INTO 32GB USB.]
+
+64GB -
+      sda1 -> 500M
+      sda2 -> 63.5GB
+                |
+          USED       FREE
+          20GB       43GB
+
+[NOW OPEN GPARTED AND RESIZE THE 63GB TO 20GB]
+-> sudo dc3dd if=/dev/sda of=/dev/sdb
+
+========================================
+PAGE 11
+========================================
+
+-> [AFTER FINISHING THE PROCESS IT GIVE
+    "DD ERROR NO SPACE LEFT"]
+
+-> sudo gdisk /dev/sdb
+-> x
+-> e
+-> w
+-> y
+
+-> lsblk
+
+* HOW TO UPLOAD LARGE AMOUNT OF FILES AND FOLDER ON GITHUB USING CLI
+
+-> [FIRST OPEN]
+
+github -> settings -> developer option
+-> personal access token -> token (classic)
+-> create/regenerate token
+
+[WHEN YOU CREATE YOUR TOKEN TICK
+ repo, workflow, write, delete, admin]
+
+========================================
+PAGE 12
+========================================
+
+-> pacman -S github-cli
+-> gh auth login   [FOR LOGIN]
+   [CHOOSE OPTION]
+
+   -> github.com
+   -> https
+   -> yes
+   -> paste an authentication token
+
+-> gh repo create test --public
+        OR
+   gh repo create test --private
+   [CREATING REPO]
+
+-> gh repo list   [LIST ALL REPO]
+
+-> gh repo delete username/repo-name
+   [DELETE REPO]
+
+[NOW WE START UPLOADING PROCESS]
+[DELETE MAIN BRANCH USING CLI]
+-> gh api -X DELETE /repos/w-h-i-t-e-x/wx_conf/git/refs...
+
+========================================
+PAGE 13
+========================================
+
+-> git init
+-> git config --global --add safe.directory /home/whitex
+
+-> git add .    [IT ADD ALL FILES]
+
+-> git status
+
+-> git remote add origin https://github.com/w-h-i-t-e-x/wx.git
+
+   [IF YOU WANT TO ADD ANOTHER URL
+    FIRST REMOVE OLD URL]
+
+-> git remote remove origin
+
+-> git commit -m "any msg"
+
+-> git push origin master
+
+* TERMITE INSTALLATION ERROR
+"ERROR: PROGRAM 'GLIB-MAKENUMS' NOT FOUND"
+
+-> pacman -S glib2
+-> pacman -S glib2-devel
+
+========================================
+PAGE 14
+========================================
+
+* STRING TO SHA512
+
+-> echo -n "hello" | openssl dgst -sha512
+        OR
+-> echo -n "hello" | sha512sum
+
+* ENCRYPT DRIVE FOR SECURING BACKUP
+[ONLY USE EMPTY DRIVE]
+-> sudo pacman cryptsetup
+-> sudo cryptsetup luksFormat /dev/sdb
+-> sudo cryptsetup open /dev/sdb wx
+        [ENTER ANY NAME]
+
+-> sudo mkfs.ext4 /dev/mapper/wx
+-> sudo mount /dev/mapper/wx /mnt
+-> [NOW YOU ADD YOUR FILES IN THIS DRIVE]
+-> sudo umount /mnt
+
+========================================
+PAGE 15
+========================================
+
+-> sudo cryptsetup close wx
+
+[IF YOU WANT TO ACCESS YOUR FILE IN FUTURE. THE STEPS TO ACCESS
+ THE DRIVE OPEN -> MOUNT -> UMOUNT -> CLOSE]
+
+* DEVICE UUID NOT FOUND
+
+-> sudo [FIRST OPEN YOUR DIFFERENT SYSTEM AND CONNECT UUID
+    ERROR SYSTEM]
+
+-> sudo su
+-> mount /dev/sdb2 /mnt
+-> mount /dev/sdb1 /mnt/boot
+-> mount -t proc proc /mnt/proc
+-> mount -t devtmpfs udev /mnt/dev
+-> mount -t sysfs sys /mnt/sys
+-> chroot /mnt
+-> vim etc/mkinitcpio.conf
+   [ADD] => MODULES=(vmd)
+
+========================================
+PAGE 16
+========================================
+
+-> mkinitcpio -p
+
+* COMPRESS FILE USING XZ
+-> pacman -S xz
+-> xz -9e a.jpg
+-> xz -d a.jpg.xz
+
+* INSTALL WORDPRESS ON LINUX
+
+[FIRST INSTALL WORDPRESS FILE THEN UNZIP THAT FILE]
+[NOW INSTALL XAMPP FOR LINUX]
+-> chmod +x xampp.run
+-> sudo ./xampp.run
+-> pacman -Sy apache
+-> pacman -Sy mysql
+
+[IF YOUR LAPTOP IS OLD THEN IT ASK 32 BIT OF XAMPP]
+solo ->
+
+========================================
+PAGE 17
+========================================
+
+-> pacman -Sy libxcrypt-compat
+-> cd wordpress
+-> cp wp-config-sample.php wp-config.php
+-> micro wp-config.php
+
+   DB_NAME = 'wordpress'
+   DB_USER = 'root'
+   DB_PASSWORD = ''  -> EMPTY
+
+[NOW MOVE YOUR WORDPRESS FOLDER TO HTDOCS]
+-> sudo mv wordpress /opt/lampp/htdocs/
+
+[START XAMPP]
+-> sudo /opt/lampp/lampp start
+
+[OPEN YOUR WEB BROWSER]
+-> localhost/phpmyadmin/
+
+new -> wordpress -> create
+            ^
+        db_name
+
+-> [OPEN NEW TAB]
+
+========================================
+PAGE 18
+========================================
+
+-> localhost/wordpress
+
+[AFTER WORDPRESS IS INSTALLED CUSTOMISE YOUR WEBSITE]
+
+-> localhost/wordpress/wp-admin
+
+* LIVE WALLPAPERS IN LINUX
+
+-> sudo pacman -Sy ffmpeg feh imagemagick xdg-utils
+
+-> git clone https://github.com/terroo/wallset
+
+-> & cd wallset
+
+-> sudo ./install.sh
+
+-> wallset -v video.mp4
+
+[wallset -v v.mp4 &] -> PASTE THIS LINE IN
+                        .xprofile FILE
+
+========================================
+PAGE 19
+========================================
+
+[LIVE WALLPAPERS WEBSITES]
+-> mylivewallpapers
+-> motionbgs
+-> moewalls
+
+* POLYBAR THEMES
+
+-> git clone https://github.com/adi1090x/polybar-themes.git
+
+-> ./setup.sh
+
+[2] BITMAP
+
+-> bash ~/.config/polybar/launch.sh --cuts
+
+[BASH ~/.config/polybar/launch.sh --cuts &]
+                        PASTE THIS IN
+                        .xprofile
+
+* COPY FILE/TEXT USING CLI
+
+-> sudo pacman -Sy xclip
+
+========================================
+PAGE 20
+========================================
+
+-> echo "hello" | xclip -selection clipboard
+        OR
+-> cat a.txt | xclip -selection clipboard
+
+* BACKUP YOUR WORDPRESS SITE
+
+-> INSTALL "ALL-IN-ONE WP MIGRATION" PLUGIN
+-> [CREATE BACKUP]
+-> [OPEN INFINITYFREE.COM AND OPEN YOUR SITE FILE MANAGER]
+-> [OPEN HTDOCS/WP-CONTENT/AI1WM-BACKUPS]
+-> [DOWNLOAD THAT BACKUP XYZ.WPRESS]
+-> [NOW IMPORT THAT BACKUP INTO YOUR NEW WORDPRESS]
+-> [INSTALL "ALL-IN-ONE..." IN YOUR NEW WORDPRESS]
+
+========================================
+PAGE 21
+========================================
+
+* INCREASE THE MAXIMUM UPLOAD BACKUP FILE SIZE IN WORDPRESS
+
+[CREATE THE .HTACCESS FILE INSIDE HTDOCS FOLDER]
+
+[INSIDE .HTACCESS FILE WRITE THIS]
+- php_value upload_max_filesize 1000M
+- php_value post_max_size 1000M
+- php_value max_execution_time 300
+- php_value max_input_time 300
+
+* GMIC FILTERS
+
+-> gmic a.jpg -hardsketchbw 200,100 -o out.jpg
+-> gmic a.jpg -sharpen 1500 -o out.jpg
+
+# MORE INTRESTING FILTERS
+
+========================================
+PAGE 22
+========================================
+
+-> gmic a.jpg -pr_canvas
+-> -cracks
+-> -pencilbw
+-> -hedcut
+-> -stained_glass
+-> -cartoon
+-> -hearts
+-> rgb2bayer
+-> boxfitting
+-> texturize_canvas
+-> halftone
+-> marble
+-> mosaic
+-> water
+-> scanlines
+-> gmic 07.jpg -watermark_visible "2 wx"
+
+========================================
+PAGE 23
+========================================
+
+\2 = USE FOR SYMBOLS CHANGE ANY NUMBER
+
+[FOR MORE FILTERS GO TO MEGA A/C]
+FOLDER NAME = GMIC FILTERS
+[OPEN THE HTML FILE ON FIREFOX]
+
+HINT:
+[ONLY CHANGE INSIDE CMD "&fx" IN STARTING]
+FOR EX -> -gimp_8bits
+             TO
+          -fx_8bits
+
+* CHECK OUT STORAGE INFO CREATIVELY
+
+-> sudo pacman -S dust
+-> dust
+
+* RECORD AND PLAY ONLY TERMINAL VIDEO
+
+-> asciinema rec
+   ctrl+d [TO STOP]
+-> asciinema play video.cast
+
+========================================
+PAGE 24
+========================================
+
+* COPY ALL TXT IN THE TERMINAL AND SAVE TO A FILE
+
+> tmux
+> tmux capture-pane -p -S - | tee o.txt
+
+* REMOVE BG USING GIMP
+
+> [OPEN IMAGE] -> [LAYER OPTION] -> [ALLOW ALPHA CHANNEL]
+> [DUPLICATE THE LAYER]
+> [CLICK ON TOP LAYER TO SELECT IT]
+> [GO TO COLOR MENU] -> [SELECT DESATURATE] -> [SET DEFAULT SETTINGS NORMALLY]
+> [GO TO COLOR MENU AGAIN] -> [SELECT THRESHOLD PLAY WITH SLIDES UNTIL YOU GET A BLACK AND WHITE IMAGE THAT SHARPS AND CLEARLY SHOW]
+> [USE FUZZY SELECT TOOL TO SELECT THE BACKGROUND AND PRESS DELETE BUTTON]
+
+========================================
+PAGE 25
+========================================
+
+> [NOW REMOVE THE EYE IN FIRST IMAGE AND IN SECOND IMAGE
+   SELECT BACKGROUND AND PRESS DELETE BUTTON]
+
+* MOUNT CAMERA SD CARD
+
+> sudo mount -t vfat /dev/sdb1 /mnt
+
+* IF BOOT PARTITION IS CORRUPTED THEN HOW TO RECOVER SQL DATABASE
+
+-> sudo mount /dev/sdb2 /mnt
+-> sudo mount --bind /dev /mnt/dev
+-> sudo mount --bind /proc /mnt/proc
+-> sudo mount --bind /sys /mnt/sys
+-> sudo -t devpts devpts /mnt/dev/pts
+-> sudo chroot /mnt
+-> mkdir -p /run/mysqld
+-> chown mysql:mysql /run/mysqld
+
+========================================
+PAGE 26
+========================================
+
+[NOW RUN SQL SERVER MANUALLY]
+-> mysqld --user=mysql --skip-networking &
+
+-> sudo mariadb-dump --no-defaults -u root -p cmp > cmp.sql
+
+* HOW TO RECOVER CORRUPTED BOOT PARTITION
+
+-> sudo mount /dev/sdb2 /mnt
+-> sudo mount /dev/sdb1 /mnt/boot
+-> sudo mount --bind /dev /mnt/dev
+-> sudo mount --bind /proc /mnt/proc
+-> sudo mount --bind /sys /mnt/sys
+-> sudo mount -t devpts devpts /mnt/dev/pts
+-> sudo mount --bind /etc/resolv.conf /mnt/etc/resolv.conf
+-> sudo chroot /mnt
+
+========================================
+PAGE 27
+========================================
+
+USE THESE 2 CMDS FIRST THEN FOLLOW CHROOT PROCESS
+
+-> lsblk -f
+-> mkfs.fat -F32 /dev/sdb1
+
+[NOW FOLLOW THESE STEPS AFTER CHROOT]
+
+-> sudo mount -t efivarfs efivarfs /sys/firmware/efi/efivars
+-> sudo pacman -S grub efibootmgr linux
+-> sudo grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=grub --recheck
+-> sudo mkinitcpio -p
+-> sudo grub-mkconfig -o /boot/grub/grub.cfg
+
+[NOW RESTART]
+
+[IF ITS GIVE ERROR IN UUID AND OPEN EMERGENCY SHELL THEN ENTER PASSWD]
+-> lsblk -f
+
+[IT SHOW CORRECT UUID OF SDB1]
+
+========================================
+PAGE 28
+========================================
+
+-> micro /etc/fstab
+- [PASTE THAT UUID THERE IN SDB1 LINE]
+
+* WHEN YOU START MARIADB SERVER AND IT GIVE YOU ERROR
+
+-> sudo mariadb-install-db --user=mysql --basedir=/usr --datadir=/var/lib/mysql
+-> sudo mariadb -u root
+
+* CREATE OR USE BACKUP OF SQL DB
+[CREATE B]
+
+-> sudo mariadb-dump -u root -p cmp > backup.sql
+[USE B]
+-> CREATE DATABASE cmp2
+-> sudo mariadb -u root -p cmp2 < backup.sql
+
+========================================
+PAGE 29
+========================================
+
+* SET STATIC IP USING CLI
+
+-> nmcli connection show
+   [COPY THE NAME]
+
+-> sudo nmcli connection modify "wc1"
+   ipv4.addresses 192.168.1.104/24
+   ipv4.gateway 192.168.1.1
+   ipv4.dns "8.8.8.8 1.1.1.1"
+   ipv4.method manual
+
+wc1 = IS MY CONNECTION NAME
+192.168.1.104 = IS MY STATIC IP THAT I WANT
+
+-> sudo nmcli connection down "wc1"
+-> sudo nmcli connection up "wc1"
+-> ip addr show wlan0
+
+* CREATE LOCAL SMB SHARING SETUP FOR WINDOWS AND ANDROID
+
+========================================
+PAGE 30
+========================================
+
+-> sudo pacman -Sy smb samba
+-> mkdir -p share
+-> chmod -R 777 share
+-> sudo chown -R $(whoami):$(whoami) share
+
+[CREATE CONFIG FILE]
+-> sudo micro /etc/samba/smb.conf
+   [SHARE]
+   path = /home/whitex/share
+   browseable = yes
+   writable = yes
+   read only = no
+   guest ok = no
+   valid users = whitex
+   force user = whitex
+   create mask = 0777
+   directory mask = 0777
+
+   (MENTION YOUR FOLDER NAME, IT IS IMPORTANT)
+
+========================================
+PAGE 31
+========================================
+
+[GLOBAL]
+kernel change notify = yes
+directory name cache size = 100
+[SAVE THE CONF FILE]
+
+-> sudo smbpasswd -a whitex
+-> sudo systemctl start smb
+-> sudo systemctl enable smb
+
+[NOW GO TO YOUR WINDOW FILE MANAGER]
+[SEARCH]
+-> \\192.168.1.104\share
+        v
+   [LINUX SYSTEM IP]
+
+[IT ASK USER AND PASS WRITE YOUR SMB USER AND PASS]
+
+[FOR ANDROID]
+INSTALL CX FILE EXPLORER IN PLAYSTORE
+
+========================================
+PAGE 32
+========================================
+
+ACCESS SMB IN CLI => smbclient //192.168.1.104/x -U whitex
+
+IN HOSTNAME ENTER -> 192.168.1.104
+
+* SQL TO EXCEL
+
+-> sudo mariadb -u root -p -e "select * from stock" cmp --batch --raw | sed 's/\t/,/g' > output.csv
+
+-> sudo pacman -Sy gnumeric
+-> ssconvert out.csv out.xlsx
+
+* FASTEST TEXT SEARCH TOOL
+
+-> X the_silver_searcher
+-> ag -i passwd
+
+[SEARCH IN SPECIFIC DIRECTORY]
+-> ag -i "passwd"
+
+[SEARCH ONLY SPECIFIC FILE TYPE]
+-> ag "database" --python --html --js
+
+========================================
+PAGE 33
+========================================
+
+[LIST FILE NAMES + COUNT]
+-> ag -c "error"
+
+[COMBINE WITH fzf]
+-> ag "" | fzf
+        OR
+-> ag "lol" | fzf
+
+* IF YOU WANT TO SHOW APPS ON DK DESKTOP
+
+-> pcmanfm --set-wallpaper a.png
+-> pcmanfm --desktop &
+
+* THUNAR FILE MANAGER THUMBNAILER PKGS
+
+X tumbler ffmpegthumbnailer
+
+[AFTER INSTALLED YOU CAN SEE ALL IMAGES WITHOUT OPEN THEM]
+
+========================================
+PAGE 34
+========================================
+
+* BACKGROUND IMAGE CHANGE USING CLI
+
+-> feh a.png
+        OR
+-> feh --bg-scale a.png
+
+[PASTE THAT CMD IN .XPROFILE]
+
+* BEST MYSQL CLIENT
+
+-> sudo pip install mycli
+-> export PATH="$HOME/.local/bin:$PATH"
+        (NO SPACES)
+
+-> sudo mycli -u root -p -d cmp
+
+* FIND SERVICE OF ANY TOOL
+
+-> systemctl list-unit-files | grep ly
+
+========================================
+PAGE 35
+========================================
+
+DARK
+* THUNAR THEME AND APP ICON PKGS
+
+-> yay -S flat-remix-gtk   [THEME]
+-> yay -S beautyline       [APP-ICON]
+-> X nwg-look
+-> nwg-look [FOR SET THEME AND APP-ICON OF THUNAR]
+
+* TRANSPARENT AND CHANGE KITTY THEMES
+
+-> micro .config/kitty/kitty.conf
+-> background_opacity 0.6
+
+[FOR THEMES]
+-> kitten themes
+-> M
+
+========================================
+PAGE 36
+========================================
+
+* ADD LIBREOFFICE CALC AS KEY BINDINGS
+
+-> alt + l
+   soffice --calc
+
+* HOW TO READ CSV FILE IN CLI
+
+-> X miller
+-> mlr --icsv --opprint head a.csv
+
+* CONNECT SQL WITH PYTHON
+
+-> sudo mysql
+-> CREATE USER 'whitex'@'localhost' IDENTIFIED BY '1234';
+-> GRANT ALL PRIVILEGES ON cmp.* TO 'whitex'@'localhost';
+-> FLUSH PRIVILEGES;
+
+========================================
+PAGE 37
+========================================
+
+[IN YOUR PYTHON CODE CHANGE THESE LINES]
+
+host = "localhost",
+user = "whitex",
+password = "1234",
+database = "cmp"
+
+* CONNECT PC'S ANY WHERE ANY TIME
+
+-> X tailscale
+-> sudo systemctl enable tailscaled
+-> sudo tailscale up
+-> [LOGIN BOTH PC WITH SAME GMAIL]
+-> sudo tailscale status
+
+[IF YOU MISTAKELY LOGIN DIFFERENT EMAIL]
+
+========================================
+PAGE 38
+========================================
+
+-> sudo tailscale logout
+-> sudo rm -rf /var/lib/tailscale/tailscaled.state
+-> sudo systemctl restart tailscaled
+-> sudo tailscale up
+-> [COPY URL AND OPEN IN FIREFOX PRIVATE WINDOW]
+-> ifconfig
+
+* TAKE FULL GUI ACCESS OF OFFICE PC
+
+[OFFICE PC]
+-> X x11vnc
+-> x11vnc -display :0 -forever -usepw
+
+[HOME PC]
+
+========================================
+PAGE 39
+========================================
+
+-> X tigervnc
+-> vncviewer 100.172.10.22:5900
+                v
+           TAILSCALE IP
+
+* SHARE ANY FILE GLOBALLY
+
+- [METHOD 1 USING CLOUDFLARED]
+-> X cloudflared
+-> python3 -m http.server 8000
+   [IN DIFFERENT TERMINAL RUN]
+-> cloudflared tunnel --url http://localhost:8000
+
+# [IT WILL PRINT A URL SEND TO YOUR CLIENT]
+
+========================================
+PAGE 40
+========================================
+
+[METHOD 2 USING PINGGY OR SERVEO]
+
+-> python -m http.server 8000
+-> ssh -p 443 -R0:localhost:8000 a.pinggy.link
+        OR
+-> ssh -R 80:localhost:8000 serveo.net
+
+* SHARE FILE TERMINAL TO TERMINAL
+
+-> croc send a.txt <- [SENDER]
+-> croc_secret = "code"    ^ croc
+                    [RECEIVER]
+
+* HOW TO REMOVE ANY TEXT OR THING IN THE IMAGE USING GIMP
+
+========================================
+PAGE 41
+========================================
+
+[SELECT HEALING OR CLONE TOOL]
+
+PRESS CTL AND CLICK THAT PART THAT YOU WANT
+
+AFTER THAT TRY TO REMOVE TEXT AND THING.
+

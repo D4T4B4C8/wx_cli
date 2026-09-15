@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WHITEX Knowledge Vault - Cube Edition</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+<style>
+:root{
+--accent:#de85ff;
+--bg:#050505;
+--border:var(--accent);
+--text:#FFFFFF;
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Consolas, monospace;
+}
+
+body{
+background:var(--bg);
+overflow:hidden;
+color:var(--text);
+height:100vh;
+}
+
+/* CUBE BACKGROUND */
+#cube-bg{
+position:fixed;
+inset:0;
+z-index:0;
+pointer-events:auto;
+}
+.sidebar{
+  overflow-y:auto;
+  scrollbar-width:thin;
+}
+.default-animation{
+width:100vw;
+height:100vh;
+}
+
+.default-animation--scene{
+display:grid;
+width:100%;
+height:100%;
+perspective:99999999px;
+}
+
+.cube{
+position:relative;
+width:100%;
+height:100%;
+transform-style:preserve-3d;
+transform:rotateX(-18deg) rotateY(18deg);
+will-change:transform;
+}
+
+.cube-face{
+position:absolute;
+width:100%;
+height:100%;
+background:linear-gradient(fffff,#414345,#232526);
+border:1px solid rgba(166,225,197);
+box-shadow:
+0 0 12px rgba(166,225,197,.18),
+inset 0 0 10px rgba(166,225,197,.18);
+backface-visibility:visible;
+}
+
+.cube-face--top{transform:rotateX(90deg) translateZ(14px);}
+.cube-face--bottom{transform:rotateX(-90deg) translateZ(14px);}
+.cube-face--left{transform:rotateY(-90deg) translateZ(14px);}
+.cube-face--right{transform:rotateY(90deg) translateZ(14px);}
+.cube-face--front{transform:translateZ(14px);} .cube-face--back{transform:rotateY(180deg) translateZ(14px);}
+
+/* UI */
+.sidebar{
+position:fixed;
+left:10px;
+top:10px;
+bottom:10px;
+width:220px;
+background:rgba(0,0,0,.88);
+border:1px solid var(--border);
+padding:15px;
+z-index:20;
+backdrop-filter:blur(8px);
+}
+
+.logo{
+font-size:20px;
+margin-bottom:20px;
+font-weight:bold;
+}
+
+.menu button{
+width:100%;
+margin-bottom:8px;
+padding:10px;
+background:black;
+border:1px solid var(--border);
+color:var(--text);
+cursor:pointer;
+}
+
+.topbar{
+position:fixed;
+left:250px;
+right:20px;
+top:10px;
+height:60px;
+background:rgba(0,0,0,.88);
+border:1px solid var(--border);
+display:flex;
+align-items:center;
+padding:0 20px;
+z-index:20;
+backdrop-filter:blur(8px);
+}
+
+.window{
+position:absolute;
+background:rgba(0,0,0,.95);
+border:1px solid var(--border);
+width:500px;
+height:350px;
+z-index:30;
+}
+
+.titlebar{
+height:35px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:0 10px;
+border-bottom:1px solid var(--border);
+cursor:move;
+}
+
+.content{
+padding:15px;
+height:calc(100% - 35px);
+overflow:auto;
+}
+
+.note{
+margin-bottom:15px;
+padding:10px;
+border:1px solid rgba(245,73,39,.2);
+}
+
+pre{white-space:pre-wrap;color:#ffd38a;}
+.close{cursor:pointer;}
+</style>
+</head>
+<body>
+
+<div id="cube-bg">
+  <div id="cubes-wrapper" class="default-animation">
+    <div id="cubes-scene" class="default-animation--scene"></div>
+  </div>
+</div>
+
+<div class="sidebar">
+<div class="logo">KNOWLEDGE VAULT</div>
+<div class="menu">
+<button onclick="openWindow('Networking', netData)">NETWORKING</button>
+<button onclick="openWindow('Linux', linuxData)">LINUX</button>
+<button onclick="openWindow('Web Dev', webData)">WEB DEV</button>
+</div>
+</div>
+
+<div class="topbar">
+<h2>WHITEX DATABASE</h2>
+</div>
+
+<script>
+const netData=[{title:"Nmap",content:"nmap -sV 192.168.1.1"}];
+const linuxData=[{title:"Find",content:"find / -name test.txt"}];
+const webData=[{title:"Flexbox",content:"display:flex;"}];
+
+let z=100;
+function openWindow(title,data){
+let win=document.createElement("div");
+win.className="window";
+win.style.left=260+Math.random()*200+"px";
+win.style.top=100+Math.random()*100+"px";
+win.innerHTML=`
+<div class="titlebar">
+<span>${title}</span>
+<span class="close">✕</span>
+</div>
+<div class="content">
+${data.map(i=>`<div class="note"><h3>${i.title}</h3><pre>${i.content}</pre></div>`).join("")}
+</div>`;
+document.body.appendChild(win);
+win.querySelector(".close").onclick=()=>win.remove();
+drag(win);
+}
+
+function drag(el){
+const title=el.querySelector(".titlebar");
+let x=0,y=0,px=0,py=0;
+title.onmousedown=(e)=>{
+el.style.zIndex=++z;
+px=e.clientX; py=e.clientY;
+document.onmousemove=(e)=>{
+x=px-e.clientX; y=py-e.clientY;
+px=e.clientX; py=e.clientY;
+el.style.top=(el.offsetTop-y)+"px";
+el.style.left=(el.offsetLeft-x)+"px";
+};
+document.onmouseup=()=>document.onmousemove=null;
+};
+}
+
+/* Cube Background */
+const config={gridSize:14,maxAngle:65,radius:4};
+const scene=document.getElementById("cubes-scene");
+
+scene.style.gridTemplateColumns=`repeat(${config.gridSize},1fr)`;
+scene.style.gridTemplateRows=`repeat(${config.gridSize},1fr)`;
+scene.style.gap='1%';
+
+let html='';
+for(let r=0;r<config.gridSize;r++){
+for(let c=0;c<config.gridSize;c++){
+html+=`<div class="cube" data-row="${r}" data-col="${c}">
+<div class="cube-face cube-face--top"></div>
+<div class="cube-face cube-face--bottom"></div>
+<div class="cube-face cube-face--left"></div>
+<div class="cube-face cube-face--right"></div>
+<div class="cube-face cube-face--front"></div>
+<div class="cube-face cube-face--back"></div>
+</div>`;
+}}
+scene.innerHTML=html;
+
+function tiltAt(row,col){
+document.querySelectorAll('.cube').forEach(cube=>{
+const r=+cube.dataset.row;
+const c=+cube.dataset.col;
+const dist=Math.hypot(r-row,c-col);
+const angle=dist<=config.radius?(1-dist/config.radius)*config.maxAngle:0;
+gsap.to(cube,{rotateX:-angle,rotateY:angle,duration:.3,overwrite:'auto'});
+});
+}
+
+scene.addEventListener('pointermove',e=>{
+const rect=scene.getBoundingClientRect();
+const col=(e.clientX-rect.left)/(rect.width/config.gridSize);
+const row=(e.clientY-rect.top)/(rect.height/config.gridSize);
+tiltAt(row,col);
+});
+
+scene.addEventListener('pointerleave',()=>{
+document.querySelectorAll('.cube').forEach(c=>{
+gsap.to(c,{rotateX:0,rotateY:0,duration:.6});
+});
+});
+</script>
+</body>
+</html>
