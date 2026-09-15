@@ -1,0 +1,1274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Knowledge Terminal</title>
+
+<style>
+
+:root{
+--accent:#5EFFF7;
+--bg:#050505;
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Consolas, monospace;
+}
+
+body{
+background:var(--bg);
+overflow:hidden;
+height:100vh;
+color:white;
+}
+
+/* Animated Grid */
+
+.grid{
+position:fixed;
+inset:0;
+
+background:
+linear-gradient(rgba(94,255,247,.05) 1px, transparent 1px),
+linear-gradient(90deg, rgba(94,255,247,.05) 1px, transparent 1px);
+
+background-size:40px 40px;
+
+animation:gridmove 20s linear infinite;
+}
+
+@keyframes gridmove{
+from{transform:translateY(0);}
+to{transform:translateY(40px);}
+}
+
+/* Network Canvas */
+
+#network{
+position:fixed;
+inset:0;
+z-index:0;
+opacity:.6;
+}
+
+/* Center Box */
+
+.container{
+position:fixed;
+inset:0;
+
+display:flex;
+justify-content:center;
+align-items:center;
+
+padding:30px;
+z-index:10;
+}
+
+.textbox{
+
+width:min(900px,90vw);
+max-height:80vh;
+
+overflow:auto;
+
+padding:40px;
+
+background:rgba(255,255,255,.05);
+
+backdrop-filter:blur(18px);
+-webkit-backdrop-filter:blur(18px);
+
+border:1px solid rgba(94,255,247,.25);
+
+box-shadow:
+0 0 25px rgba(94,255,247,.15);
+
+border-radius:18px;
+}
+
+.textbox h1{
+color:var(--accent);
+margin-bottom:20px;
+}
+
+.textbox p{
+line-height:1.8;
+font-size:16px;
+color:#e9ffff;
+}
+
+.textbox a{
+color:#FA3B34;
+}
+
+.textbox a:visited{
+color:#FA3B34;
+}
+
+.textbox a:hover{
+color:#FA3B34;
+}
+
+</style>
+</head>
+<body>
+
+<canvas id="network"></canvas>
+
+<div class="grid"></div>
+
+<div class="container">
+
+<div class="textbox">
+
+<h1 class="scramble">PILLOW (PIL)</h1>
+<br>
+<br>
+<pre>from PIL import Image</pre>
+<br>
+<pre>image = Image.open('t9.png')</pre>
+<br>
+<pre># opening image</pre>
+<br>
+<pre>image.show()</pre>
+<br>
+<pre># for showing image</pre>
+<br>
+<a href="basic1.py" download>Download basic1.py</a>
+<br>
+<br>
+<h4 class="scramble">CREATING NEW IMAGE</h4>
+<br>
+<br>
+<pre>from PIL import Image</pre>
+<br>
+<pre>image_blank = Image.new('RGBA', (1000,600))</pre>
+<br>
+<pre>image_blank.show()</pre>
+<br>
+<pre>#[R=RED G=GREEN B=BLUE A=TRANSPARENT]</pre>
+<br>
+<pre>#[WIDTH = 1000, HEIGHT = 600]</pre>
+<br>
+<a href="create_new_image.py" download>Download create_new_image.py</a>
+<br>
+<br>
+<h4 class="scramble">IMAGE SAVING</h4>
+<br>
+<br>
+<pre>from PIL import Image</pre>
+<br>
+<pre>image = Image.open('t9.png')</pre>
+<br>
+<pre>image.save('new.png')</pre>
+<br>
+<pre>#[SAVES A COPY OF THE OPENED IMAGE AS new.png]</pre>
+<br>
+<a href="image_saving.py" download>Download image_saving.py</a>
+<br>
+<br>
+<h4 class="scramble">IMAGE INFO GATHER</h4>
+<br>
+<br>
+<pre>from PIL import Image</pre>
+<br>
+<pre>image = Image.open('t9.png')</pre>
+<br>
+<pre>print(image.size)</pre>
+<br>
+<pre>print(image.filename)</pre>
+<br>
+<pre>print(image.format)</pre>
+<br>
+<pre>print(image.format_description)</pre>
+<br>
+<a href="image_info_gather.py" download>Download image_info_gather.py</a>
+<br>
+<br>
+<h4 class="scramble">ROTATE</h4>
+<br>
+<br>
+<pre>from PIL import Image</pre>
+<br>
+<pre>image = Image.open('t9.png')</pre>
+<br>
+<pre>image_rotate = image.rotate(60)</pre>
+<br>
+<pre>image_rotate.show()</pre>
+<br>
+<a href="rotate.py" download>Download rotate.py</a>
+<br>
+<br>
+<h4 class="scramble">ROTATE IN EXPAND FORM</h4>
+<br>
+<br>
+<pre>from PIL import Image</pre>
+<br>
+<pre>image = Image.open('t9.png')</pre>
+<br>
+<pre>i_r = image.rotate(60, expand=True)</pre>
+<br>
+<pre>i_r.show()</pre>
+<br>
+<a href="rotate_expand.py" download>Download rotate_expand.py</a>
+<br>
+<br>
+<h4 class="scramble">ROTATE BACKGROUND CHANGE</h4>
+<br>
+<br>
+<pre>from PIL import Image</pre>
+<br>
+<pre>image = Image.open('t9.png')</pre>
+<br>
+<pre>ir = image.rotate(60, expand=True, fillcolor=(255,255,255))</pre>
+<br>
+<pre>ir.show()</pre>
+<br>
+<a href="rotate_background.py" download>Download rotate_background.py</a>
+<br>
+<br>
+<h4 class="scramble">ROTATE BACKGROUND CHANGE USING NAMED COLOR</h4>
+<br>
+<br>
+<pre>from PIL import Image, ImageColor</pre>
+<br>
+<pre>image = Image.open('t9.png')</pre>
+<br>
+<pre>ir = image.rotate(60, expand=True, fillcolor=ImageColor.getcolor('red','RGB'))</pre>
+<br>
+<pre>ir.show()</pre>
+<br>
+<a href="rotate_background_named_color.py" download>Download rotate_background_named_color.py</a>
+<br>
+<br>
+<h4 class="scramble">CROP IMAGE</h4>
+<br>
+<br>
+<pre>from PIL import Image</pre>
+<br>
+<pre>image = Image.open('t9.png')</pre>
+<br>
+<pre>ic = image.crop((500,600,1500,1150))</pre>
+<br>
+<pre>ic.show()</pre>
+<br>
+<a href="crop.py" download>Download crop.py</a>
+<br>
+<br>
+<h4 class="scramble">IMAGE FLIP HORIZONTAL</h4>
+<br>
+<br>
+<pre>from PIL import Image</pre>
+<br>
+<pre>image = Image.open('t9.png')</pre>
+<br>
+<pre>ifh = image.transpose(Image.Transpose.FLIP_LEFT_RIGHT)</pre>
+<br>
+<pre>ifh.show()</pre>
+<br>
+<a href="flip_hor.py" download>Download flip_hor.py</a>
+<br>
+<br>
+<h4 class="scramble">IMAGE FLIP VERTICAL</h4>
+<br>
+<br>
+<pre>from PIL import Image</pre>
+<br>
+<pre>image = Image.open('t9.png')</pre>
+<br>
+<pre>ifv = image.transpose(Image.Transpose.FLIP_TOP_BOTTOM)</pre>
+<br>
+<pre>ifv.show()</pre>
+<br>
+<a href="flip_ver.py" download>Download flip_ver.py</a>
+<br>
+<br>
+<h4 class="scramble">ENHANCE RESOLUTION OF IMAGE</h4>
+<br>
+<br>
+<pre>from PIL import Image</pre>
+<br>
+<pre>image = Image.open('t9.png')</pre>
+<br>
+<pre>scale_factor = 2</pre>
+<br>
+<pre>i = (image.size[0] * scale_factor, image.size[1] * scale_factor)</pre>
+<br>
+<pre>better = image.resize(i)</pre>
+<br>
+<pre>better.save('new.png')</pre>
+<br>
+<a href="enhance_image.py" download>Download enhance_image.py</a>
+<br>
+<br>
+<h4 class="scramble">COLOR ENHANCER</h4>
+<br>
+<br>
+<pre>from PIL import Image, ImageEnhance</pre>
+<br>
+<pre>image = Image.open('t9.png')</pre>
+<br>
+<pre>c_e = ImageEnhance.Color(image)</pre>
+<br>
+<pre>enhanced_image = c_e.enhance(2)</pre>
+<br>
+<pre>enhanced_image.show()</pre>
+<br>
+<pre>#[THIS CREATES A COLOR-ENHANCED VERSION OF THE IMAGE]</pre>
+<br>
+<a href="color_enhance.py" download>Download color_enhance.py</a>
+<br>
+<br>
+<h4 class="scramble">CONTRAST ENHANCER</h4>
+<br>
+<br>
+<pre>from PIL import Image, ImageEnhance</pre>
+<br>
+<pre>image = Image.open('t9.png')</pre>
+<br>
+<pre>c_e = ImageEnhance.Contrast(image)</pre>
+<br>
+<pre>e_i = c_e.enhance(2)</pre>
+<br>
+<pre>e_i.show()</pre>
+<br>
+<a href="contrass_enhancer.py" download>Download contrass_enhancer.py</a>
+<br>
+<br>
+<h4 class="scramble">BRIGHTNESS ENHANCER</h4>
+<br>
+<br>
+<pre>from PIL import Image, ImageEnhance</pre>
+<br>
+<pre>image = Image.open('t9.png')</pre>
+<br>
+<pre>b_e = ImageEnhance.Brightness(image)</pre>
+<br>
+<pre>e_i = b_e.enhance(2)</pre>
+<br>
+<pre>e_i.show()</pre>
+<br>
+<a href="brightness_enhancer.py" download>Download brightness_enhancer.py</a>
+<br>
+<br>
+<h4 class="scramble">SHARPNESS ENHANCER</h4>
+<br>
+<br>
+<pre>from PIL import Image, ImageEnhance</pre>
+<br>
+<pre>image = Image.open('t9.png')</pre>
+<br>
+<pre>s_e = ImageEnhance.Sharpness(image)</pre>
+<br>
+<pre>e_i = s_e.enhance(2)</pre>
+<br>
+<pre>e_i.show()</pre>
+<br>
+<a href="sharpness_enhancer.py" download>Download sharpness_enhancer.py</a>
+<br>
+<br>
+<h4 class="scramble">IMAGE FILTERS - MIN FILTER</h4>
+<br>
+<br>
+<pre>from PIL import Image, ImageFilter</pre>
+<br>
+<pre>image = Image.open('t9.png')</pre>
+<br>
+<pre>min_img = image.filter(ImageFilter.MinFilter(size=5))</pre>
+<br>
+<pre>min_img.show()</pre>
+<br>
+<a href="min_filter.py" download>Download min_filter.py</a>
+<br>
+<br>
+<h4 class="scramble">IMAGE FILTERS - MEDIAN FILTER</h4>
+<br>
+<br>
+<pre>from PIL import Image, ImageFilter</pre>
+<br>
+<pre>image = Image.open('t9.png')</pre>
+<br>
+<pre>median = image.filter(ImageFilter.MedianFilter(size=5))</pre>
+<br>
+<pre>median.show()</pre>
+<br>
+<a href="median_filter.py" download>Download median_filter.py</a>
+<br>
+<br>
+<h4 class="scramble">IMAGE FILTERS - MAX FILTER</h4>
+<br>
+<br>
+<pre>from PIL import Image, ImageFilter</pre>
+<br>
+<pre>image = Image.open('t9.png')</pre>
+<br>
+<pre>max_img = image.filter(ImageFilter.MaxFilter(size=5))</pre>
+<br>
+<pre>max_img.show()</pre>
+<br>
+<a href="max_filter.py" download>Download max_filter.py</a>
+<br>
+<br>
+<h4 class="scramble">BLUR FILTER - BOX BLUR</h4>
+<br>
+<br>
+<pre>from PIL import Image, ImageFilter</pre>
+<br>
+<pre>image = Image.open('t9.png')</pre>
+<br>
+<pre>image_boxblur = image.filter(ImageFilter.BoxBlur(radius=4))</pre>
+<br>
+<pre>image_boxblur.show()</pre>
+<br>
+<a href="box_blur.py" download>Download box_blur.py</a>
+<br>
+<br>
+<h4 class="scramble">BLUR FILTER - GAUSSIAN BLUR</h4>
+<br>
+<br>
+<pre>from PIL import Image, ImageFilter</pre>
+<br>
+<pre>image = Image.open('t9.png')</pre>
+<br>
+<pre>image_gaussblur = image.filter(ImageFilter.GaussianBlur(radius=4))</pre>
+<br>
+<pre>image_gaussblur.show()</pre>
+<br>
+<a href="gaussian_blur.py" download>Download gaussian_blur.py</a>
+<br>
+<br>
+<h4 class="scramble">BLUR FILTER - UNSHARP MASK</h4>
+<br>
+<br>
+<pre>from PIL import Image, ImageFilter</pre>
+<br>
+<pre>image = Image.open('t9.png')</pre>
+<br>
+<pre>i_unsharp = image.filter(ImageFilter.UnsharpMask(radius=4))</pre>
+<br>
+<pre>i_unsharp.show()</pre>
+<br>
+<a href="unsharp_blur.py" download>Download unsharp_blur.py</a>
+<br>
+<br>
+<h4 class="scramble">GET INFO ABOUT A SPECIFIC PIXEL</h4>
+<br>
+<br>
+<pre>from PIL import Image</pre>
+<br>
+<pre>image = Image.open('t9.png')</pre>
+<br>
+<pre>print(image.getpixel((0,0)))</pre>
+<br>
+<pre>#[the pixel at (0,0) is the starting/top-left pixel of the image]</pre>
+<br>
+<pre>#[IF YOU WANT TO CHECK THE STARTING PIXEL INFO USING GIMP, USE THE COLOR PICKER TOOL, SELECT THE STARTING COLOR OF THE PICTURE, THEN CHECK THAT COLOR'S RGB SECTION]</pre>
+<br>
+<a href="spesifix_pixel.py" download>Download spesifix_pixel.py</a>
+<br>
+<br>
+<h4 class="scramble">EXTRACT ALL COLOR INFO</h4>
+<br>
+<br>
+<pre>from PIL import Image</pre>
+<br>
+<pre>image = Image.open('t9.png')</pre>
+<br>
+<pre>print(image.getcolors(maxcolors=image.size[0]*image.size[1]))</pre>
+<br>
+<pre>#[image.size[0] = WIDTH]</pre>
+<br>
+<pre>#[image.size[1] = HEIGHT]</pre>
+<br>
+<a href="extract_color.py" download>Download extract_color.py</a>
+<br>
+<br>
+<h4 class="scramble">GETTING PICTURE INFORMATION - PIXELS</h4>
+<br>
+<br>
+<pre>from PIL import Image</pre>
+<br>
+<pre>image = Image.open('t9.png')</pre>
+<br>
+<pre>print(image.mode)</pre>
+<br>
+<pre>print(image.getbands())</pre>
+<br>
+<pre>#[THIS BOTH TELL YOU WHETHER THE IMAGE IS 'RGB' OR NOT]</pre>
+<br>
+<pre>print(image.info)</pre>
+<br>
+<pre>#[THIS GIVES INSIDE PIXEL INFO]</pre>
+<br>
+<a href="pixels_info.py" download>Download pixels_info.py</a>
+<br>
+<br>
+<h4 class="scramble">CHECK IMAGE HEIGHT WIDTH USING NUMPY</h4>
+<br>
+<br>
+<pre>from PIL import Image</pre>
+<br>
+<pre>from numpy import array</pre>
+<br>
+<pre>image = Image.open('t9.png')</pre>
+<br>
+<pre>print(array(image).shape)</pre>
+<br>
+<a href="image_hw.py" download>Download image_hw.py</a>
+<br>
+<br>
+<h4 class="scramble">1 BIT GRAYSCALE</h4>
+<br>
+<br>
+<pre>from PIL import Image</pre>
+<br>
+<pre>image = Image.open('t9.png')</pre>
+<br>
+<pre>g1 = image.convert('1')</pre>
+<br>
+<pre>g1.show()</pre>
+<br>
+<a href="1bit.py" download>Download 1bit.py</a>
+<br>
+<br>
+<h4 class="scramble">8 BIT GRAYSCALE</h4>
+<br>
+<br>
+<pre>from PIL import Image</pre>
+<br>
+<pre>image = Image.open('t9.png')</pre>
+<br>
+<pre>g8 = image.convert('L')</pre>
+<br>
+<pre>g8.show()</pre>
+<br>
+<a href="8bit.py" download>Download 8bit.py</a>
+<br>
+<br>
+<h4 class="scramble">ADD COLOR PALETTE - 256 COLOR</h4>
+<br>
+<br>
+<pre>from PIL import Image</pre>
+<br>
+<pre>image = Image.open('t9.png')</pre>
+<br>
+<pre>p = image.convert('P')</pre>
+<br>
+<pre>p.show()</pre>
+<br>
+<pre>#[TO SEE THE PALETTE, ZOOM INTO THE IMAGE]</pre>
+<br>
+<a href="256color.py" download>Download 256color.py</a>
+<br>
+<br>
+<h4 class="scramble">ADD COLOR PALETTE - 16 COLOR FOR OLD-STYLE LOOK</h4>
+<br>
+<br>
+<pre>from PIL import Image</pre>
+<br>
+<pre>image = Image.open('t9.png')</pre>
+<br>
+<pre>p16 = image.convert('P', palette=Image.Palette.ADAPTIVE, colors=16)</pre>
+<br>
+<pre>p16.show()</pre>
+<br>
+<a href="16color.py" download>Download 16color.py</a>
+<br>
+<br>
+<h4 class="scramble">REPLACE COLOR</h4>
+<br>
+<br>
+<pre>from PIL import Image</pre>
+<br>
+<pre>image = Image.open('t9.png')</pre>
+<br>
+<pre>for x in range(image.size[0]):</pre>
+<br>
+<pre>    for y in range(image.size[1]):</pre>
+<br>
+<pre>        if image.getpixel((x,y))[0] > 200:</pre>
+<br>
+<pre>            image.putpixel((x,y), (0,0,0))</pre>
+<br>
+<pre>#[(0,0,0) = black]</pre>
+<br>
+<pre>image.show()</pre>
+<br>
+<a href="replace_color.py" download>Download replace_color.py</a>
+<br>
+<br>
+<h4 class="scramble">AUTO CONTRAST</h4>
+<br>
+<br>
+<pre>from PIL import Image, ImageOps</pre>
+<br>
+<pre>image = Image.open('t9.png')</pre>
+<br>
+<pre>c = ImageOps.autocontrast(image=image, cutoff=20)</pre>
+<br>
+<pre>c.show()</pre>
+<br>
+<a href="auto_contras.py" download>Download auto_contras.py</a>
+<br>
+<br>
+<h4 class="scramble">IMAGE INVERTED</h4>
+<br>
+<br>
+<pre>from PIL import Image, ImageOps</pre>
+<br>
+<pre>image = Image.open('t9.png').convert('RGB')</pre>
+<br>
+<pre>iv = ImageOps.invert(image)</pre>
+<br>
+<pre>iv.show()</pre>
+<br>
+<pre>#[invert REQUIRES AN 'L' OR 'RGB' IMAGE, IT WON'T WORK ON 'RGBA']</pre>
+<br>
+<a href="inverted.py" download>Download inverted.py</a>
+<br>
+<br>
+<h4 class="scramble">IMAGE SOLARIZE</h4>
+<br>
+<br>
+<pre>from PIL import Image, ImageOps</pre>
+<br>
+<pre>image = Image.open('t9.png')</pre>
+<br>
+<pre>is_ = ImageOps.solarize(image=image, threshold=100)</pre>
+<br>
+<pre>is_.show()</pre>
+<br>
+<a href="solarize.py" download>Download solarize.py</a>
+<br>
+<br>
+<h4 class="scramble">IMAGE POSTERIZE</h4>
+<br>
+<br>
+<pre>from PIL import Image, ImageOps</pre>
+<br>
+<pre>image = Image.open('t9.png')</pre>
+<br>
+<pre>ip = ImageOps.posterize(image=image, bits=1)</pre>
+<br>
+<pre>ip.show()</pre>
+<br>
+<a href="posterize.py" download>Download posterize.py</a>
+<br>
+<br>
+<h4 class="scramble">IMAGE EQUALIZED</h4>
+<br>
+<br>
+<pre>from PIL import Image, ImageOps</pre>
+<br>
+<pre>image = Image.open('t9.png')</pre>
+<br>
+<pre>ie = ImageOps.equalize(image=image)</pre>
+<br>
+<pre>ie.show()</pre>
+<br>
+<a href="equalrize.py" download>Download equalrize.py</a>
+<br>
+<br>
+<h4 class="scramble">IMAGE COLORIZE</h4>
+<br>
+<br>
+<pre>from PIL import Image, ImageOps</pre>
+<br>
+<pre>image = Image.open('t9.png')</pre>
+<br>
+<pre>ic = ImageOps.colorize(image=image.convert('L'), black='pink', white='red')</pre>
+<br>
+<pre>ic.show()</pre>
+<br>
+<pre>#[YOU CAN CHANGE THIS TO ANY COLOR, BUT KEEP THE black= AND white= ARGUMENT NAMES]</pre>
+<br>
+<a href="colorize.py" download>Download colorize.py</a>
+<br>
+<br>
+<h4 class="scramble">GRAYSCALE USING IMAGEOPS</h4>
+<br>
+<br>
+<pre>from PIL import Image, ImageOps</pre>
+<br>
+<pre>image = Image.open('t9.png')</pre>
+<br>
+<pre>ig = ImageOps.grayscale(image=image)</pre>
+<br>
+<pre>ig.show()</pre>
+<br>
+<a href="grayscale.py" download>Download grayscale.py</a>
+<br>
+<br>
+<h4 class="scramble">DIMENSION CHANGES - MIRROR</h4>
+<br>
+<br>
+<pre>from PIL import Image, ImageOps</pre>
+<br>
+<pre>image = Image.open('t9.png')</pre>
+<br>
+<pre>im = ImageOps.mirror(image)</pre>
+<br>
+<pre>im.show()</pre>
+<br>
+<a href="mirror.py" download>Download mirror.py</a>
+<br>
+<br>
+<h4 class="scramble">DIMENSION CHANGES - FLIP</h4>
+<br>
+<br>
+<pre>from PIL import Image, ImageOps</pre>
+<br>
+<pre>image = Image.open('t9.png')</pre>
+<br>
+<pre>if_ = ImageOps.flip(image)</pre>
+<br>
+<pre>if_.show()</pre>
+<br>
+<a href="flip.py" download>Download flip.py</a>
+<br>
+<br>
+<h4 class="scramble">DIMENSION CHANGES - SCALE</h4>
+<br>
+<br>
+<pre>from PIL import Image, ImageOps</pre>
+<br>
+<pre>image = Image.open('t9.png')</pre>
+<br>
+<pre>is_ = ImageOps.scale(image=image, factor=0.4)</pre>
+<br>
+<pre>is_.show()</pre>
+<br>
+<a href="scale.py" download>Download scale.py</a>
+<br>
+<br>
+<h4 class="scramble">DIMENSION CHANGES - CONTAIN</h4>
+<br>
+<br>
+<pre>from PIL import Image, ImageOps</pre>
+<br>
+<pre>image = Image.open('t9.png')</pre>
+<br>
+<pre>ic = ImageOps.contain(image=image, size=(500,200))</pre>
+<br>
+<pre>ic.show()</pre>
+<br>
+<a href="contain.py" download>Download contain.py</a>
+<br>
+<br>
+<h4 class="scramble">ADDING BORDER - SIMPLE BLACK BORDER</h4>
+<br>
+<br>
+<pre>from PIL import Image, ImageOps</pre>
+<br>
+<pre>image = Image.open('t9.png')</pre>
+<br>
+<pre>ib = ImageOps.expand(image=image, border=100)</pre>
+<br>
+<pre>ib.show()</pre>
+<br>
+<a href="black_border.py" download>Download black_border.py</a>
+<br>
+<br>
+<h4 class="scramble">ADDING BORDER - COLORFUL BORDER</h4>
+<br>
+<br>
+<pre>from PIL import Image, ImageOps</pre>
+<br>
+<pre>image = Image.open('t9.png')</pre>
+<br>
+<pre>ib = ImageOps.expand(image=image, border=100, fill=(255,255,0))</pre>
+<br>
+<pre>ib.show()</pre>
+<br>
+<a href="colorful_border.py" download>Download colorful_border.py</a>
+<br>
+<br>
+<h4 class="scramble">IMAGE PADDING</h4>
+<br>
+<br>
+<pre>from PIL import Image, ImageOps</pre>
+<br>
+<pre>image = Image.open('t9.png')</pre>
+<br>
+<pre>ip = ImageOps.pad(image=image, size=(2500,1600))</pre>
+<br>
+<pre>ip.show()</pre>
+<br>
+<a href="padding.py" download>Download padding.py</a>
+<br>
+<br>
+<h4 class="scramble">IMAGE FIT</h4>
+<br>
+<br>
+<pre>from PIL import Image, ImageOps</pre>
+<br>
+<pre>image = Image.open('t9.png')</pre>
+<br>
+<pre>if_ = ImageOps.fit(image=image, size=(300,300))</pre>
+<br>
+<pre>if_.show()</pre>
+<br>
+<a href="fit.py" download>Download fit.py</a>
+<br>
+<br>
+<h4 class="scramble">IMAGE CROP USING IMAGEOPS</h4>
+<br>
+<br>
+<pre>from PIL import Image, ImageOps</pre>
+<br>
+<pre>image = Image.open('t9.png')</pre>
+<br>
+<pre>image_crop = ImageOps.crop(image=image, border=400)</pre>
+<br>
+<pre>image_crop.show()</pre>
+<br>
+<a href="crop_imageops.py" download>Download crop_imageops.py</a>
+<br>
+<br>
+<h4 class="scramble">DEFORMER - CUSTOM WARP EFFECT</h4>
+<br>
+<br>
+<img src="i.png" alt="i.png" width="300">
+<br>
+<br>
+<pre>from PIL import Image, ImageOps</pre>
+<br>
+<pre>class Deformer():</pre>
+<br>
+<pre>    def getmesh(self, img):</pre>
+<br>
+<pre>        w, h = img.size</pre>
+<br>
+<pre>        left = ((0,0,w//2,h),(0,0,0,h,w//2,h,w//2,0))</pre>
+<br>
+<pre>        right = ((w//2,0,w,h),(w//2,0,w//2,h,0,h,0,0))</pre>
+<br>
+<pre>        flip = ((w//2,0,w,h),(w//2,h,w//2,0,w,0,w,h))</pre>
+<br>
+<pre>        return [left, right]</pre>
+<br>
+<pre>image = Image.open('t9.png')</pre>
+<br>
+<pre>d = ImageOps.deform(image, Deformer())</pre>
+<br>
+<pre>d.show()</pre>
+<br>
+<img src="i2.png" alt="i2.png" width="300">
+<br>
+<br>
+<pre>#[RETURNING [LEFT, RIGHT] GIVES A MIRRORED-SPLIT STYLE OUTPUT IMAGE]</pre>
+<br>
+<img src="i3.png" alt="i3.png" width="300">
+<br>
+<br>
+<pre>#[RETURNING [LEFT, FLIP] GIVES A DIFFERENT WARPED/FLIPPED STYLE OUTPUT IMAGE]</pre>
+<br>
+<a href="deformer.py" download>Download deformer.py</a>
+<br>
+<br>
+<h4 class="scramble">DRAW TEXT ON IMAGE</h4>
+<br>
+<br>
+<pre>from PIL import Image, ImageDraw, ImageFont</pre>
+<br>
+<pre>i = Image.open('t9.png')</pre>
+<br>
+<pre>draw = ImageDraw.Draw(i)</pre>
+<br>
+<pre>font = ImageFont.truetype('b.ttf', size=80)</pre>
+<br>
+<pre>draw.text((100,640), 'Hello lol', font=font, fill=(0,255,255))</pre>
+<br>
+<pre>i.show()</pre>
+<br>
+<pre>#['b.ttf' = font file, download from fontspace.com/category/ttf]</pre>
+<br>
+<pre>#[WIDTH = 100, HEIGHT = 640, YOU CAN CHANGE THESE COORDINATES]</pre>
+<br>
+<pre>#[(0,255,255) = light blue color]</pre>
+<br>
+<a href="text.py" download>Download text.py</a>
+<br>
+<br>
+<h4 class="scramble">COMBINING IMAGES - SETUP</h4>
+<br>
+<br>
+<pre>from PIL import Image, ImageChops</pre>
+<br>
+<pre>a = Image.open('t9.png')</pre>
+<br>
+<pre>b = Image.open('t9.png')</pre>
+<br>
+<pre>#[b MUST BE THE SAME SIZE AS a]</pre>
+<br>
+<pre>logo = Image.open('t9.png')</pre>
+<br>
+<pre>#[logo IS A SMALL LOGO IMAGE USED IN THE PASTING EXAMPLE BELOW]</pre>
+<br>
+<a href="combining.py" download>Download combining.py</a>
+<br>
+<br>
+<h4 class="scramble">MERGING IMAGES - COMPOSITE</h4>
+<br>
+<br>
+<pre>from PIL import Image</pre>
+<br>
+<pre>a = Image.open('t9.png')</pre>
+<br>
+<pre>b = Image.open('t9.png')</pre>
+<br>
+<pre>m = Image.composite(a, b, Image.new('L', a.size, 100))</pre>
+<br>
+<pre>m.show()</pre>
+<br>
+<a href="composite.py" download>Download composite.py</a>
+<br>
+<br>
+<h4 class="scramble">MERGING IMAGES - BLEND</h4>
+<br>
+<br>
+<pre>from PIL import Image</pre>
+<br>
+<pre>a = Image.open('t9.png')</pre>
+<br>
+<pre>b = Image.open('t9.png')</pre>
+<br>
+<pre>m = Image.blend(a, b, 0.5)</pre>
+<br>
+<pre>m.show()</pre>
+<br>
+<a href="blend.py" download>Download blend.py</a>
+<br>
+<br>
+<h4 class="scramble">LOGO PASTING</h4>
+<br>
+<br>
+<pre>from PIL import Image</pre>
+<br>
+<pre>a = Image.open('t9.png')</pre>
+<br>
+<pre>logo = Image.open('t9.png')</pre>
+<br>
+<pre>a.paste(logo, (0,0), mask=logo)</pre>
+<br>
+<pre>a.show()</pre>
+<br>
+<a href="logo.py" download>Download logo.py</a>
+<br>
+<br>
+<h4 class="scramble">IMAGE OVERLAY</h4>
+<br>
+<br>
+<pre>from PIL import Image, ImageChops</pre>
+<br>
+<pre>a = Image.open('t9.png')</pre>
+<br>
+<pre>b = Image.open('t9.png')</pre>
+<br>
+<pre>io_ = ImageChops.overlay(a, b)</pre>
+<br>
+<pre>io_.show()</pre>
+<br>
+<a href="overlay.py" download>Download overlay.py</a>
+<br>
+<br>
+<h4 class="scramble">IMAGE DARKER - ONLY SHOWS DARKER PIXELS</h4>
+<br>
+<br>
+<pre>from PIL import Image, ImageChops</pre>
+<br>
+<pre>a = Image.open('t9.png')</pre>
+<br>
+<pre>b = Image.open('t9.png')</pre>
+<br>
+<pre>id_ = ImageChops.darker(a, b)</pre>
+<br>
+<pre>id_.show()</pre>
+<br>
+<a href="darker.py" download>Download darker.py</a>
+<br>
+<br>
+<h4 class="scramble">IMAGE LIGHTER - ONLY SHOWS LIGHTER PIXELS</h4>
+<br>
+<br>
+<pre>from PIL import Image, ImageChops</pre>
+<br>
+<pre>a = Image.open('t9.png')</pre>
+<br>
+<pre>b = Image.open('t9.png')</pre>
+<br>
+<pre>il_ = ImageChops.lighter(a, b)</pre>
+<br>
+<pre>il_.show()</pre>
+<br>
+<a href="lighter.py" download>Download lighter.py</a>
+<br>
+<br>
+<h4 class="scramble">IMAGE SOFT LIGHT</h4>
+<br>
+<br>
+<pre>from PIL import Image, ImageChops</pre>
+<br>
+<pre>a = Image.open('t9.png')</pre>
+<br>
+<pre>b = Image.open('t9.png')</pre>
+<br>
+<pre>isl = ImageChops.soft_light(a, b)</pre>
+<br>
+<pre>isl.show()</pre>
+<br>
+<a href="soft.py" download>Download soft.py</a>
+<br>
+<br>
+<h4 class="scramble">IMAGE HARD LIGHT</h4>
+<br>
+<br>
+<pre>from PIL import Image, ImageChops</pre>
+<br>
+<pre>a = Image.open('t9.png')</pre>
+<br>
+<pre>b = Image.open('t9.png')</pre>
+<br>
+<pre>ihl = ImageChops.hard_light(a, b)</pre>
+<br>
+<pre>ihl.show()</pre>
+<br>
+<a href="hard.py" download>Download hard.py</a>
+<br>
+<br>
+<h4 class="scramble">IMAGE DIFFERENCE</h4>
+<br>
+<br>
+<pre>from PIL import Image, ImageChops</pre>
+<br>
+<pre>a = Image.open('t9.png')</pre>
+<br>
+<pre>b = Image.open('t9.png')</pre>
+<br>
+<pre>id_ = ImageChops.difference(a, b)</pre>
+<br>
+<pre>id_.show()</pre>
+<br>
+<a href="difference.py" download>Download difference.py</a>
+<br>
+<br>
+<h4 class="scramble">IMAGE MODULO</h4>
+<br>
+<br>
+<pre>from PIL import Image, ImageChops</pre>
+<br>
+<pre>a = Image.open('t9.png')</pre>
+<br>
+<pre>b = Image.open('t9.png')</pre>
+<br>
+<pre>im_ = ImageChops.add_modulo(a, b)</pre>
+<br>
+<pre>im_.show()</pre>
+<br>
+<a href="modulo.py" download>Download modulo.py</a>
+<br>
+<br>
+<h4 class="scramble">IMAGE SCREEN</h4>
+<br>
+<br>
+<pre>from PIL import Image, ImageChops</pre>
+<br>
+<pre>a = Image.open('t9.png')</pre>
+<br>
+<pre>b = Image.open('t9.png')</pre>
+<br>
+<pre>is_ = ImageChops.screen(a, b)</pre>
+<br>
+<pre>is_.show()</pre>
+<br>
+<a href="screen.py" download>Download screen.py</a>
+<br>
+<br>
+<h4 class="scramble">IMAGE LOGICAL AND</h4>
+<br>
+<br>
+<pre>from PIL import Image, ImageChops</pre>
+<br>
+<pre>a = Image.open('t9.png')</pre>
+<br>
+<pre>b = Image.open('t9.png')</pre>
+<br>
+<pre>add = ImageChops.logical_and(a.convert('1'), b.convert('1'))</pre>
+<br>
+<pre>add.show()</pre>
+<br>
+<a href="and.py" download>Download and.py</a>
+<br>
+<br>
+<h4 class="scramble">IMAGE LOGICAL OR</h4>
+<br>
+<br>
+<pre>from PIL import Image, ImageChops</pre>
+<br>
+<pre>a = Image.open('t9.png')</pre>
+<br>
+<pre>b = Image.open('t9.png')</pre>
+<br>
+<pre>or_ = ImageChops.logical_or(a.convert('1'), b.convert('1'))</pre>
+<br>
+<pre>or_.show()</pre>
+<br>
+<a href="or.py" download>Download or.py</a>
+<br>
+<br>
+
+</div>
+
+<script>
+
+const canvas=document.getElementById("network");
+const ctx=canvas.getContext("2d");
+
+function resize(){
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+}
+
+resize();
+window.addEventListener("resize",resize);
+
+const nodes=[];
+
+for(let i=0;i<70;i++){
+
+nodes.push({
+x:Math.random()*canvas.width,
+y:Math.random()*canvas.height,
+vx:(Math.random()-.5)*0.4,
+vy:(Math.random()-.5)*0.4
+});
+
+}
+
+function animate(){
+
+ctx.clearRect(
+0,
+0,
+canvas.width,
+canvas.height
+);
+
+for(let a of nodes){
+
+a.x+=a.vx;
+a.y+=a.vy;
+
+if(a.x<0||a.x>canvas.width) a.vx*=-1;
+if(a.y<0||a.y>canvas.height) a.vy*=-1;
+
+ctx.fillStyle="#5EFFF7";
+
+ctx.fillRect(
+a.x,
+a.y,
+2,
+2
+);
+
+for(let b of nodes){
+
+let dx=a.x-b.x;
+let dy=a.y-b.y;
+
+let dist=Math.sqrt(
+dx*dx+dy*dy
+);
+
+if(dist<150){
+
+ctx.strokeStyle=
+"rgba(94,255,247,.08)";
+
+ctx.beginPath();
+
+ctx.moveTo(a.x,a.y);
+ctx.lineTo(b.x,b.y);
+
+ctx.stroke();
+
+}
+
+}
+
+}
+
+requestAnimationFrame(animate);
+
+}
+
+animate();
+
+</script>
+
+<script>
+const SCRAMBLE_CHARS = "#█░▓▒/\\<>01";
+
+function scrambleElement(el) {
+    const original = el.textContent;
+    let progress = 0;
+
+    const duration = 1200; // 1.2 seconds
+    const frameRate = 30;
+    const totalFrames = duration / frameRate;
+
+    const timer = setInterval(() => {
+
+        progress++;
+
+        const revealCount =
+            Math.floor((progress / totalFrames) * original.length);
+
+        let output = "";
+
+        for (let i = 0; i < original.length; i++) {
+
+            if (
+                original[i] === " " ||
+                original[i] === "\n"
+            ) {
+                output += original[i];
+                continue;
+            }
+
+            if (i < revealCount) {
+                output += original[i];
+            } else {
+                output += SCRAMBLE_CHARS[
+                    Math.floor(
+                        Math.random() * SCRAMBLE_CHARS.length
+                    )
+                ];
+            }
+        }
+
+        el.textContent = output;
+
+        if (progress >= totalFrames) {
+            clearInterval(timer);
+            el.textContent = original;
+        }
+
+    }, frameRate);
+}
+
+window.addEventListener("load", () => {
+    document
+        .querySelectorAll(".scramble")
+        .forEach(scrambleElement);
+});
+</script>
+
+
+</body>
+</html>
