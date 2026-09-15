@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Knowledge Terminal</title>
+
+<style>
+
+:root{
+--accent:#5EFFF7;
+--bg:#050505;
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Consolas, monospace;
+}
+
+body{
+background:var(--bg);
+overflow:hidden;
+height:100vh;
+color:white;
+}
+
+/* Animated Grid */
+
+.grid{
+position:fixed;
+inset:0;
+
+background:
+linear-gradient(rgba(94,255,247,.05) 1px, transparent 1px),
+linear-gradient(90deg, rgba(94,255,247,.05) 1px, transparent 1px);
+
+background-size:40px 40px;
+
+animation:gridmove 20s linear infinite;
+}
+
+@keyframes gridmove{
+from{transform:translateY(0);}
+to{transform:translateY(40px);}
+}
+
+/* Network Canvas */
+
+#network{
+position:fixed;
+inset:0;
+z-index:0;
+opacity:.6;
+}
+
+/* Center Box */
+
+.container{
+position:fixed;
+inset:0;
+
+display:flex;
+justify-content:center;
+align-items:center;
+
+padding:30px;
+z-index:10;
+}
+
+.textbox{
+
+width:min(900px,90vw);
+max-height:80vh;
+
+overflow:auto;
+
+padding:40px;
+
+background:rgba(255,255,255,.05);
+
+backdrop-filter:blur(18px);
+-webkit-backdrop-filter:blur(18px);
+
+border:1px solid rgba(94,255,247,.25);
+
+box-shadow:
+0 0 25px rgba(94,255,247,.15);
+
+border-radius:18px;
+}
+
+.textbox h1{
+color:var(--accent);
+margin-bottom:20px;
+}
+
+.textbox p{
+line-height:1.8;
+font-size:16px;
+color:#e9ffff;
+}
+
+.textbox a{
+color:#FA3B34;
+}
+
+.textbox a:visited{
+color:#FA3B34;
+}
+
+.textbox a:hover{
+color:#FA3B34;
+}
+
+</style>
+</head>
+<body>
+
+<canvas id="network"></canvas>
+
+<div class="grid"></div>
+
+<div class="container">
+
+<div class="textbox">
+
+<h1 class="scramble">HOW TO USE HELIX</h1>
+<br>
+<br>
+<span style="background:#ffffff22; color:#fff; border:1px solid #ffffff55; padding:4px 10px; border-radius:999px; font-weight:bold; display:inline-block; margin-top:10px; line-height:1.6;">gg -> Go to the top of the file</span>
+<br>
+<br>
+<span style="background:#ffffff22; color:#fff; border:1px solid #ffffff55; padding:4px 10px; border-radius:999px; font-weight:bold; display:inline-block; margin-top:10px; line-height:1.6;">ge -> Go to the last of the file</span>
+<br>
+<br>
+<span style="background:#ffffff22; color:#fff; border:1px solid #ffffff55; padding:4px 10px; border-radius:999px; font-weight:bold; display:inline-block; margin-top:10px; line-height:1.6;">kx -> select one from line</span>
+<br>
+<br>
+<span style="background:#ffffff22; color:#fff; border:1px solid #ffffff55; padding:4px 10px; border-radius:999px; font-weight:bold; display:inline-block; margin-top:10px; line-height:1.6;">kxx -> select 2 line</span>
+<br>
+<br>
+<h4 class="scramble">COPY</h4>
+<br>
+<br>
+<pre>(FIRST select the line)</pre>
+<br>
+<span style="background:#ffffff22; color:#fff; border:1px solid #ffffff55; padding:4px 10px; border-radius:999px; font-weight:bold; display:inline-block; margin-top:10px; line-height:1.6;">yp -> [y] is for copy [p] for paste</span>
+<br>
+<br>
+<h4 class="scramble">IF YOU WANT TO PASTE DOWNSIDE THEN GO DOWN SIDE AND PRESS [P]</h4>
+<br>
+<br>
+<span style="background:#ffffff22; color:#fff; border:1px solid #ffffff55; padding:4px 10px; border-radius:999px; font-weight:bold; display:inline-block; margin-top:10px; line-height:1.6;">d -> [DELETE] [select the line and press [d]]</span>
+<br>
+<br>
+<span style="background:#ffffff22; color:#fff; border:1px solid #ffffff55; padding:4px 10px; border-radius:999px; font-weight:bold; display:inline-block; margin-top:10px; line-height:1.6;">u -> [undo]</span>
+<br>
+<br>
+<span style="background:#ffffff22; color:#fff; border:1px solid #ffffff55; padding:4px 10px; border-radius:999px; font-weight:bold; display:inline-block; margin-top:10px; line-height:1.6;">U -> [REDO]</span>
+<br>
+<br>
+<span style="background:#ffffff22; color:#fff; border:1px solid #ffffff55; padding:4px 10px; border-radius:999px; font-weight:bold; display:inline-block; margin-top:10px; line-height:1.6;">s -> [SEARCH]</span>
+<br>
+<br>
+<span style="background:#ffffff22; color:#fff; border:1px solid #ffffff55; padding:4px 10px; border-radius:999px; font-weight:bold; display:inline-block; margin-top:10px; line-height:1.6;">SPACE -> f -> [NOW YOU OPEN ANY FILE]</span>
+<br>
+<br>
+<span style="background:#ffffff22; color:#fff; border:1px solid #ffffff55; padding:4px 10px; border-radius:999px; font-weight:bold; display:inline-block; margin-top:10px; line-height:1.6;">miw -> ms" -> [I only select the word AND ADD "" in the word]</span>
+<br>
+<br>
+<span style="background:#ffffff22; color:#fff; border:1px solid #ffffff55; padding:4px 10px; border-radius:999px; font-weight:bold; display:inline-block; margin-top:10px; line-height:1.6;">miw -> md" -> [THIS WILL DELETE THE ""]</span>
+<br>
+<br>
+<span style="background:#ffffff22; color:#fff; border:1px solid #ffffff55; padding:4px 10px; border-radius:999px; font-weight:bold; display:inline-block; margin-top:10px; line-height:1.6;">SPACE -> b -> [IF YOU OPEN 2 FILES IN HX THEN IT SHOW THE OPTION WHICH ONE IS SELECT]</span>
+<br>
+<br>
+<span style="background:#ffffff22; color:#fff; border:1px solid #ffffff55; padding:4px 10px; border-radius:999px; font-weight:bold; display:inline-block; margin-top:10px; line-height:1.6;">SPACE -> w -> s -> [IT SPLITS WINDOW HORIZONTALY]</span>
+<br>
+<br>
+<span style="background:#ffffff22; color:#fff; border:1px solid #ffffff55; padding:4px 10px; border-radius:999px; font-weight:bold; display:inline-block; margin-top:10px; line-height:1.6;">SPACE -> w -> v -> [IT SPLIT VERTICALY]</span>
+<br>
+<br>
+<span style="background:#ffffff22; color:#fff; border:1px solid #ffffff55; padding:4px 10px; border-radius:999px; font-weight:bold; display:inline-block; margin-top:10px; line-height:1.6;">J -> [CONVERT MANY LINES TO ONE LINE]</span>
+<br>
+<br>
+<pre>EXAMPLE: a / b / c / d -> abcd</pre>
+<br>
+<h4 class="scramble">IF YOU OPEN C PROGRAM FILE AND YOU WANT TO SELECT WHOLE MAIN FUNCTION</h4>
+<br>
+<br>
+<span style="background:#ffffff22; color:#fff; border:1px solid #ffffff55; padding:4px 10px; border-radius:999px; font-weight:bold; display:inline-block; margin-top:10px; line-height:1.6;">mif -> [YOUR CURSOR WILL BE INSIDE THE MAIN FUNCTION]</span>
+<br>
+<br>
+<span style="background:#ffffff22; color:#fff; border:1px solid #ffffff55; padding:4px 10px; border-radius:999px; font-weight:bold; display:inline-block; margin-top:10px; line-height:1.6;">gc -> [GO TO CENTER OF THE FILE]</span>
+<br>
+<br>
+<span style="background:#ffffff22; color:#fff; border:1px solid #ffffff55; padding:4px 10px; border-radius:999px; font-weight:bold; display:inline-block; margin-top:10px; line-height:1.6;">b -> [IS USED TO SELECT THE WORD]</span>
+<br>
+<br>
+<h4 class="scramble">IF YOU WRITE MANY LINES FOR EX:</h4>
+<br>
+<br>
+<pre>Hello</pre>
+<br>
+<pre>Hello</pre>
+<br>
+<pre>Hello</pre>
+<br>
+<h4 class="scramble">IF YOU WANT TO REMOVE HELLO IN ALL LINES</h4>
+<br>
+<br>
+<span style="background:#ffffff22; color:#fff; border:1px solid #ffffff55; padding:4px 10px; border-radius:999px; font-weight:bold; display:inline-block; margin-top:10px; line-height:1.6;">%->s->HELLO->c->New word</span>
+<br>
+<br>
+<h4 class="scramble">"%" select all -> "s" select word -> "HELLO" your word -> "c" clear text -> new txt</h4>
+<br>
+<br>
+
+</div>
+
+<script>
+
+const canvas=document.getElementById("network");
+const ctx=canvas.getContext("2d");
+
+function resize(){
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+}
+
+resize();
+window.addEventListener("resize",resize);
+
+const nodes=[];
+
+for(let i=0;i<70;i++){
+
+nodes.push({
+x:Math.random()*canvas.width,
+y:Math.random()*canvas.height,
+vx:(Math.random()-.5)*0.4,
+vy:(Math.random()-.5)*0.4
+});
+
+}
+
+function animate(){
+
+ctx.clearRect(
+0,
+0,
+canvas.width,
+canvas.height
+);
+
+for(let a of nodes){
+
+a.x+=a.vx;
+a.y+=a.vy;
+
+if(a.x<0||a.x>canvas.width) a.vx*=-1;
+if(a.y<0||a.y>canvas.height) a.vy*=-1;
+
+ctx.fillStyle="#5EFFF7";
+
+ctx.fillRect(
+a.x,
+a.y,
+2,
+2
+);
+
+for(let b of nodes){
+
+let dx=a.x-b.x;
+let dy=a.y-b.y;
+
+let dist=Math.sqrt(
+dx*dx+dy*dy
+);
+
+if(dist<150){
+
+ctx.strokeStyle=
+"rgba(94,255,247,.08)";
+
+ctx.beginPath();
+
+ctx.moveTo(a.x,a.y);
+ctx.lineTo(b.x,b.y);
+
+ctx.stroke();
+
+}
+
+}
+
+}
+
+requestAnimationFrame(animate);
+
+}
+
+animate();
+
+</script>
+
+<script>
+const SCRAMBLE_CHARS = "#█░▓▒/\\<>01";
+
+function scrambleElement(el) {
+    const original = el.textContent;
+    let progress = 0;
+
+    const duration = 1200; // 1.2 seconds
+    const frameRate = 30;
+    const totalFrames = duration / frameRate;
+
+    const timer = setInterval(() => {
+
+        progress++;
+
+        const revealCount =
+            Math.floor((progress / totalFrames) * original.length);
+
+        let output = "";
+
+        for (let i = 0; i < original.length; i++) {
+
+            if (
+                original[i] === " " ||
+                original[i] === "\n"
+            ) {
+                output += original[i];
+                continue;
+            }
+
+            if (i < revealCount) {
+                output += original[i];
+            } else {
+                output += SCRAMBLE_CHARS[
+                    Math.floor(
+                        Math.random() * SCRAMBLE_CHARS.length
+                    )
+                ];
+            }
+        }
+
+        el.textContent = output;
+
+        if (progress >= totalFrames) {
+            clearInterval(timer);
+            el.textContent = original;
+        }
+
+    }, frameRate);
+}
+
+window.addEventListener("load", () => {
+    document
+        .querySelectorAll(".scramble")
+        .forEach(scrambleElement);
+});
+</script>
+
+
+</body>
+</html>
