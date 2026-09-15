@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Knowledge Vault</title>
+
+<style>
+:root{
+  /* CHANGE ONLY THIS */
+  --accent:#b890fc;
+
+  --bg:#050505;
+  --panel:#090909;
+
+  --border:var(--accent);
+  --text:#FFFFFF;
+  --glow:var(--accent);
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Consolas, monospace;
+}
+
+body{
+  background:#010105;
+  overflow:hidden;
+  color:var(--text);
+  height:100vh;
+  position: relative;
+  touch-action: none;
+}
+.sidebar{
+  overflow-y:auto;
+  scrollbar-width:thin;
+}
+/* Background Canvas */
+#tunnelCanvas {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1;
+}
+
+/* Sidebar */
+.sidebar{
+  position:fixed;
+  left:10px;
+  top:10px;
+  bottom:10px;
+  width:220px;
+  background:rgba(0,0,0,.85);
+  border:1px solid var(--border);
+  padding:15px;
+  z-index:5;
+}
+
+.logo{
+  font-size:20px;
+  margin-bottom:20px;
+  font-weight:bold;
+}
+
+.menu button{
+  width:100%;
+  margin-bottom:8px;
+  padding:10px;
+  background:black;
+  border:1px solid var(--border);
+  color:var(--text);
+  cursor:pointer;
+}
+
+.menu button:hover{
+  box-shadow:0 0 15px var(--glow);
+}
+
+/* Top Bar */
+.topbar{
+  position:fixed;
+  left:250px;
+  right:20px;
+  top:10px;
+  height:60px;
+  background:rgba(0,0,0,.8);
+  border:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  padding:0 20px;
+  z-index:5;
+}
+
+/* Windows */
+.window{
+  position:absolute;
+  background:rgba(0,0,0,.95);
+  border:1px solid var(--border);
+  box-shadow:0 0 15px rgba(245, 73, 39, 0.2);
+  width:500px;
+  height:350px;
+  z-index:10;
+}
+
+.titlebar{
+  height:35px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:0 10px;
+  border-bottom:1px solid var(--border);
+  cursor:move;
+}
+
+.close{
+  cursor:pointer;
+}
+
+.content{
+  padding:15px;
+  height:calc(100% - 35px);
+  overflow:auto;
+}
+
+.note{
+  margin-bottom:15px;
+  padding:10px;
+  border:1px solid rgba(245, 73, 39, 0.2);
+}
+
+.note h3{
+  margin-bottom:10px;
+}
+
+pre{
+  white-space:pre-wrap;
+  color:#ffd38a;
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="tunnelCanvas"></canvas>
+
+<div class="sidebar">
+  <div class="logo">KNOWLEDGE VAULT</div>
+  <div class="menu">
+   <button onclick="window.location.href='lib/fresh179.html'">
+   HOW TO INSTALL LIBREOFFICE IN ARCH
+   </button>
+   <button onclick="window.location.href='lib/csv50.html'">
+   HOW TO READ CSV FILE IN CLI
+   </button>
+   <button onclick="window.location.href='lib/libreoffice_key49.html'">
+   ADD LIBREOFFICE CALC AS KEY BINDINGS
+   </button>
+    
+  </div>
+</div>
+
+<div class="topbar">
+  <h2>WHITEX DATABASE</h2>
+</div>
+
+<script>
+/* Data Vault */
+const cliData = [
+  { title:"Miller", content:"mlr --csv cat file.csv" },
+  { title:"jq", content:"jq '.name' file.json" },
+  { title:"grep", content:"grep -R 'password' ." }
+];
+
+const netData = [
+  { title:"Nmap", content:"nmap -sV 192.168.1.1" },
+  { title:"Ping", content:"ping google.com" }
+];
+
+const linuxData = [
+  { title:"Find", content:"find / -name test.txt" },
+  { title:"lsblk", content:"lsblk -f" }
+];
+
+const webData = [
+  { title:"Flexbox", content:"display:flex;" },
+  { title:"Grid", content:"display:grid;" }
+];
+
+/* Window System */
+let z = 100;
+
+function openWindow(title, data){
+  let win = document.createElement("div");
+  win.className = "window";
+  win.style.left = 260 + Math.random() * 200 + "px";
+  win.style.top = 100 + Math.random() * 100 + "px";
+
+  win.innerHTML = `
+    <div class="titlebar">
+      <span>${title}</span>
+      <span class="close">✕</span>
+    </div>
+    <div class="content">
+      ${data.map(item => `
+        <div class="note">
+          <h3>${item.title}</h3>
+          <pre>${item.content}</pre>
+        </div>
+      `).join("")}
+    </div>
+  `;
+
+  document.body.appendChild(win);
+
+  win.style.zIndex = ++z;
+  win.addEventListener('mousedown', () => {
+    win.style.zIndex = ++z;
+  });
+
+  win.querySelector(".close").onclick = () => {
+    win.remove();
+  };
+
+  drag(win);
+}
+
+/* Drag Windows */
+function drag(el){
+  const title = el.querySelector(".titlebar");
+  let x = 0, y = 0, px = 0, py = 0;
+
+  title.onmousedown = (e) => {
+    el.style.zIndex = ++z;
+    px = e.clientX;
+    py = e.clientY;
+
+    document.onmousemove = (e) => {
+      x = px - e.clientX;
+      y = py - e.clientY;
+      px = e.clientX;
+      py = e.clientY;
+
+      el.style.top = (el.offsetTop - y) + "px";
+      el.style.left = (el.offsetLeft - x) + "px";
+    };
+
+    document.onmouseup = () => {
+      document.onmousemove = null;
+    };
+  };
+}
+
+/* Infinite Mirror Room Engine */
+const canvas = document.getElementById('tunnelCanvas');
+const ctx = canvas.getContext('2d');
+
+let width, height, centerX, centerY;
+
+const frameCount = 400; 
+const depthStep = 10;
+const maxDepth = frameCount * depthStep;
+
+const state = {
+  currentX: 0, currentY: 0,
+  targetX: 0, targetY: 0,
+  scrollPosition: 0,
+  scrollVelocity: 0,
+  targetVelocity: 0,
+  friction: 0.94
+};
+
+const framesData = [];
+for (let i = 0; i < frameCount; i++) {
+  let color, glow;
+  if (i % 2 === 0) {
+    color = 'rgba(220, 0, 0, ';      // Bloody Red
+    glow = 'rgba(220, 0, 0, 0.15)';
+  } else {
+    color = 'rgba(255, 255, 255, ';  // Pure White
+    glow = 'rgba(255, 255, 255, 0.12)';
+  }
+  framesData.push({ zBase: i * -depthStep, color, glow });
+}
+
+function resize() {
+  width = canvas.width = window.innerWidth;
+  height = canvas.height = window.innerHeight;
+  centerX = width / 2;
+  centerY = height / 2;
+}
+
+function drawRoundRect(ctx, x, y, w, h, r) {
+  if (w < 0 || h < 0) return;
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y, x + w, y + h, r);
+  ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r);
+  ctx.arcTo(x, y, x + w, y, r);
+  ctx.closePath();
+}
+
+function render() {
+  state.scrollVelocity += (state.targetVelocity - state.scrollVelocity) * 0.15;
+  state.scrollPosition += state.scrollVelocity;
+  state.targetVelocity *= state.friction;
+
+  state.currentX += (state.targetX - state.currentX) * 0.08;
+  state.currentY += (state.targetY - state.currentY) * 0.08;
+
+  ctx.fillStyle = '#010105';
+  ctx.fillRect(0, 0, width, height);
+
+  const fov = 100; 
+  const camX = centerX + (state.currentX * 6);
+  const camY = centerY - (state.currentY * 5);
+
+  for (let i = frameCount - 1; i >= 0; i--) {
+    const fData = framesData[i];
+    let currentZ = fData.zBase + state.scrollPosition;
+
+    if (currentZ > 150) {
+      const loopsBehind = Math.ceil((currentZ - 150) / maxDepth);
+      fData.zBase -= loopsBehind * maxDepth;
+      currentZ = fData.zBase + state.scrollPosition;
+    } else if (currentZ < -maxDepth + 150) {
+      const loopsAhead = Math.ceil((Math.abs(currentZ) - maxDepth) / maxDepth);
+      fData.zBase += loopsAhead * maxDepth;
+      currentZ = fData.zBase + state.scrollPosition;
+    }
+
+    if (currentZ >= 0) continue;
+
+    const scale = fov / (fov - currentZ);
+    const fWidth = width * 0.95 * scale;
+    const fHeight = height * 0.95 * scale;
+    
+    const x = camX - fWidth / 2;
+    const y = camY - fHeight / 2;
+
+    const relativeDepth = Math.abs(currentZ);
+    let opacity = 1 - (relativeDepth / maxDepth);
+    opacity = Math.pow(opacity, 1.4); 
+
+    if (currentZ > -80) opacity *= (fov + currentZ) / fov; 
+    if (opacity <= 0.01 || fWidth < 0.5) continue;
+
+    ctx.save();
+    ctx.translate(camX, camY);
+    ctx.rotate((currentZ * 0.0002) + (state.scrollVelocity * 0.001));
+    ctx.translate(-camX, -camY);
+
+    const strokeWidth = Math.max(0.4, 2.2 * scale);
+
+    // Glow Pass
+    ctx.lineWidth = strokeWidth * 3;
+    ctx.strokeStyle = fData.glow;
+    drawRoundRect(ctx, x, y, fWidth, fHeight, Math.max(1, 14 * scale));
+    ctx.stroke();
+
+    // Core Neon Pass
+    ctx.lineWidth = strokeWidth;
+    ctx.strokeStyle = `${fData.color}${opacity})`;
+    drawRoundRect(ctx, x, y, fWidth, fHeight, Math.max(1, 14 * scale));
+    ctx.stroke();
+
+    ctx.restore();
+  }
+
+  requestAnimationFrame(render);
+}
+
+/* Event Hooks */
+window.addEventListener('wheel', (e) => {
+  // Prevent default scroll behavior only when not scrolling inside panels
+  if (!e.target.closest('.content') && !e.target.closest('.sidebar')) {
+    e.preventDefault();
+    state.targetVelocity += e.deltaY * 0.12; 
+  }
+}, { passive: false });
+
+let touchStartY = 0;
+window.addEventListener('touchstart', (e) => {
+  touchStartY = e.touches[0].clientY;
+}, { passive: true });
+
+window.addEventListener('touchmove', (e) => {
+  if (!e.target.closest('.content') && !e.target.closest('.sidebar')) {
+    const currentY = e.touches[0].clientY;
+    const deltaY = touchStartY - currentY;
+    state.targetVelocity += deltaY * 0.35;
+    touchStartY = currentY;
+  }
+}, { passive: true });
+
+window.addEventListener('mousemove', (e) => {
+  state.targetX = (e.clientX / window.innerWidth - 0.5) * 10; 
+  state.targetY = (e.clientY / window.innerHeight - 0.5) * -8;
+});
+
+window.addEventListener('mouseleave', () => {
+  state.targetX = 0;
+  state.targetY = 0;
+});
+
+window.addEventListener('resize', resize);
+
+resize();
+render();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Knowledge Vault</title>
+
+<style>
+
+:root{
+
+/* CHANGE ONLY THIS */
+--accent:#b890fc;
+
+--bg:#050505;
+--panel:#090909;
+
+--border:var(--accent);
+--text:#FFFFFF;
+--glow:var(--accent);
+
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Consolas, monospace;
+}
+
+html, body{
+background:#000;
+overflow:hidden;
+color:var(--text);
+height:100vh;
+}
+
+/* Audio visualizer canvas sits behind everything */
+canvas{
+position:fixed;
+top:0;
+left:0;
+z-index:1;
+}
+
+.sidebar{
+  overflow-y:auto;
+  scrollbar-width:thin;
+}
+
+/* Sidebar */
+
+.sidebar{
+position:fixed;
+left:10px;
+top:10px;
+bottom:10px;
+width:220px;
+background:rgba(0,0,0,.85);
+border:1px solid var(--border);
+padding:15px;
+z-index:5;
+}
+
+.logo{
+font-size:20px;
+margin-bottom:20px;
+font-weight:bold;
+}
+
+.menu button{
+width:100%;
+margin-bottom:8px;
+padding:10px;
+background:black;
+border:1px solid var(--border);
+color:var(--text);
+cursor:pointer;
+}
+
+.menu button:hover{
+box-shadow:0 0 15px var(--glow);
+}
+
+/* Top Bar */
+
+.topbar{
+position:fixed;
+left:250px;
+right:20px;
+top:10px;
+height:60px;
+background:rgba(0,0,0,.8);
+border:1px solid var(--border);
+display:flex;
+align-items:center;
+padding:0 20px;
+z-index:5;
+}
+
+
+/* Windows */
+
+.window{
+position:absolute;
+background:rgba(0,0,0,.95);
+border:1px solid var(--border);
+box-shadow:0 0 15px rgba(94,255,247,.2);
+width:500px;
+height:350px;
+z-index:10;
+}
+
+.titlebar{
+height:35px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:0 10px;
+border-bottom:1px solid var(--border);
+cursor:move;
+}
+
+.close{
+cursor:pointer;
+}
+
+.content{
+padding:15px;
+height:calc(100% - 35px);
+overflow:auto;
+}
+
+.note{
+margin-bottom:15px;
+padding:10px;
+border:1px solid rgba(94,255,247,.2);
+}
+
+.note h3{
+margin-bottom:10px;
+}
+
+pre{
+white-space:pre-wrap;
+color:#ffd38a;
+}
+
+/* Audio status text, bottom of screen */
+#txtStatus {
+position: fixed;
+bottom: 10px;
+left: 250px;
+font-family: Consolas, monospace;
+font-size: 12px;
+color: var(--text);
+z-index: 5;
+opacity: 0.8;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="sidebar">
+<div class="logo">KNOWLEDGE VAULT</div>
+
+<div class="menu">
+   <button onclick="window.location.href='clieditor/vim494.html'">
+   VIM EDITOR SHORTCUTS
+   </button>
+   <button onclick="window.location.href='clieditor/remline408.html'">
+   HOW TO REMOVE WHOLE LINE IN THE FILE
+   </button>
+   <button onclick="window.location.href='clieditor/remove407.html'">
+   HOW TO REMOVE MULTIPLE WORD IN THE FILE
+   </button>
+   <button onclick="window.location.href='clieditor/manager317.html'">
+   CLI FILE MANAGER
+   </button>
+   <button onclick="window.location.href='clieditor/startend312.html'">
+   WRIGHT ANY THING IN STARTING AND ENDING OF ALL LINES
+   </button>
+   <button onclick="window.location.href='clieditor/8space302.html'">
+   HOW TO GIVE SPACE AFTER EVERY 8 CHARACTERS
+   </button>
+   <button onclick="window.location.href='clieditor/space301.html'">
+   HOW GIVE SPACE EACH ON EVERY LETTER
+   </button>
+   <button onclick="window.location.href='clieditor/backn300.html'">
+   HOW TO REMOVE 
+ IN ANY FILE
+   </button>
+   <button onclick="window.location.href='clieditor/remove298.html'">
+   REMOVE USELESS OR EXTRA SPACES IN LINUX
+   </button>
+   <button onclick="window.location.href='clieditor/replace297.html'">
+   REPLACE TXT IN ANY FILE IN LINUX
+   </button>
+<button onclick="window.location.href='cli.html'">
+CLI TOOLS
+</button>
+<button onclick="openWindow('Networking', netData)">NETWORKING</button>
+<button onclick="openWindow('Linux', linuxData)">LINUX</button>
+<button onclick="openWindow('Web Dev', webData)">WEB DEV</button>
+</div>
+</div>
+
+
+<div class="topbar">
+<h2>WHITEX DATABASE</h2>
+</div>
+
+<p id="txtStatus"></p>
+
+<script>
+
+/* Notes */
+
+const cliData = [
+{
+title:"Miller",
+content:"mlr --csv cat file.csv"
+},
+{
+title:"jq",
+content:"jq '.name' file.json"
+},
+{
+title:"grep",
+content:"grep -R 'password' ."
+}
+];
+
+const netData = [
+{
+title:"Nmap",
+content:"nmap -sV 192.168.1.1"
+},
+{
+title:"Ping",
+content:"ping google.com"
+}
+];
+
+const linuxData = [
+{
+title:"Find",
+content:"find / -name test.txt"
+},
+{
+title:"lsblk",
+content:"lsblk -f"
+}
+];
+
+const webData = [
+{
+title:"Flexbox",
+content:"display:flex;"
+},
+{
+title:"Grid",
+content:"display:grid;"
+}
+];
+
+/* Window System */
+
+let z = 100;
+
+function openWindow(title,data){
+
+let win=document.createElement("div");
+win.className="window";
+win.style.left=260+Math.random()*200+"px";
+win.style.top=100+Math.random()*100+"px";
+
+win.innerHTML=`
+<div class="titlebar">
+<span>${title}</span>
+<span class="close">✕</span>
+</div>
+
+<div class="content">
+${data.map(item=>`
+<div class="note">
+<h3>${item.title}</h3>
+<pre>${item.content}</pre>
+</div>
+`).join("")}
+</div>
+`;
+
+document.body.appendChild(win);
+
+win.querySelector(".close").onclick=()=>{
+win.remove();
+};
+
+drag(win);
+
+}
+
+/* Drag */
+
+function drag(el){
+
+const title=el.querySelector(".titlebar");
+
+let x=0,y=0,px=0,py=0;
+
+title.onmousedown=(e)=>{
+
+el.style.zIndex=++z;
+
+px=e.clientX;
+py=e.clientY;
+
+document.onmousemove=(e)=>{
+
+x=px-e.clientX;
+y=py-e.clientY;
+
+px=e.clientX;
+py=e.clientY;
+
+el.style.top=(el.offsetTop-y)+"px";
+el.style.left=(el.offsetLeft-x)+"px";
+};
+
+document.onmouseup=()=>{
+document.onmousemove=null;
+};
+};
+
+}
+
+</script>
+
+  <script>
+    /*
+    Song: LAKEY INSPIRED - Chill Day (Vlog No Copyright Music) Music provided by Vlog No Copyright Music. Video Link: https://youtu.be/vtHGESuQ22s
+    */
+
+    var audio, audioContext, audioSrc;
+    var analyser, analyserBufferLength;
+    var audioInfo = 'Song: LAKEY INSPIRED - Chill Day';
+
+    var MATHPI2 = Math.PI * 2;
+
+    var w;
+    var h;
+
+    var txtStatus;
+    var canvas;
+    var context;
+
+    var imageData;
+    var data;
+
+    var mouseActive = false;
+    var mouseDown = false;
+    var mousePos = { x:0, y:0 };
+
+    var fov = 250;
+
+    var speed = 0.75;
+
+    var cubeMinHeight = 2;
+
+    var frequencyDamp = 25;
+    var smoothingTimeConstant = 0.65;
+    var fftSize = 8192;
+
+    var circleHolder = [];
+
+    var time = 0;
+
+    var colorInvertValue = 0;
+
+    var rgb = {};
+        rgb.r = Math.random() * MATHPI2;
+        rgb.g = Math.random() * MATHPI2;
+        rgb.b = Math.random() * MATHPI2;
+        
+    var rgb2 = {};
+        rgb2.r = Math.random() * MATHPI2;
+        rgb2.g = Math.random() * MATHPI2;
+        rgb2.b = Math.random() * MATHPI2;
+
+    function getRGBColor( color ) {
+      var r = Math.sin( color.r += 0.010 ) * 1 + 1;
+      var g = Math.sin( color.g += 0.007 ) * 1 + 1;
+      var b = Math.sin( color.b += 0.013 ) * 1 + 1;
+      return { r:r, g:g, b:b };
+    }
+
+    function getRGBColor2( color ) {
+      var r = Math.sin( color.r += 0.040 ) * 1 + 1;
+      var g = Math.sin( color.g += 0.028 ) * 1 + 1;
+      var b = Math.sin( color.b += 0.052 ) * 1 + 1;
+      return { r:r, g:g, b:b };
+    }
+
+    function limitRGBColor( color, percent = 0.45 ) {
+      if ( color.r < percent ) color.r = percent;
+      if ( color.g < percent ) color.g = percent;
+      if ( color.b < percent ) color.b = percent;
+    }
+
+    function init() {
+
+      canvas = document.createElement( 'canvas' );
+      canvas.addEventListener( 'mousedown', mouseDownHandler, false );
+      canvas.addEventListener( 'mouseup', mouseUpHandler, false );
+      canvas.addEventListener( 'mousemove', mouseMoveHandler, false );
+      canvas.addEventListener( 'mouseenter', mouseEnterHandler, false ); 
+      canvas.addEventListener( 'mouseleave', mouseLeaveHandler, false ); 
+
+      document.body.appendChild( canvas );
+
+      context = canvas.getContext( '2d' );
+
+      window.addEventListener( 'resize', onResize, false );
+      
+      onResize();
+
+      addCircles();
+      
+      render();
+      
+      clearImageData();
+      
+      render();
+      
+      context.putImageData( imageData, 0, 0 );
+      
+      txtStatus = document.getElementById( 'txtStatus' );
+      txtStatus.innerHTML = 'Loading Audio...';
+
+      // Autostart: no button needed, visualization begins automatically
+      userStart();
+
+    }
+
+    function userStart() {
+
+      audioSetup( 'https://nkunited.de/ExternalImages/jsfiddle/audio/ChillDay_comp_2024.mp3' );
+      animate();
+
+    }
+
+    function audioSetup( url ) {
+
+      if ( audio ) audio.pause();
+
+      audio = new Audio();
+      audio.src = url;
+      audio.controls = false;
+      audio.loop = true;
+      audio.autoplay = true;
+      audio.crossOrigin = 'anonymous';
+      audio.addEventListener( 'canplaythrough', audioLoaded, false );
+
+      audioContext = new ( window.AudioContext || window.webkitAudioContext )();
+
+      analyser = audioContext.createAnalyser();
+      analyser.connect( audioContext.destination );
+      analyser.smoothingTimeConstant = smoothingTimeConstant;
+      analyser.fftSize = fftSize;
+      analyserBufferLength = analyser.frequencyBinCount;
+
+      audioSrc = audioContext.createMediaElementSource( audio ); 
+      audioSrc.connect( analyser );
+
+    }
+
+    function audioLoaded( e ) {
+      txtStatus.innerHTML = audioInfo;
+    }
+
+    function clearImageData() {
+      for ( var i = 0, l = data.length; i < l; i += 4 ) {
+        data[ i ] = 0;
+        data[ i + 1 ] = 0;
+        data[ i + 2 ] = 0;
+        data[ i + 3 ] = 255;
+      }
+    }
+
+    function setPixel( x, y, r, g, b, a ) {
+      var i = ( x + y * imageData.width ) * 4;
+      data[ i ] = r;
+      data[ i + 1 ] = g;
+      data[ i + 2 ] = b;
+      data[ i + 3 ] = a;
+    }
+
+    function drawLine( x1, y1, x2, y2, r, g, b, a ) {
+
+      var dx = Math.abs( x2 - x1 );
+      var dy = Math.abs( y2 - y1 );
+      var sx = ( x1 < x2 ) ? 1 : -1;
+      var sy = ( y1 < y2 ) ? 1 : -1;
+      var err = dx - dy;
+      var lx = x1;
+      var ly = y1;    
+
+      while ( true ) {
+
+        if ( lx > 0 && lx < w && ly > 0 && ly < h ) {
+          setPixel( lx, ly, r, g, b, a );
+        }
+
+        if ( ( lx === x2 ) && ( ly === y2 ) ) break;
+
+        var e2 = 2 * err;
+
+        if ( e2 > -dx ) { 
+          err -= dy; 
+          lx += sx; 
+        }
+
+        if ( e2 < dy ) { 
+          err += dx; 
+          ly += sy; 
+        }
+
+      }
+
+    }
+
+    function getCirclePosition( centerX, centerY, radius, index, segments ) {
+      var angle = index * ( MATHPI2 / segments ) + time;
+      var x = centerX + Math.cos( angle ) * radius;
+      var y = centerY + Math.sin( angle ) * radius;
+      return { x:x, y:y };
+    }
+
+    function drawCircle( centerPosition, radius, segments ) {
+
+      var coordinates = [];
+      var radiusSave;
+      var diff = 0;
+
+      for ( var i = 0; i <= segments; i++ ) {
+
+        var radiusRandom = radius;
+
+        if ( i === 0 ) radiusSave = radiusRandom;
+        if ( i === segments ) radiusRandom = radiusSave;
+
+        var centerX = centerPosition.x;
+        var centerY = centerPosition.y;
+
+        var position = getCirclePosition( centerX, centerY, radiusRandom, i, segments );
+        coordinates.push( { x:position.x, y:position.y, index:i + diff, radius:radiusRandom, segments:segments } );
+
+      }
+
+      return coordinates;
+
+    }
+
+    function addCircleSegment( x, y, z, audioBufferIndex ) {
+      var circleSegment = {};
+          circleSegment.x = x;
+          circleSegment.y = y;
+          circleSegment.x2d = 0;
+          circleSegment.y2d = 0;
+          circleSegment.audioBufferIndex = audioBufferIndex;
+      return circleSegment;
+    }
+
+    function addCircles() {
+
+      var audioBufferIndexMin = 8;
+      var audioBufferIndexMax = 1024;
+      var audioBufferIndex = audioBufferIndexMin;
+
+      var centerPosition = { x:0, y:0 };
+      var center  = { x:0, y:0 };
+      
+      var toggle = 1;
+      var index = 0;
+      var audioIndex = audioBufferIndexMin;
+      
+      var mp = { x:Math.random() * w, y:Math.random() * h };
+      
+      for ( var z = -fov; z < fov; z += 5 ) { 
+
+        var coordinates = drawCircle( centerPosition, 75, 64 );
+
+        var circleObj = {};
+            circleObj.segmentsOutside = [];
+            circleObj.segmentsInside = [];
+            circleObj.segmentsInside2 = [];
+            circleObj.segmentsCount = 0;
+            circleObj.index = index;
+            circleObj.z = z;
+            circleObj.center = center;
+            circleObj.circleCenter = { x:0, y:0 };
+            circleObj.mp = { x:mp.x, y:mp.y };
+            circleObj.radius = coordinates[ 0 ].radius;
+            circleObj.color = { r:0, g:0, b:0 };
+
+        toggle = index % 2;
+        index++;
+        
+        if ( z < 0 ) {
+          audioIndex++;
+        } else {
+          audioIndex--;
+        }
+        
+        audioBufferIndex = Math.floor( Math.random() * audioBufferIndexMax ) + audioBufferIndexMin;  
+        
+        var circleSegmentOutside;
+
+        for ( var i = 0, l = coordinates.length; i < l; i++ ) { 
+
+          var coordinate = coordinates[ i ];
+        
+          if ( i % 2 === toggle ) {
+          
+            circleSegmentOutside = addCircleSegment( coordinate.x, coordinate.y, z, audioBufferIndex );
+            circleSegmentOutside.active = true;
+            circleSegmentOutside.index = coordinate.index;
+            circleSegmentOutside.radius = coordinate.radius;
+            circleSegmentOutside.radiusAudio = circleSegmentOutside.radius;
+            circleSegmentOutside.segments = coordinate.segments;
+            circleSegmentOutside.coordinates = [];
+
+            var co;
+            if ( i > 0 ) {
+              co = coordinates[ i - 1 ];
+            } else {
+              co = coordinates[ l - 1 ];
+            }
+
+            var sub1 = addCircleSegment( co.x, co.y, z, audioBufferIndex );
+            var sub2 = addCircleSegment( coordinate.x, coordinate.y, z - 5, audioBufferIndex );
+            var sub3 = addCircleSegment( co.x, co.y, z - 5, audioBufferIndex );
+            var sub4 = addCircleSegment( coordinate.x, coordinate.y, z, audioBufferIndex );
+            var sub5 = addCircleSegment( co.x, co.y, z, audioBufferIndex );
+            var sub6 = addCircleSegment( coordinate.x, coordinate.y, z - 5, audioBufferIndex );
+            var sub7 = addCircleSegment( co.x, co.y, z - 5, audioBufferIndex );
+
+            sub1.index = co.index;
+            sub2.index = coordinate.index;
+            sub3.index = co.index;
+            sub4.index = coordinate.index;
+            sub5.index = co.index;
+            sub6.index = coordinate.index;
+            sub7.index = co.index;
+
+            circleSegmentOutside.subs = [];
+            circleSegmentOutside.subs.push( sub1, sub2, sub3, sub4, sub5, sub6, sub7 );
+
+            if ( i < l - 1 ) {
+              audioBufferIndex = Math.floor( Math.random() * audioBufferIndexMax ) + audioBufferIndexMin;
+            } else {
+              audioBufferIndex = circleObj.segmentsOutside[ 0 ].audioBufferIndex;
+            }
+            
+            circleObj.segmentsOutside.push( circleSegmentOutside );
+          
+          } else {
+          
+            circleObj.segmentsOutside.push( { active:false } );
+
+          }
+
+        }
+
+        circleHolder.push( circleObj );
+
+      }
+
+    }
+
+    function onResize(){
+        
+      w = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+      h = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+
+      canvas.width = w;
+      canvas.height = h;
+
+      context.fillStyle = '#000000';
+      context.fillRect( 0, 0, w, h );
+
+      imageData = context.getImageData( 0, 0, w, h );
+      data = imageData.data;
+
+    }
+
+    function mouseDownHandler( event ) { mouseDown = true; }
+    function mouseUpHandler( event ) { mouseDown = false; }
+    function mouseEnterHandler( event ) { mouseActive = true; }
+    function mouseLeaveHandler( event ) {
+      mouseActive = false;
+      mouseDown = false;
+    }
+    function mouseMoveHandler( event ) { mousePos = getMousePos( canvas, event ); }
+    function getMousePos( canvas, event ) {
+      var rect = canvas.getBoundingClientRect();
+      return { x:event.clientX - rect.left, y:event.clientY - rect.top };
+    }
+
+    function render() {
+
+      var aa = false;
+      if ( analyser ) aa = true;
+
+      var frequencySource;
+      if ( aa === true ) {
+        frequencySource = new Uint8Array( analyser.frequencyBinCount );
+        analyser.getByteFrequencyData( frequencySource );
+      }
+
+      var sortArray = false;
+      
+      var col = getRGBColor2( rgb );
+      var col2 = getRGBColor( rgb2 );
+      
+      limitRGBColor( col, 0.45 );
+      limitRGBColor( col2, 0.25 );
+      
+      for ( var i = 0, l = circleHolder.length; i < l; i++ ) {
+
+        var circleObj = circleHolder[ i ];
+
+        circleObj.color.r = col.r - ( circleObj.z + fov ) / fov;
+        circleObj.color.g = col.g - ( circleObj.z + fov ) / fov;
+        circleObj.color.b = col.b - ( circleObj.z + fov ) / fov;
+
+        if ( circleObj.color.r < col2.r ) circleObj.color.r = col2.r;
+        if ( circleObj.color.g < col2.g ) circleObj.color.g = col2.g;
+        if ( circleObj.color.b < col2.b ) circleObj.color.b = col2.b;
+
+        var circleObjBack;
+        if ( i > 0 ) circleObjBack = circleHolder[ i - 1 ];
+
+        if ( mouseActive ) {
+          circleObj.mp = mousePos;
+        } else {
+          circleObj.mp.x += ( ( w / 2 ) - circleObj.mp.x ) * 0.00025;
+          circleObj.mp.y += ( ( h / 2 ) - circleObj.mp.y ) * 0.00025;
+        }
+
+        circleObj.center.x = ( ( w / 2 ) - circleObj.mp.x ) * ( ( circleObj.z - fov ) / 500 ) + w / 2;
+        circleObj.center.y = ( ( h / 2 ) - circleObj.mp.y ) * ( ( circleObj.z - fov ) / 500 ) + h / 2;
+
+        for ( var j = 0, k = circleObj.segmentsOutside.length; j < k; j++ ) {
+
+          var circleSegmentOutside = circleObj.segmentsOutside[ j ];
+
+          if ( circleSegmentOutside.active === true ) {
+
+            var scale = fov / ( fov + circleObj.z ); 
+            var scaleBack;
+            if ( i > 0 ) scaleBack = fov / ( fov + circleObjBack.z );
+
+            var frequency, frequencyAdd;
+
+            circleSegmentOutside.x2d = ( circleSegmentOutside.x * scale ) + circleObj.center.x;
+            circleSegmentOutside.y2d = ( circleSegmentOutside.y * scale ) + circleObj.center.y;
+
+            if ( aa === true ) {
+              frequency = frequencySource[ circleSegmentOutside.audioBufferIndex ];
+              frequencyAdd = frequency / 20;
+              circleSegmentOutside.radiusAudio = circleSegmentOutside.radius - frequencyAdd;
+            } 
+
+            var lineColorValue = 0;
+
+            if ( j > 0 ) {
+              if ( aa === true && audio.paused === false ) {
+                lineColorValue = Math.round( i / l * ( 55 + frequency ) );
+                if ( lineColorValue > 255 ) lineColorValue = 255;
+              } else {
+                lineColorValue = Math.round( i / l * 200 );
+              }
+            }
+
+            if ( i > 0 && i < l - 1 ) {
+
+              var sub1 = circleSegmentOutside.subs[ 0 ];
+              var sub1angle = sub1.index * ( MATHPI2 / circleSegmentOutside.segments ) + time;
+                  sub1.x2d = ( sub1.x * scale ) + circleObj.center.x;
+                  sub1.y2d = ( sub1.y * scale ) + circleObj.center.y;
+                  sub1.x = circleObj.circleCenter.x + Math.cos( sub1angle ) * circleSegmentOutside.radiusAudio;
+                  sub1.y = circleObj.circleCenter.y + Math.sin( sub1angle ) * circleSegmentOutside.radiusAudio;
+
+              var sub2 = circleSegmentOutside.subs[ 1 ];
+              var sub2angle = sub2.index * ( MATHPI2 / circleSegmentOutside.segments ) + time;
+                  sub2.x2d = ( sub2.x * scaleBack ) + circleObjBack.center.x;
+                  sub2.y2d = ( sub2.y * scaleBack ) + circleObjBack.center.y;
+                  sub2.x = circleObj.circleCenter.x + Math.cos( sub2angle ) * circleSegmentOutside.radiusAudio;
+                  sub2.y = circleObj.circleCenter.y + Math.sin( sub2angle ) * circleSegmentOutside.radiusAudio;
+                  
+              var sub3 = circleSegmentOutside.subs[ 2 ];
+              var sub3angle = sub3.index * ( MATHPI2 / circleSegmentOutside.segments ) + time;
+                  sub3.x2d = ( sub3.x * scaleBack ) + circleObjBack.center.x;
+                  sub3.y2d = ( sub3.y * scaleBack ) + circleObjBack.center.y;
+                  sub3.x = circleObj.circleCenter.x + Math.cos( sub3angle ) * circleSegmentOutside.radiusAudio;
+                  sub3.y = circleObj.circleCenter.y + Math.sin( sub3angle ) * circleSegmentOutside.radiusAudio;
+
+              var sub4 = circleSegmentOutside.subs[ 3 ];
+              var sub4angle = sub4.index * ( MATHPI2 / circleSegmentOutside.segments ) + time;
+                  sub4.x2d = ( sub4.x * scale ) + circleObj.center.x;
+                  sub4.y2d = ( sub4.y * scale ) + circleObj.center.y;
+                  sub4.x = circleObj.circleCenter.x + Math.cos( sub4angle ) * circleSegmentOutside.radius;
+                  sub4.y = circleObj.circleCenter.y + Math.sin( sub4angle ) * circleSegmentOutside.radius;
+
+              var sub5 = circleSegmentOutside.subs[ 4 ];
+              var sub5angle = sub5.index * ( MATHPI2 / circleSegmentOutside.segments ) + time;
+                  sub5.x2d = ( sub5.x * scale ) + circleObj.center.x;
+                  sub5.y2d = ( sub5.y * scale ) + circleObj.center.y;
+                  sub5.x = circleObj.circleCenter.x + Math.cos( sub5angle ) * circleSegmentOutside.radius;
+                  sub5.y = circleObj.circleCenter.y + Math.sin( sub5angle ) * circleSegmentOutside.radius;
+                  
+              var sub6 = circleSegmentOutside.subs[ 5 ];
+              var sub6angle = sub6.index * ( MATHPI2 / circleSegmentOutside.segments ) + time;
+                  sub6.x2d = ( sub6.x * scaleBack ) + circleObjBack.center.x;
+                  sub6.y2d = ( sub6.y * scaleBack ) + circleObjBack.center.y;
+                  sub6.x = circleObj.circleCenter.x + Math.cos( sub6angle ) * circleSegmentOutside.radius;
+                  sub6.y = circleObj.circleCenter.y + Math.sin( sub6angle ) * circleSegmentOutside.radius; 
+                  
+              var sub7 = circleSegmentOutside.subs[ 6 ];
+              var sub7angle = sub7.index * ( MATHPI2 / circleSegmentOutside.segments ) + time;
+                  sub7.x2d = ( sub7.x * scaleBack ) + circleObjBack.center.x;
+                  sub7.y2d = ( sub7.y * scaleBack ) + circleObjBack.center.y;
+                  sub7.x = circleObj.circleCenter.x + Math.cos( sub7angle ) * circleSegmentOutside.radius;
+                  sub7.y = circleObj.circleCenter.y + Math.sin( sub7angle ) * circleSegmentOutside.radius;
+
+              var p1, p2, p3, p4;
+              var p5 = circleSegmentOutside.subs[ 3 ];
+              var p6 = circleSegmentOutside.subs[ 4 ];
+              var p7 = circleSegmentOutside.subs[ 6 ];
+              var p8 = circleSegmentOutside.subs[ 5 ];
+              
+              if ( frequencyAdd > 0 ) {
+                p1 = circleSegmentOutside;
+                p2 = circleSegmentOutside.subs[ 1 ];
+                p3 = circleSegmentOutside.subs[ 2 ];
+                p4 = circleSegmentOutside.subs[ 0 ];
+              }
+              
+              var cr = Math.round( circleObj.color.r * lineColorValue );
+              var cg = Math.round( circleObj.color.g * lineColorValue );
+              var cb = Math.round( circleObj.color.b * lineColorValue );
+              
+              if ( frequencyAdd > 0 ) {
+                drawLine( p1.x2d | 0, p1.y2d | 0, p2.x2d | 0, p2.y2d | 0, cr, cg, cb, 255 );
+                drawLine( p2.x2d | 0, p2.y2d | 0, p3.x2d | 0, p3.y2d | 0, cr, cg, cb, 255 );
+                drawLine( p3.x2d | 0, p3.y2d | 0, p4.x2d | 0, p4.y2d | 0, cr, cg, cb, 255 );
+                drawLine( p4.x2d | 0, p4.y2d | 0, p1.x2d | 0, p1.y2d | 0, cr, cg, cb, 255 );
+                drawLine( p5.x2d | 0, p5.y2d | 0, p1.x2d | 0, p1.y2d | 0, cr, cg, cb, 255 );
+                drawLine( p6.x2d | 0, p6.y2d | 0, p4.x2d | 0, p4.y2d | 0, cr, cg, cb, 255 );
+                drawLine( p7.x2d | 0, p7.y2d | 0, p3.x2d | 0, p3.y2d | 0, cr, cg, cb, 255 );
+                drawLine( p8.x2d | 0, p8.y2d | 0, p2.x2d | 0, p2.y2d | 0, cr, cg, cb, 255 );
+              }
+
+              if ( circleObj.z < fov / 2 ) {
+                drawLine( p5.x2d | 0, p5.y2d | 0, p6.x2d | 0, p6.y2d | 0, cr, cg, cb, 255 );
+                drawLine( p6.x2d | 0, p6.y2d | 0, p7.x2d | 0, p7.y2d | 0, cr, cg, cb, 255 );
+                drawLine( p7.x2d | 0, p7.y2d | 0, p8.x2d | 0, p8.y2d | 0, cr, cg, cb, 255 );
+                drawLine( p8.x2d | 0, p8.y2d | 0, p5.x2d | 0, p5.y2d | 0, cr, cg, cb, 255 );
+              }
+
+            }
+
+            var circleSegmentOutsideangle = circleSegmentOutside.index * ( MATHPI2 / circleSegmentOutside.segments ) + time;
+            circleSegmentOutside.x = circleObj.circleCenter.x + Math.cos( circleSegmentOutsideangle ) * circleSegmentOutside.radiusAudio;
+            circleSegmentOutside.y = circleObj.circleCenter.y + Math.sin( circleSegmentOutsideangle ) * circleSegmentOutside.radiusAudio;
+
+          }
+          
+        }
+
+        if ( mouseDown ) {
+          circleObj.z += speed;
+          if ( circleObj.z > fov ) {
+            circleObj.z -= ( fov * 2 );
+            sortArray = true;
+          }
+        } else {
+          circleObj.z -= speed;
+          if ( circleObj.z < -fov ) {
+            circleObj.z += ( fov * 2 );
+            sortArray = true;
+          }
+        }
+
+      }
+
+      if ( sortArray ) {
+        circleHolder = circleHolder.sort( function( a, b ) {
+          return ( b.z - a.z );
+        } );
+      }
+
+      if ( mouseDown ) {
+        time -= 0.005;
+      } else {
+        time += 0.005;
+      }
+
+      if ( mouseDown ) {
+        if ( colorInvertValue < 255 ) colorInvertValue += 5;
+        else colorInvertValue = 255;
+        softInvert( colorInvertValue );
+      } else {
+        if ( colorInvertValue > 0 ) colorInvertValue -= 5;
+        else colorInvertValue = 0;
+        if ( colorInvertValue > 0 ) softInvert( colorInvertValue );
+      }
+
+    }
+
+    function softInvert( value ) {
+      for ( var j = 0, n = data.length; j < n; j += 4 ) {
+        data[ j ]     = Math.abs( value - data[ j ] );
+        data[ j + 1 ] = Math.abs( value - data[ j + 1 ] );
+        data[ j + 2 ] = Math.abs( value - data[ j + 2 ] );
+        data[ j + 3 ] = 255;
+      }
+    }
+
+    function animate() {
+      clearImageData();
+      render();
+      context.putImageData( imageData, 0, 0 );
+      requestAnimationFrame( animate );
+    }
+
+    window.requestAnimFrame = ( function() {
+      return  window.requestAnimationFrame       ||
+              window.webkitRequestAnimationFrame ||
+              window.mozRequestAnimationFrame    ||
+              function( callback ) {
+                window.setTimeout( callback, 1000 / 60 );
+              };
+    } )();
+
+    init();
+  </script>
+</body>
+</html>

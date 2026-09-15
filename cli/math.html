@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Knowledge Vault</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0"/>
+<meta name="theme-color" content="#020406"/>
+<meta name="description" content="Knowledge Vault UI over a GPGPU fluid heightmap simulation background. WebGL - Three.js">
+
+<style>
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:600&display=swap');
+
+:root{
+  /* CHANGE ONLY THIS */
+  --accent:#b890fc;
+
+  --bg:#050505;
+  --panel:#090909;
+
+  --border:var(--accent);
+  --text:#FFFFFF;
+  --glow:var(--accent);
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Consolas, monospace;
+}
+
+html, body{
+  height:100%;
+  width:100%;
+}
+
+body{
+  position:fixed;
+  overflow:hidden;
+  background:#000;
+  color:var(--text);
+}
+
+canvas{
+  display:block;
+  width:100%;
+  height:100%;
+  position:fixed;
+  top:0;
+  left:0;
+  z-index:0;
+}
+
+.sidebar{
+  overflow-y:auto;
+  scrollbar-width:thin;
+}
+
+/* Sidebar */
+.sidebar{
+  position:fixed;
+  left:10px;
+  top:10px;
+  bottom:10px;
+  width:220px;
+  background:rgba(0,0,0,.85);
+  border:1px solid var(--border);
+  padding:15px;
+  z-index:5;
+}
+
+.logo{
+  font-size:20px;
+  margin-bottom:20px;
+  font-weight:bold;
+}
+
+.menu button{
+  width:100%;
+  margin-bottom:8px;
+  padding:10px;
+  background:black;
+  border:1px solid var(--border);
+  color:var(--text);
+  cursor:pointer;
+}
+
+.menu button:hover{
+  box-shadow:0 0 15px var(--glow);
+}
+
+/* Top Bar */
+.topbar{
+  position:fixed;
+  left:250px;
+  right:20px;
+  top:10px;
+  height:60px;
+  background:rgba(0,0,0,.8);
+  border:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  padding:0 20px;
+  z-index:5;
+}
+
+/* Windows */
+.window{
+  position:absolute;
+  background:rgba(0,0,0,.95);
+  border:1px solid var(--border);
+  box-shadow:0 0 15px rgba(94,255,247,.2);
+  width:500px;
+  height:350px;
+  z-index:10;
+}
+
+.titlebar{
+  height:35px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:0 10px;
+  border-bottom:1px solid var(--border);
+  cursor:move;
+}
+
+.close{
+  cursor:pointer;
+}
+
+.content{
+  padding:15px;
+  height:calc(100% - 35px);
+  overflow:auto;
+}
+
+.note{
+  margin-bottom:15px;
+  padding:10px;
+  border:1px solid rgba(94,255,247,.2);
+}
+
+.note h3{
+  margin-bottom:10px;
+}
+
+pre{
+  white-space:pre-wrap;
+  color:#ffd38a;
+}
+
+/* Footer (from Soothe) */
+#footer {
+  position: fixed;
+  right: 4vw;
+  bottom: 5vh;
+  z-index: 6;
+}
+
+.footers, .footers a {
+  font-weight: 600;
+  display: inline-block;
+  color: #e4e5e6;
+  font-size: 14px;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: subpixel-antialiased;
+  font-family: 'Open Sans', sans-serif;
+  letter-spacing: 1.1px;
+}
+
+.footers a {
+  text-decoration: underline;
+}
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/108/three.min.js"></script>
+</head>
+
+<body>
+
+<!-- === Knowledge Vault UI === -->
+<div class="sidebar">
+  <div class="logo">KNOWLEDGE VAULT</div>
+  <div class="menu">
+   <button onclick="window.location.href='math/calc495.html'">
+   MATH CALCULATION IN TERMINAL NOT IN SCRIPT
+   </button>
+   <button onclick="window.location.href='math/percentage290.html'">
+   HOW TO CALCULATE MARKS PERCENTAGE USING CALCULATOR
+   </button>
+   <button onclick="window.location.href='math/calculate201.html'">
+   CALCULATE NUMBERS IN CLI
+   </button>
+   <button onclick="window.location.href='math/tables195.html'">
+   HOW TO PRINT 1 TO 10 IN LINUX
+   </button>
+   <button onclick="window.location.href='math/factor69.html'">
+   FACTOR TOOL IN LINUX
+   </button>
+    
+  </div>
+</div>
+
+<div class="topbar">
+  <h2>WHITEX DATABASE</h2>
+</div>
+
+<!-- === Soothe footer credit === -->
+
+
+<script>
+/* ============================================================
+   KNOWLEDGE VAULT — data + window system
+   ============================================================ */
+
+const cliData = [
+  { title:"Miller", content:"mlr --csv cat file.csv" },
+  { title:"jq", content:"jq '.name' file.json" },
+  { title:"grep", content:"grep -R 'password' ." }
+];
+
+const netData = [
+  { title:"Nmap", content:"nmap -sV 192.168.1.1" },
+  { title:"Ping", content:"ping google.com" }
+];
+
+const linuxData = [
+  { title:"Find", content:"find / -name test.txt" },
+  { title:"lsblk", content:"lsblk -f" }
+];
+
+const webData = [
+  { title:"Flexbox", content:"display:flex;" },
+  { title:"Grid", content:"display:grid;" }
+];
+
+let z = 100;
+
+function openWindow(title, data) {
+  let win = document.createElement("div");
+  win.className = "window";
+  win.style.left = 260 + Math.random() * 200 + "px";
+  win.style.top = 100 + Math.random() * 100 + "px";
+
+  win.innerHTML = `
+    <div class="titlebar">
+      <span>${title}</span>
+      <span class="close">✕</span>
+    </div>
+    <div class="content">
+      ${data.map(item => `
+        <div class="note">
+          <h3>${item.title}</h3>
+          <pre>${item.content}</pre>
+        </div>
+      `).join("")}
+    </div>
+  `;
+
+  document.body.appendChild(win);
+
+  win.querySelector(".close").onclick = () => {
+    win.remove();
+  };
+
+  drag(win);
+}
+
+function drag(el) {
+  const title = el.querySelector(".titlebar");
+  let x = 0, y = 0, px = 0, py = 0;
+
+  title.onmousedown = (e) => {
+    el.style.zIndex = ++z;
+    px = e.clientX;
+    py = e.clientY;
+
+    document.onmousemove = (e) => {
+      x = px - e.clientX;
+      y = py - e.clientY;
+      px = e.clientX;
+      py = e.clientY;
+
+      el.style.top = (el.offsetTop - y) + "px";
+      el.style.left = (el.offsetLeft - x) + "px";
+    };
+
+    document.onmouseup = () => {
+      document.onmousemove = null;
+    };
+  };
+}
+
+/* ============================================================
+   SOOTHE — GPGPU fluid heightmap background (Three.js)
+   ============================================================ */
+
+const basic_vert = `
+precision highp float;
+
+void main() {
+    gl_Position = vec4( position, vec2(1.0) );
+}
+`;
+
+const prep_frag = `
+precision highp float;
+
+void main() {
+    gl_FragColor.z = 0.012;
+}
+`;
+
+const physics_frag = `
+precision highp float;
+
+uniform vec3 mouse;
+uniform vec3 pmouse;
+uniform vec2 resolution;
+uniform sampler2D texture;
+
+float distToSegment( vec2 x1, vec2 x2, vec2 p ) {
+
+  vec2 v = x2 - x1;
+  vec2 w = p - x1;
+
+  float c1 = dot(w,v);
+  float c2 = dot(v,v);
+
+  float div = mix( c2, c1, step( c2, c1 ) );
+  float mult = step( 0.0, c1 );
+
+  float b = c1 * mult / div;
+  vec2 pb = x1 + b*v;
+
+  return distance( p, pb );
+
+}
+
+vec3 computeNormal( vec4 n ) {
+
+  vec2 un = 1. / resolution;
+  vec2 uv = gl_FragCoord.xy * un;
+
+  vec3 n_r = texture2D( texture, uv + vec2( 1, 0 ) * un ).xyz;
+  vec3 n_l = texture2D( texture, uv - vec2( 1, 0 ) * un ).xyz;
+  vec3 n_u = texture2D( texture, uv + vec2( 0, 1 ) * un ).xyz;
+  vec3 n_d = texture2D( texture, uv - vec2( 0, 1 ) * un ).xyz;
+
+  vec4 dn = vec4( n.z );
+  dn -= vec4( n_r.z, n_l.z, n_u.z, n_d.z );
+
+  vec2 xy = vec2( dn.x - dn.y, dn.z - dn.w );
+  xy += n_r.xy + n_l.xy + n_u.xy + n_d.xy;
+  xy *= 0.972;
+
+  float z;
+  z += dot( n_r.xy, - vec2( 1, 0 ) );
+  z += dot( n_l.xy, + vec2( 1, 0 ) );
+  z += dot( n_u.xy, - vec2( 0, 1 ) );
+  z += dot( n_d.xy, + vec2( 0, 1 ) );
+
+  return vec3( xy , z ) * 0.25;
+
+}
+
+void main() {
+
+  vec2 uv = gl_FragCoord.xy / resolution;
+  float asp = resolution.x / resolution.y;
+
+  vec4 h = texture2D( texture, uv );
+
+  float vel = h.a;
+  vel += - ( h.z - 0.012 ) * 0.016 - vel * 0.059;
+
+  vec3 f = computeNormal( h );
+  f.z += h.z + vel;
+
+  float dist = distToSegment(
+    vec2( pmouse.x * asp, pmouse.y),
+    vec2( mouse.x * asp, mouse.y),
+    vec2( uv.x * asp, uv.y)
+  );
+
+  float mSize = 0.065;
+  float peak = 0.9;
+
+  float isDisp = step( 0.5, mouse.z );
+
+  if ( mouse.z > 0.5 && dist <= mSize ) {
+
+    float dst = ( mSize - dist ) / mSize;
+    f.z += pow( abs(dst), 1.9 ) * peak * 2.5;
+    f.xy -= f.xy * pow( abs(dst), 3.9 ) * 0.1;
+    f.z = min( peak, f.z );
+
+  }
+
+  gl_FragColor = clamp( vec4( f, vel ), -1.0, 1.0);
+
+}
+`;
+
+const light_frag = `
+precision highp float;
+
+#define RECIPROCAL_PI 0.31830988618
+
+uniform vec2 resolution;
+uniform sampler2D texture;
+
+float rand(vec2 co){
+  return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
+}
+
+vec3 dithering( vec3 color ) {
+    float grid_position = rand( gl_FragCoord.xy );
+    vec3 dither_shift_RGB = vec3( 0.25 / 255.0, -0.25 / 255.0, 0.25 / 255.0 );
+    dither_shift_RGB = mix( 2.0 * dither_shift_RGB, -2.0 * dither_shift_RGB, grid_position );
+    return color + dither_shift_RGB;
+}
+
+void main() {
+
+    vec2 uv = gl_FragCoord.xy / resolution.xy;
+
+    vec3 N = texture2D( texture, uv ).xyz;
+
+    vec3 viewPos = vec3( 0.0, 0.0, 1.2 );
+    vec3 lightPos = vec3( 0.0, 1.5, 0.98 );
+    vec3 fragPos = vec3( ( 2.0 * uv - 1.0 ), N.z );
+
+    vec3 L = normalize( lightPos - fragPos );
+    vec3 H = normalize( L + normalize( viewPos - fragPos ) );
+    vec3 dN = vec3( N.xy, N.z/2.0 + 0.28 );
+
+    float dif = max( dot( dN, L ), 0.0 );
+    float spec = clamp( dot( normalize(N), H ), 0.0, 1.0 );
+
+    float attenuation = 1.0 - length( lightPos - fragPos ) / 3.1;
+    vec3 dif_int = vec3( dif * 0.056 * attenuation  );
+
+    float shininess = 4.8;
+    float ref = RECIPROCAL_PI * ( shininess * 0.5 + 1.0 ) * pow( spec, shininess );
+    vec3 spec_int = vec3( ref * 0.38 * pow( attenuation, 3.0 )  );
+
+    vec3 col = dif_int + spec_int;
+
+    col = pow( col, vec3( 1.0 / 2.2 ) );
+
+    col.r = mix( col.r * 1.28, col.r, length( dif_int ) * 1.2 / 3.0 );
+
+    gl_FragColor = vec4( dithering(col), 1.0 );
+
+}
+`;
+
+const w = window.innerWidth;
+const h = window.innerHeight;
+const res = new THREE.Vector2(w, h);
+const mousecoord = new THREE.Vector3();
+const mouse = new THREE.Vector3();
+const pmouse = new THREE.Vector3();
+
+var renderer = new THREE.WebGLRenderer();
+renderer.setSize(w, h);
+document.body.insertBefore(renderer.domElement, document.body.firstChild);
+
+const scene = new THREE.Scene();
+const camera = new THREE.Camera();
+
+let rtt = new THREE.WebGLRenderTarget(w, h, {
+  minFilter: THREE.LinearFilter,
+  magFilter: THREE.LinearFilter,
+  format: THREE.RGBAFormat,
+  type: ( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) ? THREE.HalfFloatType : THREE.FloatType,
+  depthTest: false,
+  depthBuffer: false,
+  stencilBuffer: false
+});
+
+let rtt2 = rtt.clone();
+
+const copyMaterial = new THREE.ShaderMaterial({
+  vertexShader: basic_vert,
+  fragmentShader: prep_frag,
+  blending: THREE.NoBlending,
+  transparent: false,
+  fog: false,
+  lights: false,
+  depthWrite: false,
+  depthTest: false
+});
+
+const physicsMaterial = new THREE.ShaderMaterial({
+  uniforms: {
+    mouse: { type: 'v3', value: mouse },
+    pmouse: { type: 'v3', value: pmouse },
+    resolution: { type: 'v2', value: res },
+    texture: { type: 't' },
+  },
+  vertexShader: basic_vert,
+  fragmentShader: physics_frag,
+  blending: THREE.NoBlending,
+  transparent: false,
+  fog: false,
+  lights: false,
+  depthWrite: false,
+  depthTest: false
+});
+
+const lightsMaterial = new THREE.ShaderMaterial({
+  uniforms: {
+    resolution: { type: 'v2', value: res },
+    texture: { type: 't' },
+  },
+  vertexShader: basic_vert,
+  fragmentShader: light_frag,
+  blending: THREE.NoBlending,
+  transparent: false,
+  fog: false,
+  lights: false,
+  depthWrite: false,
+  depthTest: false
+});
+
+const geometry = new THREE.BufferGeometry();
+const vertices = new Float32Array([
+  -1.0, -1.0,
+  3.0, -1.0,
+  -1.0, 3.0
+]);
+
+geometry.addAttribute('position', new THREE.BufferAttribute(vertices, 2));
+
+let mesh = new THREE.Mesh(geometry, copyMaterial);
+mesh.frustumCulled = false;
+scene.add(mesh);
+
+renderer.setRenderTarget(rtt);
+renderer.render(scene, camera);
+
+renderer.setRenderTarget(rtt2);
+renderer.render(scene, camera);
+
+mesh.material = physicsMaterial;
+
+renderer.domElement.addEventListener('mousemove', mousemove);
+renderer.domElement.addEventListener('mouseout', mouseout);
+
+renderer.domElement.addEventListener('touchmove', touch);
+renderer.domElement.addEventListener('touchstart', touch);
+renderer.domElement.addEventListener('touchend', touchend);
+
+window.addEventListener('resize', resize);
+
+renderer.setAnimationLoop(function () {
+  render();
+});
+
+function render() {
+
+  const tmp = rtt;
+  rtt = rtt2;
+  rtt2 = tmp;
+
+  pmouse.copy(mouse);
+  mouse.copy(mousecoord);
+
+  if (pmouse.z == 0) pmouse.copy(mouse);
+
+  mesh.material = physicsMaterial;
+  mesh.material.uniforms.texture.value = rtt2.texture;
+
+  renderer.setRenderTarget(rtt);
+  renderer.render(scene, camera);
+
+  mesh.material = lightsMaterial;
+  mesh.material.uniforms.texture.value = rtt.texture;
+
+  renderer.setRenderTarget(null);
+  renderer.render(scene, camera);
+
+}
+
+function resize() {
+
+  const h = window.innerHeight;
+  const w = window.innerWidth;
+
+  res.set(w, h);
+
+  camera.aspect = w / h;
+
+  rtt.setSize(w, h);
+  rtt2.setSize(w, h);
+
+  renderer.setSize(w, h);
+
+}
+
+function mousemove(evt) {
+  mousecoord.x = evt.pageX / window.innerWidth;
+  mousecoord.y = 1 - (evt.pageY / window.innerHeight);
+  mousecoord.z = 1;
+}
+
+function mouseout(evt) {
+  mousecoord.z = 0;
+}
+
+function touch(evt) {
+  evt.preventDefault();
+  mousecoord.x = evt.touches[0].pageX / window.innerWidth;
+  mousecoord.y = 1 - evt.touches[0].pageY / window.innerHeight;
+  mousecoord.z = 1;
+}
+
+function touchend(evt) {
+  mousecoord.z = 0;
+}
+</script>
+
+</body>
+</html>

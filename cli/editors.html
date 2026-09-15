@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Knowledge Vault</title>
+
+<style>
+
+:root{
+
+/* CHANGE ONLY THIS */
+--accent:#b890fc;
+
+--bg:#050505;
+--panel:#090909;
+
+--border:var(--accent);
+--text:#FFFFFF;
+--glow:var(--accent);
+
+--c:#fff;
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Consolas, monospace;
+}
+
+html, body{
+height:100vh;
+}
+
+body{
+background:#000;
+overflow:hidden;
+color:var(--text);
+height:100vh;
+position:relative;
+}
+
+/* Sidebar */
+
+.sidebar{
+overflow-y:auto;
+scrollbar-width:thin;
+position:fixed;
+left:10px;
+top:10px;
+bottom:10px;
+width:220px;
+background:rgba(0,0,0,.85);
+border:1px solid var(--border);
+padding:15px;
+z-index:50;
+}
+
+.logo{
+font-size:20px;
+margin-bottom:20px;
+font-weight:bold;
+}
+
+.menu button{
+width:100%;
+margin-bottom:8px;
+padding:10px;
+background:black;
+border:1px solid var(--border);
+color:var(--text);
+cursor:pointer;
+}
+
+.menu button:hover{
+box-shadow:0 0 15px var(--glow);
+}
+
+.menu button.active{
+box-shadow:0 0 15px var(--glow);
+background:var(--border);
+color:#000;
+}
+
+/* Top Bar */
+
+.topbar{
+position:fixed;
+left:250px;
+right:20px;
+top:10px;
+height:60px;
+background:rgba(0,0,0,.8);
+border:1px solid var(--border);
+display:flex;
+align-items:center;
+padding:0 20px;
+z-index:50;
+}
+
+
+/* Windows */
+
+.window{
+position:absolute;
+background:rgba(0,0,0,.95);
+border:1px solid var(--border);
+box-shadow:0 0 15px rgba(94,255,247,.2);
+width:500px;
+height:350px;
+z-index:60;
+}
+
+.titlebar{
+height:35px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:0 10px;
+border-bottom:1px solid var(--border);
+cursor:move;
+}
+
+.close{
+cursor:pointer;
+}
+
+.content{
+padding:15px;
+height:calc(100% - 35px);
+overflow:auto;
+}
+
+.note{
+margin-bottom:15px;
+padding:10px;
+border:1px solid rgba(94,255,247,.2);
+}
+
+.note h3{
+margin-bottom:10px;
+}
+
+pre{
+white-space:pre-wrap;
+color:#ffd38a;
+}
+
+/* Game layer (sits behind the vault UI) */
+
+#gameLayer{
+position:fixed;
+inset:0;
+z-index:1;
+display:none;
+}
+
+#gameLayer.on{
+display:block;
+}
+
+.player {
+  --t: 1;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 5vmin;
+  height: 5vmin;
+  border-radius: 50%;
+  box-shadow: 0 0 0 0.5vmin var(--c);
+  transform: translate(-50%, -50%) translate(var(--x, 0), var(--y, 0)) rotate(var(--r, 0deg)) scaleY(calc(0 + var(--t))) scaleX(calc(2 - var(--t)));
+  background: #202126;
+  z-index: 10;
+  will-change: transform;
+}
+.player::after {
+  content: '';
+  position: absolute;
+  width: 15%;
+  height: 15%;
+  background: #202126;
+  box-shadow: 0 0 0 0.4vmin #fff;
+  left: 50%;
+  top: 0;
+  transform: translate(-50%, calc(-50% - 0.2vmin)) rotate(-45deg);
+}
+.player::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: lch(110 80 var(--ch));
+  border-radius: 50%;
+  clip-path: inset(50% 0 0 0);
+  transform: rotate(calc(-1 * var(--r, 0deg)));
+  transition: 200ms transform;
+  box-shadow: inset 0 0 0 0.1vmin;
+}
+#gameLayer.shooting .player {
+  animation: float 0.1s infinite alternate ease-in-out;
+}
+@keyframes float {
+  0% { --t: 0.75; }
+  100% { --t: 1; }
+}
+.projectile {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1vmin;
+  height: 3vmin;
+  border-radius: 50%;
+  background: var(--c);
+  transform: translate(-50%, -50%) translate(var(--x, 0), var(--y, 0)) rotate(var(--r, 0deg)) scaleY(calc(0.5 + var(--rnd) * 1.5));
+  will-change: transform;
+}
+.particle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0.5vmin;
+  height: 0.5vmin;
+  border-radius: 50%;
+  background: var(--c);
+  will-change: transform;
+  transform: translate(-50%, -50%) translate(var(--x, 0), var(--y, 0)) rotate(var(--r, 0deg)) scale(calc(0.5 + var(--rnd) * 4.5));
+}
+.score {
+  position: fixed;
+  top: 80px;
+  right: 20px;
+  color: white;
+  font-family: monospace;
+  font-size: 24px;
+  z-index: 55;
+}
+</style>
+</head>
+
+<body>
+
+<!-- Background shooter game layer -->
+<div id="gameLayer" class="on"></div>
+<div class="score" id="scoreBox">Score: <span id="scoreValue">0</span></div>
+
+<div class="sidebar">
+<div class="logo">KNOWLEDGE VAULT</div>
+
+<div class="menu">
+   <button onclick="window.location.href='editors/pluma396.html'">
+   HOW TO OPEN STICKER BOX IN PLUMA EDITOR
+   </button>
+   <button onclick="window.location.href='editors/usehelix137.html'">
+   HOW TO USE HELIX
+   </button>
+   <button onclick="window.location.href='editors/helix91.html'">
+   BEST EDITOR FOR PROGRAMMING IN CLI
+   </button>
+
+</div>
+</div>
+
+
+<div class="topbar">
+<h2>WHITEX DATABASE</h2>
+</div>
+
+<script>
+
+/* ===================== Notes / Vault ===================== */
+
+const cliData = [
+{
+title:"Miller",
+content:"mlr --csv cat file.csv"
+},
+{
+title:"jq",
+content:"jq '.name' file.json"
+},
+{
+title:"grep",
+content:"grep -R 'password' ."
+}
+];
+
+const netData = [
+{
+title:"Nmap",
+content:"nmap -sV 192.168.1.1"
+},
+{
+title:"Ping",
+content:"ping google.com"
+}
+];
+
+const linuxData = [
+{
+title:"Find",
+content:"find / -name test.txt"
+},
+{
+title:"lsblk",
+content:"lsblk -f"
+}
+];
+
+const webData = [
+{
+title:"Flexbox",
+content:"display:flex;"
+},
+{
+title:"Grid",
+content:"display:grid;"
+}
+];
+
+let z = 100;
+
+function openWindow(title,data){
+
+let win=document.createElement("div");
+win.className="window";
+win.style.left=260+Math.random()*200+"px";
+win.style.top=100+Math.random()*100+"px";
+
+win.innerHTML=`
+<div class="titlebar">
+<span>${title}</span>
+<span class="close">✕</span>
+</div>
+
+<div class="content">
+${data.map(item=>`
+<div class="note">
+<h3>${item.title}</h3>
+<pre>${item.content}</pre>
+</div>
+`).join("")}
+</div>
+`;
+
+document.body.appendChild(win);
+
+win.querySelector(".close").onclick=()=>{
+win.remove();
+};
+
+drag(win);
+
+}
+
+function drag(el){
+
+const title=el.querySelector(".titlebar");
+
+let x=0,y=0,px=0,py=0;
+
+title.onmousedown=(e)=>{
+
+el.style.zIndex=++z;
+
+px=e.clientX;
+py=e.clientY;
+
+document.onmousemove=(e)=>{
+
+x=px-e.clientX;
+y=py-e.clientY;
+
+px=e.clientX;
+py=e.clientY;
+
+el.style.top=(el.offsetTop-y)+"px";
+el.style.left=(el.offsetLeft-x)+"px";
+};
+
+document.onmouseup=()=>{
+document.onmousemove=null;
+};
+};
+
+}
+
+/* ===================== Background Shooter Game ===================== */
+// Disclamer: doing this with CSS is stupid. But its what I do best: stupid things and CSS
+
+class GameObject {
+  constructor({
+    x = 0,
+    y = 0,
+    rotation = 0,
+    className = 'gameObject',
+    scale = 1,
+    parent = document.getElementById('gameLayer'),
+    color = '#fff'
+  }) {
+    this.element = document.createElement('div');
+    this.element.classList.add(className);
+    parent.appendChild(this.element);
+
+    this.position = { x, y };
+    this.velocity = { x: 0, y: 0 };
+    this.rotation = rotation;
+    this.scale = scale;
+    this.color = color;
+    this.random = Math.random();
+  }
+
+  update() {
+    this.velocity.x *= 0.98;
+    this.velocity.y *= 0.98;
+
+    this.position.x += this.velocity.x;
+    this.position.y += this.velocity.y;
+
+    if (this.position.x < 0) {
+      this.position.x = 0;
+      this.velocity.x *= -0.5;
+    }
+    if (this.position.x > window.innerWidth) {
+      this.position.x = window.innerWidth;
+      this.velocity.x *= -0.5;
+    }
+    if (this.position.y < 0) {
+      this.position.y = 0;
+      this.velocity.y *= -0.5;
+    }
+    if (this.position.y > window.innerHeight) {
+      this.position.y = window.innerHeight;
+      this.velocity.y *= -0.5;
+    }
+
+    this.element.style.setProperty('--x', `${this.position.x}px`);
+    this.element.style.setProperty('--y', `${this.position.y}px`);
+    this.element.style.setProperty('--r', `${this.rotation}deg`);
+    this.element.style.setProperty('--c', this.color);
+    this.element.style.setProperty('--rnd', this.random);
+  }
+
+  destroy() {
+    this.element.remove();
+  }
+
+  getDistance(x, y) {
+    const dx = this.position.x - x;
+    const dy = this.position.y - y;
+    return Math.sqrt(dx * dx + dy * dy);
+  }
+}
+
+class Player extends GameObject {
+  constructor(config) {
+    super({ ...config, className: 'player' });
+    this.score = 0;
+    this.scoreElement = document.getElementById('scoreValue');
+  }
+
+  lookAt(x, y) {
+    const dx = x - this.position.x;
+    const dy = y - this.position.y;
+    this.rotation = (Math.atan2(dy, dx) * (180 / Math.PI) + 90 + 360) % 360;
+  }
+
+  applyRecoil(force) {
+    const angleRad = (this.rotation - 90) * (Math.PI / 180);
+    this.velocity.x -= Math.cos(angleRad) * force;
+    this.velocity.y -= Math.sin(angleRad) * force;
+  }
+
+  updateScore(points) {
+    this.score += points;
+    if (this.scoreElement) this.scoreElement.textContent = this.score;
+  }
+}
+
+class Game {
+  constructor() {
+    this.layer = document.getElementById('gameLayer');
+    this.player = new Player({
+      x: window.innerWidth / 2,
+      y: window.innerHeight / 2
+    });
+
+    this.projectiles = [];
+    this.particles = [];
+    this.spatters = [];
+    this.currentHue = Math.random() * 360;
+    this.shootingInterval = null;
+    this.running = true;
+    this.rafId = null;
+
+    this._onMove = (e) => this.player.lookAt(e.clientX, e.clientY);
+    this._onDown = (e) => {
+      this.layer.classList.add('shooting');
+      this.player.lookAt(e.clientX, e.clientY);
+      this.shoot();
+      this.shootingInterval = setInterval(() => this.shoot(), 20);
+    };
+    this._onUp = () => {
+      clearInterval(this.shootingInterval);
+      this.layer.classList.remove('shooting');
+    };
+
+    this.setupEventListeners();
+    this.animate();
+  }
+
+  setupEventListeners() {
+    window.addEventListener('pointermove', this._onMove);
+    window.addEventListener('pointerdown', this._onDown);
+    window.addEventListener('pointerup', this._onUp);
+  }
+
+  teardownEventListeners() {
+    window.removeEventListener('pointermove', this._onMove);
+    window.removeEventListener('pointerdown', this._onDown);
+    window.removeEventListener('pointerup', this._onUp);
+    clearInterval(this.shootingInterval);
+  }
+
+  shoot() {
+    const recoilForce = 1.5;
+    this.player.applyRecoil(recoilForce);
+
+    const projectile = new GameObject({
+      x: this.player.position.x,
+      y: this.player.position.y,
+      rotation: this.player.rotation,
+      className: 'projectile',
+      color: `lch(100 60 ${this.currentHue})`
+    });
+
+    const angleRad = (projectile.rotation - 90) * (Math.PI / 180);
+    const speed = 25;
+    projectile.velocity.x = Math.cos(angleRad) * speed;
+    projectile.velocity.y = Math.sin(angleRad) * speed;
+
+    this.projectiles.push(projectile);
+  }
+
+  updateProjectiles() {
+    for (let i = this.projectiles.length - 1; i >= 0; i--) {
+      const projectile = this.projectiles[i];
+
+      const angleRad = (projectile.rotation - 90) * (Math.PI / 180);
+      const speed = 25;
+      projectile.position.x += Math.cos(angleRad) * speed;
+      projectile.position.y += Math.sin(angleRad) * speed;
+
+      projectile.update();
+
+      const borderCollision =
+        projectile.position.y <= 0 ||
+        projectile.position.x <= 0 ||
+        projectile.position.x >= window.innerWidth ||
+        projectile.position.y >= window.innerHeight;
+
+      if (borderCollision) {
+        this.createExplosion(projectile);
+        projectile.destroy();
+        this.projectiles.splice(i, 1);
+        this.player.updateScore(10);
+      }
+    }
+  }
+
+  createExplosion(source) {
+    const particleCount = Math.floor(Math.random() * 20) + 10;
+
+    for (let i = 0; i < particleCount; i++) {
+      const particle = new GameObject({
+        x: source.position.x,
+        y: source.position.y,
+        rotation: Math.random() * 360,
+        className: 'particle',
+        color: source.color
+      });
+
+      const angleRad = (particle.rotation - 90) * (Math.PI / 180);
+      const speed = Math.random() * 3 + 2;
+      particle.velocity.x = Math.cos(angleRad) * speed;
+      particle.velocity.y = Math.sin(angleRad) * speed;
+
+      this.particles.push({
+        particle,
+        life: 10 + Math.floor(Math.random() * 40)
+      });
+    }
+  }
+
+  updateParticles() {
+    for (let i = this.particles.length - 1; i >= 0; i--) {
+      const { particle, life } = this.particles[i];
+
+      if (life < 0) {
+        this.spatters.push(particle);
+        this.particles.splice(i, 1);
+        continue;
+      }
+
+      const angleRad = (particle.rotation - 90) * (Math.PI / 180);
+      const speed = 7;
+      particle.position.x += Math.cos(angleRad) * speed;
+      particle.position.y += Math.sin(angleRad) * speed;
+
+      particle.update();
+      this.particles[i].life--;
+    }
+
+    for (let i = this.spatters.length - 1; i >= 0; i--) {
+      const spatter = this.spatters[i];
+      if (this.player.getDistance(spatter.position.x, spatter.position.y) < 50) {
+        spatter.destroy();
+        this.spatters.splice(i, 1);
+        this.player.updateScore(-5);
+      }
+    }
+  }
+
+  animate() {
+    if (!this.running) return;
+
+    this.currentHue = (this.currentHue + 1) % 360;
+    this.layer.style.setProperty('--ch', this.currentHue);
+
+    this.player.update();
+    this.updateProjectiles();
+    this.updateParticles();
+
+    this.rafId = requestAnimationFrame(() => this.animate());
+  }
+
+  destroy() {
+    this.running = false;
+    if (this.rafId) cancelAnimationFrame(this.rafId);
+    this.teardownEventListeners();
+    this.layer.innerHTML = '';
+  }
+}
+
+/* Auto-start the background game as soon as the page loads */
+let currentGame = new Game();
+
+</script>
+
+</body>
+</html>
