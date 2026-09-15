@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Knowledge Terminal</title>
+
+<style>
+
+:root{
+--accent:#5EFFF7;
+--bg:#050505;
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Consolas, monospace;
+}
+
+body{
+background:var(--bg);
+overflow:hidden;
+height:100vh;
+color:white;
+}
+
+/* Animated Grid */
+
+.grid{
+position:fixed;
+inset:0;
+
+background:
+linear-gradient(rgba(94,255,247,.05) 1px, transparent 1px),
+linear-gradient(90deg, rgba(94,255,247,.05) 1px, transparent 1px);
+
+background-size:40px 40px;
+
+animation:gridmove 20s linear infinite;
+}
+
+@keyframes gridmove{
+from{transform:translateY(0);}
+to{transform:translateY(40px);}
+}
+
+/* Network Canvas */
+
+#network{
+position:fixed;
+inset:0;
+z-index:0;
+opacity:.6;
+}
+
+/* Center Box */
+
+.container{
+position:fixed;
+inset:0;
+
+display:flex;
+justify-content:center;
+align-items:center;
+
+padding:30px;
+z-index:10;
+}
+
+.textbox{
+
+width:min(900px,90vw);
+max-height:80vh;
+
+overflow:auto;
+
+padding:40px;
+
+background:rgba(255,255,255,.05);
+
+backdrop-filter:blur(18px);
+-webkit-backdrop-filter:blur(18px);
+
+border:1px solid rgba(94,255,247,.25);
+
+box-shadow:
+0 0 25px rgba(94,255,247,.15);
+
+border-radius:18px;
+}
+
+.textbox h1{
+color:var(--accent);
+margin-bottom:20px;
+}
+
+.textbox p{
+line-height:1.8;
+font-size:16px;
+color:#e9ffff;
+}
+
+.textbox a{
+color:#FA3B34;
+}
+
+.textbox a:visited{
+color:#FA3B34;
+}
+
+.textbox a:hover{
+color:#FA3B34;
+}
+
+</style>
+</head>
+<body>
+
+<canvas id="network"></canvas>
+
+<div class="grid"></div>
+
+<div class="container">
+
+<div class="textbox">
+
+<h1 class="scramble">HIDE A MESSAGE IN THE PIXELS [PART 2]</h1>
+<br>
+<br>
+<h4 class="scramble">EXAMPLE: HIDING THE WORD "HELLO" INSIDE THE RED CHANNEL OF 5 PIXELS</h4>
+<br>
+<br>
+<h4 class="scramble">FOR EX: (255, 72, 0, 1)</h4>
+<br>
+<br>
+<pre>RED=255 </pre>
+<br>
+<pre>ASCII VALUE OF "H"=72 </pre>
+<br>
+<pre>GREEN=0 </pre>
+<br>
+<pre>TRANSPARENT=1 </pre>
+<br>
+<h4 class="scramble">YOU CAN PLACE THE ASCII VALUE IN ANY PIXEL LOCATION, JUST DON'T TOUCH THE TRANSPARENT AREA</h4>
+<br>
+<br>
+<h4 class="scramble">ASCII TABLE - MAIN PRINTABLE CHARACTERS RUN FROM 33 TO 126</h4>
+<br>
+<br>
+<pre>33=! 34=" 35=# 36=$ 37=% 38=& 39=' 40=( 41=) 42=* 43=+ 44=, 45=- 46=. 47=/ 48=0 49=1 50=2 51=3 52=4 53=5 54=6</pre>
+<br>
+<pre>55=7 56=8 57=9 58=: 59=; 60=< 61== 62=> 63=? 64=@ 65=A 66=B 67=C 68=D 69=E 70=F 71=G 72=H 73=I 74=J 75=K</pre>
+<br>
+<pre>76=L 77=M 78=N 79=O 80=P 81=Q 82=R 83=S 84=T 85=U 86=V 87=W 88=X 89=Y 90=Z 91=[ 92=\ 93=] 94=^ 95=_ 96=`</pre>
+<br>
+<pre>97=a 98=b 99=c 100=d 101=e 102=f 103=g 104=h 105=i 106=j 107=k 108=l 109=m 110=n 111=o 112=p 113=q 114=r</pre>
+<br>
+<pre>115=s 116=t 117=u 118=v 119=w 120=x 121=y 122=z 123={ 124=| 125=} 126=~</pre>
+<br>
+<a href="hide_msg_in_pixel_ascii.py" download>Download hide_msg_in_pixel_ascii.py</a>
+<br>
+<br>
+<h4 class="scramble">EXTRACT MSG FROM PIXELS</h4>
+<br>
+<br>
+<a href="extract_msg_from_pixel_ascii.py" download>Download extract_msg_from_pixel_ascii.py</a>
+<br>
+<br>
+
+</div>
+
+<script>
+
+const canvas=document.getElementById("network");
+const ctx=canvas.getContext("2d");
+
+function resize(){
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+}
+
+resize();
+window.addEventListener("resize",resize);
+
+const nodes=[];
+
+for(let i=0;i<70;i++){
+
+nodes.push({
+x:Math.random()*canvas.width,
+y:Math.random()*canvas.height,
+vx:(Math.random()-.5)*0.4,
+vy:(Math.random()-.5)*0.4
+});
+
+}
+
+function animate(){
+
+ctx.clearRect(
+0,
+0,
+canvas.width,
+canvas.height
+);
+
+for(let a of nodes){
+
+a.x+=a.vx;
+a.y+=a.vy;
+
+if(a.x<0||a.x>canvas.width) a.vx*=-1;
+if(a.y<0||a.y>canvas.height) a.vy*=-1;
+
+ctx.fillStyle="#5EFFF7";
+
+ctx.fillRect(
+a.x,
+a.y,
+2,
+2
+);
+
+for(let b of nodes){
+
+let dx=a.x-b.x;
+let dy=a.y-b.y;
+
+let dist=Math.sqrt(
+dx*dx+dy*dy
+);
+
+if(dist<150){
+
+ctx.strokeStyle=
+"rgba(94,255,247,.08)";
+
+ctx.beginPath();
+
+ctx.moveTo(a.x,a.y);
+ctx.lineTo(b.x,b.y);
+
+ctx.stroke();
+
+}
+
+}
+
+}
+
+requestAnimationFrame(animate);
+
+}
+
+animate();
+
+</script>
+
+<script>
+const SCRAMBLE_CHARS = "#█░▓▒/\\<>01";
+
+function scrambleElement(el) {
+    const original = el.textContent;
+    let progress = 0;
+
+    const duration = 1200; // 1.2 seconds
+    const frameRate = 30;
+    const totalFrames = duration / frameRate;
+
+    const timer = setInterval(() => {
+
+        progress++;
+
+        const revealCount =
+            Math.floor((progress / totalFrames) * original.length);
+
+        let output = "";
+
+        for (let i = 0; i < original.length; i++) {
+
+            if (
+                original[i] === " " ||
+                original[i] === "\n"
+            ) {
+                output += original[i];
+                continue;
+            }
+
+            if (i < revealCount) {
+                output += original[i];
+            } else {
+                output += SCRAMBLE_CHARS[
+                    Math.floor(
+                        Math.random() * SCRAMBLE_CHARS.length
+                    )
+                ];
+            }
+        }
+
+        el.textContent = output;
+
+        if (progress >= totalFrames) {
+            clearInterval(timer);
+            el.textContent = original;
+        }
+
+    }, frameRate);
+}
+
+window.addEventListener("load", () => {
+    document
+        .querySelectorAll(".scramble")
+        .forEach(scrambleElement);
+});
+</script>
+
+
+</body>
+</html>
