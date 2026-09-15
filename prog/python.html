@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Knowledge Vault</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdnjs.cloudflare.com/ajax/libs/three.js/0.164.1/three.module.min.js"
+  }
+}
+</script>
+
+<style>
+
+:root{
+
+/* CHANGE ONLY THIS */
+--accent:#90e3fc;
+
+--bg:#050505;
+--panel:#090909;
+
+--border:var(--accent);
+--text:#FFFFFF;
+--glow:var(--accent);
+
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Consolas, monospace;
+}
+
+html, body{
+width:100%;
+height:100%;
+overflow:hidden;
+background:#000;
+color:var(--text);
+}
+
+/* Particle background sketch */
+#sketch{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+z-index:0;
+}
+
+.sidebar{
+  overflow-y:auto;
+  scrollbar-width:thin;
+}
+/* Sidebar */
+
+.sidebar{
+position:fixed;
+left:10px;
+top:10px;
+bottom:10px;
+width:220px;
+background:rgba(0,0,0,.85);
+border:1px solid var(--border);
+padding:15px;
+z-index:5;
+}
+
+.logo{
+font-size:20px;
+margin-bottom:20px;
+font-weight:bold;
+}
+
+.menu button{
+width:100%;
+margin-bottom:8px;
+padding:10px;
+background:black;
+border:1px solid var(--border);
+color:var(--text);
+cursor:pointer;
+}
+
+.menu button:hover{
+box-shadow:0 0 15px var(--glow);
+}
+
+/* Top Bar */
+
+.topbar{
+position:fixed;
+left:250px;
+right:20px;
+top:10px;
+height:60px;
+background:rgba(0,0,0,.8);
+border:1px solid var(--border);
+display:flex;
+align-items:center;
+padding:0 20px;
+z-index:5;
+}
+
+
+/* Windows */
+
+.window{
+position:absolute;
+background:rgba(0,0,0,.95);
+border:1px solid var(--border);
+box-shadow:0 0 15px rgba(94,255,247,.2);
+width:500px;
+height:350px;
+z-index:10;
+}
+
+.titlebar{
+height:35px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:0 10px;
+border-bottom:1px solid var(--border);
+cursor:move;
+}
+
+.close{
+cursor:pointer;
+}
+
+.content{
+padding:15px;
+height:calc(100% - 35px);
+overflow:auto;
+}
+
+.note{
+margin-bottom:15px;
+padding:10px;
+border:1px solid rgba(94,255,247,.2);
+}
+
+.note h3{
+margin-bottom:10px;
+}
+
+pre{
+white-space:pre-wrap;
+color:#ffd38a;
+}
+
+/* Sidebar */
+</style>
+</head>
+
+<body>
+
+<!-- Three.js particle field lives behind everything else -->
+<div id="sketch"></div>
+
+<div class="sidebar">
+<div class="logo">KNOWLEDGE VAULT</div>
+
+<div class="menu">
+   <button onclick="window.location.href='python/enc447.html'">
+   HOW TO ENCRYPT PYTHON SCRIPT
+   </button>
+   <button onclick="window.location.href='python/intresting265.html'">
+   PYTHON INTERESTING CMNDS
+   </button>
+   <button onclick="window.location.href='python/d244.html'">
+   CTRL+D NOT WORKING IN YOUR SCRIPT
+   </button>
+   <button onclick="window.location.href='python/cz243.html'">
+   HOW TO WRITE CODE SO CTRL+C OR CTRL+Z DOESN'T WORK IN YOUR SCRIPT
+   </button>
+   <button onclick="window.location.href='python/lines242.html'">
+   HOW TO WRITE 2 LINES IN 1 LINE IN PYTHON
+   </button>
+   <button onclick="window.location.href='python/login241.html'">
+   HOW TO CREATE A LOGIN PAGE USING PYTHON
+   </button>
+<button onclick="window.location.href='cli.html'">
+CLI TOOLS
+</button>
+<button onclick="openWindow('Networking', netData)">NETWORKING</button>
+<button onclick="openWindow('Linux', linuxData)">LINUX</button>
+<button onclick="openWindow('Web Dev', webData)">WEB DEV</button>
+</div>
+</div>
+
+
+<div class="topbar">
+<h2>WHITEX DATABASE</h2>
+</div>
+
+<script type="module">
+import * as THREE from "three";
+
+/*
+ * Particle background sketch.
+ * Rewritten to depend only on three.js (no GUI panel, no kokomi.js).
+ * The original code used "kokomi.js", a small/obscure three.js helper
+ * library. Loading it from a CDN either failed silently or pulled in a
+ * duplicate copy of three.js (breaking internal instanceof checks),
+ * which is the most likely cause of the black screen. This version
+ * reimplements the same particle shader and a simple "persistence /
+ * trail" effect directly with three.js, so there's no dependency on
+ * an unstable third-party package.
+ */
+
+const vertexShader = `
+#define GLSLIFY 1
+highp float random(vec2 co)
+{
+    highp float a=12.9898;
+    highp float b=78.233;
+    highp float c=43758.5453;
+    highp float dt=dot(co.xy,vec2(a,b));
+    highp float sn=mod(dt,3.14);
+    return fract(sin(sn)*c);
+}
+
+uniform float iTime;
+uniform float iVelocity;
+
+attribute vec2 aSeed;
+attribute float aSize;
+
+varying float vRandColor;
+
+void main(){
+    vec3 p=position;
+
+    float t=iTime*1000.;
+    float v=iVelocity;
+    float s=v*t;
+    p.z=mod(p.z+s,2000.);
+
+    vec4 mvPosition=modelViewMatrix*vec4(p,1.);
+    gl_Position=projectionMatrix*mvPosition;
+
+    float pSize=aSize*(200./-mvPosition.z);
+    gl_PointSize=pSize;
+
+    float randColor=random(aSeed);
+    vRandColor=randColor;
+}
+`;
+
+const fragmentShader = `
+#define GLSLIFY 1
+float circle(vec2 st,float r){
+    vec2 dist=st-vec2(.5);
+    return 1.-smoothstep(r-(r*1.15),r,dot(dist,dist)*4.);
+}
+
+uniform vec3 iColor1;
+uniform vec3 iColor2;
+
+varying float vRandColor;
+
+void main(){
+    vec2 p=gl_PointCoord-.5+.5;
+
+    vec3 color=iColor1;
+    if(vRandColor>0.&&vRandColor<.5){
+        color=iColor2;
+    }
+
+    float shape=circle(p,1.);
+
+    vec3 col=color*shape;
+
+    gl_FragColor=vec4(col,1.);
+}
+`;
+
+// ---- Fullscreen fade quad (the "persistence" / trail effect) ----
+// Instead of clearing the canvas each frame, we paint a translucent
+// black rectangle over everything first. Older frames fade out
+// gradually instead of disappearing instantly, producing motion trails.
+const fadeScene = new THREE.Scene();
+const fadeCamera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+const fadeMaterial = new THREE.MeshBasicMaterial({
+  color: new THREE.Color("#191919"),
+  transparent: true,
+  opacity: 0.2,
+  depthWrite: false,
+  depthTest: false
+});
+const fadeQuad = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), fadeMaterial);
+fadeScene.add(fadeQuad);
+
+// ---- Particles ----
+const params = {
+  count: 10000,
+  pointColor1: "#58c5f4",
+  pointColor2: "#d3d3d3",
+  angularVelocity: 1,
+  fadeFactor: 0.2,
+  velocity: 0.01,
+  pointSize: 3
+};
+
+let geometry, material, points;
+
+function makeBuffer(count, fn, itemSize = 1) {
+  const arr = new Float32Array(count * itemSize);
+  for (let i = 0; i < count; i++) {
+    for (let j = 0; j < itemSize; j++) {
+      arr[i * itemSize + j] = fn();
+    }
+  }
+  return arr;
+}
+
+function createParticles() {
+  if (points) {
+    scene.remove(points);
+    geometry.dispose();
+    material.dispose();
+  }
+
+  geometry = new THREE.BufferGeometry();
+
+  const positions = new Float32Array(params.count * 3);
+  for (let i = 0; i < params.count; i++) {
+    const theta = THREE.MathUtils.randFloat(0, 360);
+    const r = THREE.MathUtils.randFloat(10, 50);
+    const x = r * Math.cos(theta);
+    const y = r * Math.sin(theta);
+    const z = THREE.MathUtils.randFloat(0, 2000);
+    positions[i * 3] = x;
+    positions[i * 3 + 1] = y;
+    positions[i * 3 + 2] = z;
+  }
+  geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+
+  const seeds = makeBuffer(params.count, () => THREE.MathUtils.randFloat(0, 1), 2);
+  geometry.setAttribute("aSeed", new THREE.BufferAttribute(seeds, 2));
+
+  const sizes = makeBuffer(params.count, () => params.pointSize + THREE.MathUtils.randFloat(0, 1), 1);
+  geometry.setAttribute("aSize", new THREE.BufferAttribute(sizes, 1));
+
+  material = new THREE.ShaderMaterial({
+    vertexShader,
+    fragmentShader,
+    transparent: true,
+    depthWrite: false,
+    blending: THREE.AdditiveBlending,
+    uniforms: {
+      iTime: { value: 0 },
+      iColor1: { value: new THREE.Color(params.pointColor1) },
+      iColor2: { value: new THREE.Color(params.pointColor2) },
+      iVelocity: { value: params.velocity }
+    }
+  });
+
+  points = new THREE.Points(geometry, material);
+  scene.add(points);
+}
+
+// ---- Scene / camera / renderer ----
+const container = document.querySelector("#sketch");
+
+const scene = new THREE.Scene();
+
+const camera = new THREE.PerspectiveCamera(
+  60,
+  window.innerWidth / window.innerHeight,
+  0.1,
+  10000
+);
+camera.position.z = 1000;
+
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.autoClear = false;
+container.appendChild(renderer.domElement);
+
+createParticles();
+
+window.addEventListener("resize", () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+function animate(time) {
+  requestAnimationFrame(animate);
+
+  if (material) {
+    material.uniforms.iTime.value = time / 1000;
+    material.uniforms.iVelocity.value = params.velocity;
+  }
+  if (points) {
+    points.rotation.z += params.angularVelocity * 0.01;
+  }
+  fadeMaterial.opacity = params.fadeFactor;
+
+  renderer.clearDepth();
+  renderer.render(fadeScene, fadeCamera);
+  renderer.render(scene, camera);
+}
+requestAnimationFrame(animate);
+
+</script>
+
+<script>
+/* Knowledge Vault UI */
+
+/* Notes */
+
+const cliData = [
+{
+title:"Miller",
+content:"mlr --csv cat file.csv"
+},
+{
+title:"jq",
+content:"jq '.name' file.json"
+},
+{
+title:"grep",
+content:"grep -R 'password' ."
+}
+];
+
+const netData = [
+{
+title:"Nmap",
+content:"nmap -sV 192.168.1.1"
+},
+{
+title:"Ping",
+content:"ping google.com"
+}
+];
+
+const linuxData = [
+{
+title:"Find",
+content:"find / -name test.txt"
+},
+{
+title:"lsblk",
+content:"lsblk -f"
+}
+];
+
+const webData = [
+{
+title:"Flexbox",
+content:"display:flex;"
+},
+{
+title:"Grid",
+content:"display:grid;"
+}
+];
+
+/* Window System */
+
+let z = 100;
+
+function openWindow(title,data){
+
+let win=document.createElement("div");
+win.className="window";
+win.style.left=260+Math.random()*200+"px";
+win.style.top=100+Math.random()*100+"px";
+
+win.innerHTML=`
+<div class="titlebar">
+<span>${title}</span>
+<span class="close">✕</span>
+</div>
+
+<div class="content">
+${data.map(item=>`
+<div class="note">
+<h3>${item.title}</h3>
+<pre>${item.content}</pre>
+</div>
+`).join("")}
+</div>
+`;
+
+document.body.appendChild(win);
+
+win.querySelector(".close").onclick=()=>{
+win.remove();
+};
+
+drag(win);
+
+}
+
+/* Drag */
+
+function drag(el){
+
+const title=el.querySelector(".titlebar");
+
+let x=0,y=0,px=0,py=0;
+
+title.onmousedown=(e)=>{
+
+el.style.zIndex=++z;
+
+px=e.clientX;
+py=e.clientY;
+
+document.onmousemove=(e)=>{
+
+x=px-e.clientX;
+y=py-e.clientY;
+
+px=e.clientX;
+py=e.clientY;
+
+el.style.top=(el.offsetTop-y)+"px";
+el.style.left=(el.offsetLeft-x)+"px";
+};
+
+document.onmouseup=()=>{
+document.onmousemove=null;
+};
+};
+
+}
+
+</script>
+
+</body>
+</html>
