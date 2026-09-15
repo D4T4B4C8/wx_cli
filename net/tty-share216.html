@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Knowledge Terminal</title>
+
+<style>
+
+:root{
+--accent:#5EFFF7;
+--bg:#050505;
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Consolas, monospace;
+}
+
+body{
+background:var(--bg);
+overflow:hidden;
+height:100vh;
+color:white;
+}
+
+/* Animated Grid */
+
+.grid{
+position:fixed;
+inset:0;
+
+background:
+linear-gradient(rgba(94,255,247,.05) 1px, transparent 1px),
+linear-gradient(90deg, rgba(94,255,247,.05) 1px, transparent 1px);
+
+background-size:40px 40px;
+
+animation:gridmove 20s linear infinite;
+}
+
+@keyframes gridmove{
+from{transform:translateY(0);}
+to{transform:translateY(40px);}
+}
+
+/* Network Canvas */
+
+#network{
+position:fixed;
+inset:0;
+z-index:0;
+opacity:.6;
+}
+
+/* Center Box */
+
+.container{
+position:fixed;
+inset:0;
+
+display:flex;
+justify-content:center;
+align-items:center;
+
+padding:30px;
+z-index:10;
+}
+
+.textbox{
+
+width:min(900px,90vw);
+max-height:80vh;
+
+overflow:auto;
+
+padding:40px;
+
+background:rgba(255,255,255,.05);
+
+backdrop-filter:blur(18px);
+-webkit-backdrop-filter:blur(18px);
+
+border:1px solid rgba(94,255,247,.25);
+
+box-shadow:
+0 0 25px rgba(94,255,247,.15);
+
+border-radius:18px;
+}
+
+.textbox h1{
+color:var(--accent);
+margin-bottom:20px;
+}
+
+.textbox p{
+line-height:1.8;
+font-size:16px;
+color:#e9ffff;
+}
+
+.textbox a{
+color:#FA3B34;
+}
+
+.textbox a:visited{
+color:#FA3B34;
+}
+
+.textbox a:hover{
+color:#FA3B34;
+}
+
+</style>
+</head>
+<body>
+
+<canvas id="network"></canvas>
+
+<div class="grid"></div>
+
+<div class="container">
+
+<div class="textbox">
+
+<h1 class="scramble">CONNECT YOUR TERMINAL ALL OVER THE WORLD PUBLICALLY</h1>
+<br>
+<br>
+<span style="background:#ffffff22; color:#fff; border:1px solid #ffffff55; padding:4px 10px; border-radius:999px; font-weight:bold; display:inline-block; margin-top:10px; line-height:1.6;">yay -S tty-share</span>
+<br>
+<br>
+<h4 class="scramble">IF YOU WANT TO RUN IN LOCAL HOST</h4>
+<br>
+<br>
+<span style="background:#ffffff22; color:#fff; border:1px solid #ffffff55; padding:4px 10px; border-radius:999px; font-weight:bold; display:inline-block; margin-top:10px; line-height:1.6;">tty-share</span>
+<br>
+<br>
+<h4 class="scramble">IF YOU WANT TO RUN ALL OVER THE WORLD</h4>
+<br>
+<br>
+<span style="background:#ffffff22; color:#fff; border:1px solid #ffffff55; padding:4px 10px; border-radius:999px; font-weight:bold; display:inline-block; margin-top:10px; line-height:1.6;">tty-share --public --readonly --command bash</span>
+<br>
+<br>
+<pre>IF YOU DON'T WANT READONLY REMOVE THAT LINE</pre>
+<br>
+
+</div>
+
+<script>
+
+const canvas=document.getElementById("network");
+const ctx=canvas.getContext("2d");
+
+function resize(){
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+}
+
+resize();
+window.addEventListener("resize",resize);
+
+const nodes=[];
+
+for(let i=0;i<70;i++){
+
+nodes.push({
+x:Math.random()*canvas.width,
+y:Math.random()*canvas.height,
+vx:(Math.random()-.5)*0.4,
+vy:(Math.random()-.5)*0.4
+});
+
+}
+
+function animate(){
+
+ctx.clearRect(
+0,
+0,
+canvas.width,
+canvas.height
+);
+
+for(let a of nodes){
+
+a.x+=a.vx;
+a.y+=a.vy;
+
+if(a.x<0||a.x>canvas.width) a.vx*=-1;
+if(a.y<0||a.y>canvas.height) a.vy*=-1;
+
+ctx.fillStyle="#5EFFF7";
+
+ctx.fillRect(
+a.x,
+a.y,
+2,
+2
+);
+
+for(let b of nodes){
+
+let dx=a.x-b.x;
+let dy=a.y-b.y;
+
+let dist=Math.sqrt(
+dx*dx+dy*dy
+);
+
+if(dist<150){
+
+ctx.strokeStyle=
+"rgba(94,255,247,.08)";
+
+ctx.beginPath();
+
+ctx.moveTo(a.x,a.y);
+ctx.lineTo(b.x,b.y);
+
+ctx.stroke();
+
+}
+
+}
+
+}
+
+requestAnimationFrame(animate);
+
+}
+
+animate();
+
+</script>
+
+<script>
+const SCRAMBLE_CHARS = "#█░▓▒/\\<>01";
+
+function scrambleElement(el) {
+    const original = el.textContent;
+    let progress = 0;
+
+    const duration = 1200; // 1.2 seconds
+    const frameRate = 30;
+    const totalFrames = duration / frameRate;
+
+    const timer = setInterval(() => {
+
+        progress++;
+
+        const revealCount =
+            Math.floor((progress / totalFrames) * original.length);
+
+        let output = "";
+
+        for (let i = 0; i < original.length; i++) {
+
+            if (
+                original[i] === " " ||
+                original[i] === "\n"
+            ) {
+                output += original[i];
+                continue;
+            }
+
+            if (i < revealCount) {
+                output += original[i];
+            } else {
+                output += SCRAMBLE_CHARS[
+                    Math.floor(
+                        Math.random() * SCRAMBLE_CHARS.length
+                    )
+                ];
+            }
+        }
+
+        el.textContent = output;
+
+        if (progress >= totalFrames) {
+            clearInterval(timer);
+            el.textContent = original;
+        }
+
+    }, frameRate);
+}
+
+window.addEventListener("load", () => {
+    document
+        .querySelectorAll(".scramble")
+        .forEach(scrambleElement);
+});
+</script>
+
+
+</body>
+</html>
