@@ -134,7 +134,15 @@ color:#FA3B34;
 <br>
 <pre>copy your usb name</pre>
 <br>
-<span style="background:#ffffff22; color:#fff; border:1px solid #ffffff55; padding:4px 10px; border-radius:999px; font-weight:bold; display:inline-block; margin-top:10px; line-height:1.6;">dd if=parrot.iso of=/dev/sdb</span>
+<span style="background:#ffffff22; color:#fff; border:1px solid #ffffff55; padding:4px 10px; border-radius:999px; font-weight:bold; display:inline-block; margin-top:10px; line-height:1.6;">sudo dd if="linux.iso" of="/dev/sda" bs=4M status=progress oflag=sync</span>
+<br>
+<pre>Make sure everything is written</pre>
+<br>
+<span style="background:#ffffff22; color:#fff; border:1px solid #ffffff55; padding:4px 10px; border-radius:999px; font-weight:bold; display:inline-block; margin-top:10px; line-height:1.6;">sync</span>
+<br>
+<pre>Then safely remove the USB:</pre>
+<br>
+<span style="background:#ffffff22; color:#fff; border:1px solid #ffffff55; padding:4px 10px; border-radius:999px; font-weight:bold; display:inline-block; margin-top:10px; line-height:1.6;">sudo eject /dev/sda</span>
 <br>
 <br>
 
