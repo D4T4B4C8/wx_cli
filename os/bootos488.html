@@ -126,15 +126,28 @@ color:#FA3B34;
 
 <div class="textbox">
 
-<h1 class="scramble">HOW TO BOOT USB WITH TERMINAL</h1>
+<h1 class="scramble">HOW TO BOOT USB USING TERMINAL</h1>
 <br>
 <br>
 <span style="background:#ffffff22; color:#fff; border:1px solid #ffffff55; padding:4px 10px; border-radius:999px; font-weight:bold; display:inline-block; margin-top:10px; line-height:1.6;">fdisk -n</span>
 <br>
 <br>
-<pre>copy your usb name</pre>
+<pre>Install Ventoy</pre>
 <br>
-<span style="background:#ffffff22; color:#fff; border:1px solid #ffffff55; padding:4px 10px; border-radius:999px; font-weight:bold; display:inline-block; margin-top:10px; line-height:1.6;">sudo dd if="linux.iso" of="/dev/sda" bs=4M status=progress oflag=sync</span>
+<span style="background:#ffffff22; color:#fff; border:1px solid #ffffff55; padding:4px 10px; border-radius:999px; font-weight:bold; display:inline-block; margin-top:10px; line-height:1.6;">yay -S ventoy</span>
+<br>
+<br>
+<pre>Format the usb with GPT Partition scheme for both UEFI & BIOS</pre>
+<br>
+<span style="background:#ffffff22; color:#fff; border:1px solid #ffffff55; padding:4px 10px; border-radius:999px; font-weight:bold; display:inline-block; margin-top:10px; line-height:1.6;">sudo ventoy -i -g /dev/sda</span>
+<br>
+<br>
+<pre>Mount the new partition and simply copy the ISO file over</pre>
+<br>
+<span style="background:#ffffff22; color:#fff; border:1px solid #ffffff55; padding:4px 10px; border-radius:999px; font-weight:bold; display:inline-block; margin-top:10px; line-height:1.6;">udisksctl mount -b /dev/sda1</span>
+<br>
+<br>
+<span style="background:#ffffff22; color:#fff; border:1px solid #ffffff55; padding:4px 10px; border-radius:999px; font-weight:bold; display:inline-block; margin-top:10px; line-height:1.6;">cp arch.iso /run/media/whitex/Ventoy/</span>
 <br>
 <br>
 <pre>Make sure everything is written</pre>
